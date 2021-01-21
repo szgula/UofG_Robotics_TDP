@@ -15,7 +15,7 @@ Team Member 5;Singh, Shreyansh;;;;;;;;;
 ;;;;;;;;;;
 #;Workpackage;Activity;Start Date;End Date;Hours: Team member 1;Hours: Team member 2;Hours: Team member 3;Hours: Team member 4;Hours: Team member 5;Total hours
 1;Organization;Setup Git, Collect requred documents, organize group;20.01.20;20.01.20;1,5;0;0;0;0;1,5
-2;;;;;;;;;;0
+2;Add basic 2d game visualisation, basic ball model + tests ;21.01.20;22.01.20;3;0;0;0;0;3
 3;;;;;;;;;;0
 4;;;;;;;;;;0
 5;;;;;;;;;;0
