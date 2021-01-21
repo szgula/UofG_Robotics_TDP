@@ -4,6 +4,10 @@ import logging
 
 from Simulation.base_simulator import BaseSimulator
 
+# TODO: add unittests, smoke test, and functional tests
+# TODO: Write documentation
+
+
 class BasicVisualizer:
 
     def __init__(self, simulator: BaseSimulator, number_of_players: int = 2, field_size: tuple = (18, 14),

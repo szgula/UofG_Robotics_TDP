@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class RobotModel(ABC):
     @abstractmethod
-    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1):
+    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, radius:float = 0.1):
         """
         :param dt: simulation time step
         """
@@ -15,9 +15,11 @@ class RobotModel(ABC):
         # Ego field coordinate system (EFCS): located in the middle of the field,
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
+        # pointing angle [rad], 0rad with X axis, positive towards the Y axis (counterclockwise)
         x_init, y_init = self._convert_field_CS_to_EFCS(init_x_pos, init_y_pos)
         self._x_pos_EFCS = x_init                           # robot x coordinate in field coordinate system
         self._y_pos_EFCS = y_init                           # robot x coordinate in field coordinate system
+        self.radius = radius                               # assuming round robot
 
     @staticmethod
     @abstractmethod
@@ -62,5 +64,19 @@ class RobotModel(ABC):
         """
         Define behavior in contact with other robot/ball/wall
         :return:
+        """
+        pass
+
+    def get_velocity_components_wcs(self) -> (float, float):
+        """
+        Return the velocity vector (x, y components) in game coordinate system
+        :return: x velocity, y velocity
+        """
+        pass
+
+    def get_position_components_wcs(self) -> (float, float):
+        """
+        Return the velocity vector (x, y components) in game coordinate system
+        :return: x velocity, y velocity
         """
         pass
