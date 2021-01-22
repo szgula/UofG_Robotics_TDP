@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 
 
 class BallModel(ABC):
@@ -30,6 +31,12 @@ class BallModel(ABC):
         :return:
         """
         pass
+
+
+class BallActions(Enum):
+    NO = 0
+    KICK = 1
+    RECEIVE = 2
 
 
 class BallBasicModel(BallModel):
@@ -183,7 +190,7 @@ class BallBasicModel(BallModel):
 
     def _receive_collision(self, collision_object):
         """
-        Match the ball velocity to players velocity
+        Match the ball velocity to player's velocity
         :param collision_object:
         :return:
         """
