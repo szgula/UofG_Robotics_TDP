@@ -2,7 +2,7 @@ import numpy as np
 import pygame
 import logging
 
-from Simulation.base_simulator import BaseSimulator
+#from GameEngine.game_master import BaseSimulator
 
 # TODO: add unittests, smoke test, and functional tests
 # TODO: Write documentation
@@ -10,9 +10,9 @@ from Simulation.base_simulator import BaseSimulator
 
 class BasicVisualizer:
 
-    def __init__(self, simulator: BaseSimulator, number_of_players: int = 2, field_size: tuple = (18, 14),
+    def __init__(self, simulator: None, number_of_players: int = 2, field_size: tuple = (18, 14),
                  display_size: tuple = (1800//2, 1400//2)):
-        self._simulator = simulator
+        #self._simulator = simsimulatorulator
         self._number_of_players = number_of_players
         self._position_dim = 3  # x, y, heading
         self._field_size = field_size
@@ -20,6 +20,8 @@ class BasicVisualizer:
         self._init_display()
 
         self._temp_initialized_data = False
+        self._data_provided = False
+        self._data_provided_buffer = ()
 
     def __del__(self):
         pygame.quit()
@@ -55,13 +57,21 @@ class BasicVisualizer:
         pygame.draw.circle(self.screen, (0, 255, 0), ball.astype(int), 5)
         pygame.display.flip()
 
-    def accrue_data_from_simulatior(self) -> (tuple, tuple, tuple):
+    def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer
         """
         Accrue data from game simulation - players and ball positions, # of goals, game time etc
         :return:
         """
-        return self._temp_generate_random_data_from_simulation()
+        if not self._data_provided:
+            return self._temp_generate_random_data_from_simulation()
+        else:
+            self._data_provided = False
+            return self._data_provided_buffer
 
+
+    def send_game_state(self, team_1, team_2, ball):
+        self._data_provided = True
+        self._data_provided_buffer = (team_1, team_2, ball)
 
     def _temp_generate_random_data_from_simulation(self):
         # generate random positions

@@ -1,4 +1,4 @@
-class BaseSimulator:
+class GameMaster:
     def __init__(self, robot_class, number_of_teams: int = 1, number_of_robots: int = 1, size_of_field: tuple = (18, 12)):
         """
         :param robot_class:

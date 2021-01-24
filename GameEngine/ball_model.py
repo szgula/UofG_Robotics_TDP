@@ -55,7 +55,7 @@ class BallBasicModel(BallModel):
         self._friction = friction                           # friction proportional to vel
         self._mass = mass                                   # ball mass
         self._vel_bounce_coefficient = vel_bounce_coef      # coefficient of velocity that is preserved after bounce
-        self._radius = radius                               # ball dimensions
+        self.radius = radius                                # ball dimensions
 
     def step(self):
         """
@@ -388,7 +388,7 @@ class BallTests:
         f, (ax1, ax2, ax3) = plt.subplots(3, 1)
         f.suptitle(f"test_collision_with_round_player: initial conditions: \nplayer (x, y, x', y', size): {player_pos_x, player_pos_y,player_vel_x, player_vel_y, player_radius} \nball (x, y, x', y'): {ball_pos_x, ball_pos_y,ball_vel_x, ball_vel_y}, \ndt={dt}, time={time} ")
         ax1.plot(history['x'], history['y'], label='pos')
-        ax1.scatter(player_pos_x, player_pos_y, label='player')
+        ax1.scatter(player_pos_x, player_pos_y, label='player')  # TODO -> add marker size same as the player size
         ax1.set_xlabel('x'), ax1.set_xlabel('y')
         ax1.legend()
         ax2.plot(history['t'], history['x'], label='x_pos(t)')
@@ -403,12 +403,12 @@ class BallTests:
 
 
 if __name__ == "__main__":
-    BallTests.test_ball_stationary()
-    BallTests.test_ball_moving_with_initial_speed(2,1)
-    BallTests.test_ball_wall_bouncing("vertical")
-    BallTests.test_ball_wall_bouncing("horizontal")
-    BallTests.test_ball_wall_bouncing("corner")
-    BallTests.test_kick(-1, 0)  # player on the left of the ball -> kick East
+    #BallTests.test_ball_stationary()
+    #BallTests.test_ball_moving_with_initial_speed(2,1)
+    #BallTests.test_ball_wall_bouncing("vertical")
+    #BallTests.test_ball_wall_bouncing("horizontal")
+    #BallTests.test_ball_wall_bouncing("corner")
+    '''BallTests.test_kick(-1, 0)  # player on the left of the ball -> kick East
     BallTests.test_kick(0, 1)  # player above the ball -> kick South
     BallTests.test_kick(1, -1)  # player right and below the ball -> kick North-West
     BallTests.test_kick(1, -3)  # player right and below the ball -> kick North-West
@@ -422,7 +422,7 @@ if __name__ == "__main__":
     BallTests.test_collision_with_round_player(player_pos_x=10, player_pos_y=-10.1, player_vel_x=0, player_vel_y=0,
                                                ball_pos_x=0, ball_pos_y=0, ball_vel_x=5, ball_vel_y=-5, dt=0.001)
     BallTests.test_collision_with_round_player(player_pos_x=10, player_pos_y=-9.9, player_vel_x=0, player_vel_y=0,
-                                               ball_pos_x=0, ball_pos_y=0, ball_vel_x=5, ball_vel_y=-5, dt=0.001)
+                                               ball_pos_x=0, ball_pos_y=0, ball_vel_x=5, ball_vel_y=-5, dt=0.001)'''
     BallTests.test_collision_with_round_player(player_pos_x=6, player_pos_y=9.9, player_vel_x=0, player_vel_y=0,
                                                ball_pos_x=0, ball_pos_y=0, ball_vel_x=3, ball_vel_y=5, dt=0.001)
 
