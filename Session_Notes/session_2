@@ -1,0 +1,22 @@
+Team Notes:
+	- ROS 1 or 2?
+	- Ros 1 has more community help but ros 2 more advanced
+	- Phase 1 is a minimum testing simulator phase, no ros and gazebo.
+	- The different elements will be nodes, game master will be managed by ros and simulation and visualization by Gazebo.
+	- Phase 1 includes making sure that the minimal simulation is realizable
+	- Team master directs where each robot should be and how is directed and navigated
+	- Game master will have a general strategy and team masters will have a certain strategy
+Notes from Professor:
+	- 15 h/ week: if we go to max we overestimate the amount of time it would take to develop the project. If we go under that amount, we have a sizable profit. But if we set a certain hour, we generate normal profit unlike with extra hours.
+	- Costs: maximum cost and estimated minimum cost.
+	- Research & Development factored together.
+	- 80,000£ is within the ball park for 12 weeks.
+	- Overestimation or underestimation but it is in the ballpark (80,000£).
+	- Aware: Product stateflow => control logic tool that models reactive systems thru state machines. Determine functions in MATLAB and simulink using stateflow within an environment.
+	- Using simcape that will help into developing a robot using DC and wheels.
+	- Timing diagram for project !
+	- Gantt chart
+	- Estimate the time it is going to take to develop project and use that for the estimated cost. Basics is important and milestones in order to understand how the project goes.
+	- For next week put in time allocation.
+	- Speak everybody for their own tasks. Split presentation between all team members.
+
