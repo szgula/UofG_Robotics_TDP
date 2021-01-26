@@ -12,7 +12,7 @@ class RobotModel(ABC):
         :param dt: simulation time step
         """
         self._dt = dt                                       # simulation time step
-        self.pointing_angle = 0                            # robot pointing direction, range <-pi, pi>
+        self.pointing_angle = 0                             # robot pointing direction, range <-pi, pi>
         self.vel = 0                                        # robot velocity
         self.vel_limit = (-float('inf'), float('inf'))      # robot velocity limits
 
@@ -27,6 +27,9 @@ class RobotModel(ABC):
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
         self._axis_len = axis_len                           # distance between wheels
+
+        #self.last_collision_object = None
+        #self.steps_since_last_collision = 1000
 
     def _convert_field_CS_to_EFCS(self, pos_x: float, pos_y: float) -> (float, float):
         """
@@ -119,7 +122,7 @@ class RobotBasicModel(RobotModel):
             diff_x, diff_y = self_pos_x - other_pos_x, self_pos_y - other_pos_y
             collision_angle = np.arctan2(diff_y, diff_x)
             angle_diff = abs((collision_angle - self.pointing_angle + np.pi) % (2*np.pi) - np.pi)
-            if angle_diff > np.pi / 2:
+            if angle_diff > np.pi / 2:   # the move direction need to be grater then... TODO
                 self.step(l_motor_speed, r_motor_speed, extra_action)
             else:  # robot is heading towards the collision object
                 if max(l_motor_speed, l_motor_speed) < 0:  # robot is going backwards - away from collision
@@ -129,13 +132,8 @@ class RobotBasicModel(RobotModel):
                     self.step(l_motor_speed-speed_cancellation, r_motor_speed-speed_cancellation, extra_action)
 
         # TODO
-        elif collision_type == CollisionTypes.WALL_CORNER:
+        elif collision_type != CollisionTypes.No:
             pass
-        elif collision_type == CollisionTypes.WALL_VERTICAL:
-            pass
-        elif collision_type == CollisionTypes.WALL_HORIZONTAL:
-            pass
-
 
 
 class RobotModelTests:

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-
+from GameEngine.collisions import CollisionTypes
+import logging
+import numpy as np
 
 class BallModel(ABC):
     @abstractmethod
@@ -16,6 +18,9 @@ class BallModel(ABC):
         self._x_pos = init_x_pos                            # ball x coordinate in field coordinate system
         self._y_pos = init_y_pos                            # ball y coordinate in field coordinate system
 
+        self.last_collision_object = None
+        self.steps_since_last_collision = 1000
+
     @abstractmethod
     def step(self, action):
         """
@@ -25,7 +30,7 @@ class BallModel(ABC):
         pass
 
     @abstractmethod
-    def _collision_step(self, collision_object):
+    def collision_step(self,  wall_collision:CollisionTypes, players_collision:CollisionTypes, collisions_with:list):
         """
         Define behavior in contact with other robot/ball/wall
         :return:
@@ -57,6 +62,10 @@ class BallBasicModel(BallModel):
         self._vel_bounce_coefficient = vel_bounce_coef      # coefficient of velocity that is preserved after bounce
         self.radius = radius                                # ball dimensions
 
+        self.last_collision_object = None
+        self.steps_since_last_collision = 1000
+        self.MINIMAL_TIME_BETWEEN_COLLISION_WITH_SAME_OBJECT = 0
+
     def step(self):
         """
         Execute simulation step
@@ -78,17 +87,50 @@ class BallBasicModel(BallModel):
         self._x_vel += acc_x * self._dt
         self._y_vel += acc_y * self._dt
         # TODO: how about collision step?
+        self.steps_since_last_collision += 1
 
-    def _collision_step(self, collision_object, collision_type=None, **kwargs):
+    def players_actions(self, actions):
+        if len(actions) > 1:
+            logging.warning("Thy multiple actions are not supported yet - executing first action")
+        object = actions[0][0]
+        action_type = actions[0][1]
+        if action_type == BallActions.KICK:
+            self._kick_collision(object)
+        elif action_type == BallActions.RECEIVE:
+            self._receive_collision(object)
+        #self.step()
+
+    def collision_step(self,  wall_collision:CollisionTypes, players_collision:CollisionTypes, collisions_with:list):
         """
         Define behavior in contact with other robot/ball/wall
         :param collision_object:
         :param collision_type: can be "moving", "wall", "kick", "receive"
         :return:
         """
-        pass
+        if (wall_collision != CollisionTypes.NO and players_collision != CollisionTypes.NO) or len(collisions_with) > 1:
+            logging.warning("Thy multiple collision are not supported yet")
+            if wall_collision != CollisionTypes.No:
+                logging.warning("Handling just wall collision")
+                players_collision = CollisionTypes.No
+            else:
+                logging.warning("Handling just first player collision")
+                collisions_with = [collisions_with[0]]
+            self._wall_collision(wall_collision)
 
-    def _wall_collision(self, collision_object, wall_orientation: str, **kwargs):
+        if wall_collision != CollisionTypes.NO:
+            self._wall_collision(wall_collision)
+        if players_collision != CollisionTypes.NO:
+            if self.steps_since_last_collision <= self.MINIMAL_TIME_BETWEEN_COLLISION_WITH_SAME_OBJECT and \
+                    collisions_with == self.last_collision_object:
+                pass
+            else:
+                collisions_with = collisions_with[0]  # TODO: handles just one instance for now
+                self._elastic_collision_with_round_player(collisions_with)
+                self.steps_since_last_collision = 0
+                self.last_collision_object = collisions_with
+        #self.step()
+
+    def _wall_collision(self, collision_type:CollisionTypes):
         """
         Ball bounce from the static wall - can be horizontal or vertical
         :param collision_object:
@@ -96,9 +138,9 @@ class BallBasicModel(BallModel):
         :param kwargs:
         :return:
         """
-        if wall_orientation == "vertical" or wall_orientation == "corner":
+        if collision_type == CollisionTypes.WALL_VERTICAL or collision_type == CollisionTypes.WALL_CORNER:
             self._x_vel *= -1 * self._vel_bounce_coefficient
-        if wall_orientation == "horizontal" or wall_orientation == "corner":
+        if collision_type == CollisionTypes.WALL_HORIZONTAL or collision_type == CollisionTypes.WALL_CORNER:
             self._y_vel *= -1 * self._vel_bounce_coefficient
 
     def _elastic_collision_with_round_player(self, collision_object):
@@ -113,10 +155,17 @@ class BallBasicModel(BallModel):
         diff = (dx ** 2 + dy ** 2) ** 0.5  # TODO: add check if in collision range (of this time step)
         player_vx, player_vy = collision_object.get_velocity_components_wcs()
 
+        def similar_speeds(player_vx_, player_vy_):
+            speed_diff = np.hypot(player_vx_-self._x_vel, player_vy_-self._y_vel)
+            same_speed_threshold = 0.01
+            return speed_diff <= same_speed_threshold
+
+        if similar_speeds(player_vx, player_vy): return
+
         """ Calculate intersection point between player and ball - assuming the ball radius ~= 0 for simplicity 
          Using line equation: 
-         x = x0 + v_x * t  
-         y = y0 + v_y * t 
+         x = x0 + v_x * t 
+         y = y0 + v_y * t
 
          Circle equation:
          (x - x0)**2 + (y-y0)**2 = r**2 """
@@ -129,17 +178,23 @@ class BallBasicModel(BallModel):
             a = (1 + k ** 2)
             b = -2*(player_pos_x + M * k)
             c = player_pos_x**2 + M**2 - player_radius**2
-        else:
+        elif self._y_vel >= move_vel_threshold:
             a = 1
             b = -2 * player_pos_y
             c = player_pos_y**2 + (self._x_pos - player_pos_x)**2 - player_radius**2
+        else:
+            k = (player_vy / player_vx)
+            M = k * player_pos_x - player_pos_y + self._y_pos  #k * self._x_pos - self._y_pos + player_pos_y
+            a = (1 + k ** 2)
+            b = -2 * (self._x_pos + M * k)
+            c = self._x_pos ** 2 + M ** 2 - player_radius ** 2
 
         #  solve quadratic equation
         delta = b ** 2 - 4 * a * c
         if delta < 0:
             return
         delta_root = delta ** 0.5
-        sol1, sol2 =  (-b + delta_root) / (2 * a), (-b - delta_root) / (2 * a)
+        sol1, sol2 = (-b + delta_root) / (2 * a), (-b - delta_root) / (2 * a)
         if self._x_vel >= move_vel_threshold:
             x1, x2 = sol1, sol2
             get_y = lambda _x_: self._y_pos + self._y_vel * (_x_ - self._x_pos) / self._x_vel
@@ -166,12 +221,16 @@ class BallBasicModel(BallModel):
         vel_ = (self._x_vel**2 + self._y_vel**2)**0.5
         ref_vel = (r_x**2 + r_y**2)**0.5
         # TODO: vel_ *= self._vel_bounce_coefficient
-        vel_x = player_vx + r_x * vel_ / ref_vel
-        vel_y = player_vy + r_y * vel_ / ref_vel
+        if abs(ref_vel) > move_vel_threshold:
+            vel_x = player_vx + r_x * vel_ / ref_vel
+            vel_y = player_vy + r_y * vel_ / ref_vel
+        else:
+            vel_x = player_vx
+            vel_y = player_vy
         self._x_vel = vel_x
         self._y_vel = vel_y
 
-    def _kick_collision(self, collision_object, kick_vel: float = None, **kwargs):
+    def _kick_collision(self, collision_object, kick_vel: float = 0.4, **kwargs):
         """
         The ball is kick along line connecting player's and ball's centre points.
         :param collision_object:
@@ -248,7 +307,7 @@ class BallTests:
         return True
 
     @staticmethod
-    def test_ball_wall_bouncing(wall_type="vertical"):
+    def test_ball_wall_bouncing(wall_type=CollisionTypes.WALL_VERTICAL):
         import matplotlib.pyplot as plt
         x0, y0 = 0, 0
         vx0, vy0 = 1, 2
@@ -259,7 +318,7 @@ class BallTests:
 
         for i in range(steps):
             ball.step()
-            if i == wall_step: ball._wall_collision(None, wall_type)
+            if i == wall_step: ball._wall_collision(wall_type)
             x, y = ball.get_position()
             history['x'].append(x), history['y'].append(y), history['t'].append(i)
             history['dx'].append(ball._x_vel), history['dy'].append(ball._y_vel)
@@ -405,9 +464,9 @@ class BallTests:
 if __name__ == "__main__":
     #BallTests.test_ball_stationary()
     #BallTests.test_ball_moving_with_initial_speed(2,1)
-    #BallTests.test_ball_wall_bouncing("vertical")
-    #BallTests.test_ball_wall_bouncing("horizontal")
-    #BallTests.test_ball_wall_bouncing("corner")
+    #BallTests.test_ball_wall_bouncing(CollisionTypes.WALL_VERTICAL)
+    BallTests.test_ball_wall_bouncing(CollisionTypes.WALL_HORIZONTAL)
+    #BallTests.test_ball_wall_bouncing(CollisionTypes.WALL_CORNER)
     '''BallTests.test_kick(-1, 0)  # player on the left of the ball -> kick East
     BallTests.test_kick(0, 1)  # player above the ball -> kick South
     BallTests.test_kick(1, -1)  # player right and below the ball -> kick North-West
@@ -423,7 +482,7 @@ if __name__ == "__main__":
                                                ball_pos_x=0, ball_pos_y=0, ball_vel_x=5, ball_vel_y=-5, dt=0.001)
     BallTests.test_collision_with_round_player(player_pos_x=10, player_pos_y=-9.9, player_vel_x=0, player_vel_y=0,
                                                ball_pos_x=0, ball_pos_y=0, ball_vel_x=5, ball_vel_y=-5, dt=0.001)'''
-    BallTests.test_collision_with_round_player(player_pos_x=6, player_pos_y=9.9, player_vel_x=0, player_vel_y=0,
+    BallTests.test_collision_with_round_player(player_pos_x=6, player_pos_y=10, player_vel_x=0, player_vel_y=0,
                                                ball_pos_x=0, ball_pos_y=0, ball_vel_x=3, ball_vel_y=5, dt=0.001)
 
     # TODO: add tests for the moving player

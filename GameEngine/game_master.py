@@ -1,28 +1,43 @@
-class GameMaster:
-    def __init__(self, robot_class, number_of_teams: int = 1, number_of_robots: int = 1, size_of_field: tuple = (18, 12)):
+from GameEngine.robot_model import RobotBasicModel
+from GameEngine.ball_model import BallBasicModel, BallActions
+# import matplotlib.pyplot as plt
+from GameEngine.visualizer import BasicVisualizer
+from GameEngine.game_simulator import GameSimulator
+import logging
+
+
+class BaseGameMaster:
+    def __init__(self):
         """
         :param robot_class:
         :param number_of_teams:
         :param number_of_robots:
         :param size_of_field:
         """
-        self._robot_class = robot_class
-        self._number_of_teams = number_of_teams
-        self._number_of_robots = number_of_robots
-        self._size_of_field = size_of_field
-
         # Ego field coordinate system: located in the middle of the field,
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
+        self.number_of_robots = 5
+        self.number_of_teams = 1
+        self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
+        self.simulator = None
+        self.reset()
 
-        # Base simulation should be synchronous - the simulation waits for all inputs and is each step is triggered by
-        # step() method.
+        self.full_game_length = 30000
+        self.game_current_step = 0
+        self.goals = [0, 0]
+
+        self.action_buffer = [None] * self.number_of_teams
+        self.action_updated = [False] * self.number_of_teams
 
     def reset(self):
         """
         Reset the play
         :return:
         """
+        self.simulator = GameSimulator(RobotBasicModel, BallBasicModel,
+                                       number_of_robots=self.number_of_robots,
+                                       number_of_teams=self.number_of_teams)
         pass
 
     def update_robot_actions(self, team_id: int, actions: tuple):
@@ -30,18 +45,54 @@ class GameMaster:
         Update the robots actions - aggregate from all agents
         :return:
         """
-        pass
+        self.action_updated[team_id] = True
+        self.action_buffer[team_id] = actions
 
     def step(self):
         """
         Execute the simulation step
         :return:
         """
-        pass
+        self.game_current_step += 1
+        logging.info(f'current game step {self.game_current_step}')
+        if not all(self.action_updated):
+            logging.warning("Some team have not updated the action")
+        self.simulator.step(self.action_buffer)
+        self.visualizer.send_game_state(*self.simulator.get_positions_for_visualizer())
+        self.visualizer.display()
+
+        if self.game_current_step >= self.full_game_length:
+            self.end_game()
+
+    def end_game(self):
+        logging.info(f"End of game with result {self.goals}")
 
     def get_game_state(self):
         """
         Interface for the visualization
         :return:
         """
+        return self.goals, self.game_current_step
+
+
+class TestGameMaster:
+    @staticmethod
+    def test_game_master_initialization():
         pass
+
+    @staticmethod
+    def test_game_with_simple_actions():
+        pass
+
+
+if __name__ == "__main__":
+    game_master = BaseGameMaster()
+    actions = [(0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25), (0.7, 0.7)]
+    for i in range(game_master.full_game_length):
+        if game_master.game_current_step == 7000 or i == 7000:
+            game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),
+                                                 (0.7, 0.7, BallActions.KICK)))
+        else:
+            game_master.update_robot_actions(0, actions)
+        game_master.step()
+
