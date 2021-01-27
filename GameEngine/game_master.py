@@ -87,11 +87,14 @@ class TestGameMaster:
 
 if __name__ == "__main__":
     game_master = BaseGameMaster()
-    actions = [(0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25), (0.7, 0.7)]
+    actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
+    kick_done = False
+
     for i in range(game_master.full_game_length):
-        if game_master.game_current_step == 7000 or i == 7000:
+        if not kick_done and game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 2.5:
             game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),
-                                                 (0.7, 0.7, BallActions.KICK)))
+                                                 (1.2, 1.2, BallActions.KICK)))
+            kick_done = True
         else:
             game_master.update_robot_actions(0, actions)
         game_master.step()

@@ -98,7 +98,6 @@ class BallBasicModel(BallModel):
             self._kick_collision(object)
         elif action_type == BallActions.RECEIVE:
             self._receive_collision(object)
-        #self.step()
 
     def collision_step(self,  wall_collision:CollisionTypes, players_collision:CollisionTypes, collisions_with:list):
         """
@@ -109,9 +108,9 @@ class BallBasicModel(BallModel):
         """
         if (wall_collision != CollisionTypes.NO and players_collision != CollisionTypes.NO) or len(collisions_with) > 1:
             logging.warning("Thy multiple collision are not supported yet")
-            if wall_collision != CollisionTypes.No:
+            if wall_collision != CollisionTypes.NO:
                 logging.warning("Handling just wall collision")
-                players_collision = CollisionTypes.No
+                players_collision = CollisionTypes.NO
             else:
                 logging.warning("Handling just first player collision")
                 collisions_with = [collisions_with[0]]
@@ -140,8 +139,10 @@ class BallBasicModel(BallModel):
         """
         if collision_type == CollisionTypes.WALL_VERTICAL or collision_type == CollisionTypes.WALL_CORNER:
             self._x_vel *= -1 * self._vel_bounce_coefficient
+            self._x_pos = np.round(self._x_pos)  # TODO assuming the wall is on "rounded" position - may not be the case
         if collision_type == CollisionTypes.WALL_HORIZONTAL or collision_type == CollisionTypes.WALL_CORNER:
             self._y_vel *= -1 * self._vel_bounce_coefficient
+            self._y_pos = np.round(self._y_pos)
 
     def _elastic_collision_with_round_player(self, collision_object):
         """
@@ -171,23 +172,27 @@ class BallBasicModel(BallModel):
          (x - x0)**2 + (y-y0)**2 = r**2 """
 
         move_vel_threshold = 0.001              # TODO: find a better place for this
-        if self._x_vel >= move_vel_threshold:
+        if abs(self._x_vel) >= move_vel_threshold:
             # solving ax^2 + bx + c = 0
             k = (self._y_vel / self._x_vel)
             M = k * self._x_pos - self._y_pos + player_pos_y
             a = (1 + k ** 2)
             b = -2*(player_pos_x + M * k)
             c = player_pos_x**2 + M**2 - player_radius**2
-        elif self._y_vel >= move_vel_threshold:
+        elif abs(self._y_vel) >= move_vel_threshold:
             a = 1
             b = -2 * player_pos_y
             c = player_pos_y**2 + (self._x_pos - player_pos_x)**2 - player_radius**2
-        else:
+        elif abs(player_vx) > move_vel_threshold:
             k = (player_vy / player_vx)
             M = k * player_pos_x - player_pos_y + self._y_pos  #k * self._x_pos - self._y_pos + player_pos_y
             a = (1 + k ** 2)
             b = -2 * (self._x_pos + M * k)
             c = self._x_pos ** 2 + M ** 2 - player_radius ** 2
+        elif abs(player_vy) > move_vel_threshold:
+            raise NotImplementedError
+        else:
+            raise ValueError("No collision should happen if all vel are ~0")
 
         #  solve quadratic equation
         delta = b ** 2 - 4 * a * c
@@ -195,7 +200,7 @@ class BallBasicModel(BallModel):
             return
         delta_root = delta ** 0.5
         sol1, sol2 = (-b + delta_root) / (2 * a), (-b - delta_root) / (2 * a)
-        if self._x_vel >= move_vel_threshold:
+        if abs(self._x_vel) >= move_vel_threshold or abs(player_vx) > move_vel_threshold:
             x1, x2 = sol1, sol2
             get_y = lambda _x_: self._y_pos + self._y_vel * (_x_ - self._x_pos) / self._x_vel
             y1, y2 = get_y(x1), get_y(x2)

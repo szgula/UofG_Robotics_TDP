@@ -10,13 +10,14 @@ import logging
 
 class BasicVisualizer:
 
-    def __init__(self, simulator: None, number_of_players: int = 2, field_size: tuple = (18, 14),
-                 display_size: tuple = (1800//2, 1400//2)):
+    def __init__(self, simulator: None, number_of_players: int = 2, field_size: tuple = (10, 6),
+                 display_scale: int = 100):
         #self._simulator = simsimulatorulator
         self._number_of_players = number_of_players
         self._position_dim = 3  # x, y, heading
-        self._field_size = field_size
-        self._display_size = display_size
+        self._field_size = np.array(field_size)
+        self._display_size = self._field_size * display_scale
+        self.scale = display_scale
         self._init_display()
 
         self._temp_initialized_data = False
@@ -53,8 +54,14 @@ class BasicVisualizer:
                 self._exit_display()
         self.screen.fill((255, 255, 255))
         for pos in state_players_1:
-            pygame.draw.circle(self.screen, (0, 0, 255), pos[:2].astype(int), 15)
-        pygame.draw.circle(self.screen, (0, 255, 0), ball.astype(int), 5)
+            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 7)
+        pygame.draw.circle(self.screen, (255, 0, 0), (ball*self.scale).astype(int), 5)
+        pygame.draw.line(self.screen, (0, 255, 0),
+                         (5, 50 + self._display_size[1] / 2),
+                         (5, -50 + self._display_size[1] / 2), 3)
+        pygame.draw.line(self.screen, (0, 255, 0),
+                         (self._display_size[0] - 5, 50 + self._display_size[1] / 2),
+                         (self._display_size[0] - 5, -50 + self._display_size[1] / 2), 3)
         pygame.display.flip()
 
     def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer

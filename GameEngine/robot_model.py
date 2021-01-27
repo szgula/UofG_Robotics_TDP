@@ -68,7 +68,8 @@ class RobotModel(ABC):
         pass
 
     @abstractmethod
-    def collision_step(self, collision_object, collision_type, l_motor_speed: float, r_motor_speed: float, extra_action: BallActions = BallActions.NO):
+    def collision_step(self, wall_collision:CollisionTypes, players_collision: CollisionTypes, collision_list: list,
+                       l_motor_speed: float, r_motor_speed: float, extra_action: BallActions = BallActions.NO):
         """
         Define behavior in contact with other robot/ball/wall
         :return:
@@ -104,36 +105,72 @@ class RobotBasicModel(RobotModel):
         :param extra_action: <None, kick, receive>
         :return:
         """
+
+        # http://roboscience.org/book/html/Simulation/MovingDifferential.html
         self.vel = (self._wheel_radius / 2.0) * (l_motor_speed + r_motor_speed)
         xn = self._x_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.cos(self.pointing_angle)
         yn = self._y_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.sin(self.pointing_angle)
         qn = self.pointing_angle + (self._wheel_radius * self._dt / (self._axis_len)) * (l_motor_speed - r_motor_speed)
-        self._x_pos_EFCS, self._y_pos_EFCS, self.pointing_angle = xn, yn, qn
+        clip_angle = lambda a: a - 2*np.pi*np.sign(a) if abs(a) > np.pi else a
+        self._x_pos_EFCS, self._y_pos_EFCS, self.pointing_angle = xn, yn, clip_angle(qn)
         return extra_action
 
-    def collision_step(self, collision_object, collision_type: CollisionTypes, l_motor_speed: float, r_motor_speed: float, extra_action: BallActions = BallActions.NO):
+    def collision_step(self, wall_collision:CollisionTypes, players_collision: CollisionTypes, collision_list: list,
+                       l_motor_speed: float, r_motor_speed: float, extra_action: BallActions = BallActions.NO):
         """
         Define behavior in contact with other robot/ball/wall
         :return:
         """
-        if collision_type == CollisionTypes.PLAYER:
+        if players_collision == CollisionTypes.PLAYER:
+            collision_object = collision_list[0]  # TODO, handle collision with multiple players
             other_pos_x, other_pos_y = collision_object.get_position_components_wcs()
             self_pos_x, self_pos_y = self.get_position_components_wcs()
             diff_x, diff_y = self_pos_x - other_pos_x, self_pos_y - other_pos_y
-            collision_angle = np.arctan2(diff_y, diff_x)
-            angle_diff = abs((collision_angle - self.pointing_angle + np.pi) % (2*np.pi) - np.pi)
-            if angle_diff > np.pi / 2:   # the move direction need to be grater then... TODO
-                self.step(l_motor_speed, r_motor_speed, extra_action)
-            else:  # robot is heading towards the collision object
-                if max(l_motor_speed, l_motor_speed) < 0:  # robot is going backwards - away from collision
-                    self.step(l_motor_speed, r_motor_speed, extra_action)
-                else:
-                    speed_cancellation = max(l_motor_speed, l_motor_speed)
-                    self.step(l_motor_speed-speed_cancellation, r_motor_speed-speed_cancellation, extra_action)
+            blocker_angle = np.arctan2(diff_y, diff_x)
+            restricted_angle = np.pi / 2
 
-        # TODO
-        elif collision_type != CollisionTypes.No:
-            pass
+        elif wall_collision != CollisionTypes.NO:
+            if wall_collision == CollisionTypes.WALL_VERTICAL:
+                if self._x_pos_EFCS > 0: blocker_angle, restricted_angle = 0, np.pi / 2
+                else: blocker_angle, restricted_angle = -np.pi, np.pi/2
+                self._x_pos_EFCS = np.round(self._x_pos_EFCS)
+            elif wall_collision == CollisionTypes.WALL_HORIZONTAL:
+                if self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/2, np.pi / 2
+                else: blocker_angle, restricted_angle = -np.pi/2, np.pi/2
+                self._y_pos_EFCS = np.round(self._y_pos_EFCS)
+            else:
+                if self._x_pos_EFCS > 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/4, 3*np.pi/4
+                elif self._x_pos_EFCS > 0 and self._y_pos_EFCS < 0: blocker_angle, restricted_angle = -np.pi/4, 3*np.pi/4
+                elif self._x_pos_EFCS < 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = 3*np.pi/4, 3*np.pi/4
+                else: blocker_angle, restricted_angle = -3*np.pi/4, 3*np.pi/4
+                self._x_pos_EFCS = np.round(self._x_pos_EFCS)
+                self._y_pos_EFCS = np.round(self._y_pos_EFCS)
+        else:
+            raise ValueError
+        self.step_with_restrictions(blocker_angle, restricted_angle, l_motor_speed, r_motor_speed)
+        return extra_action
+
+    def step_with_restrictions(self, angle_of_blockage_relative_to_ego, restricted_angle,
+                               l_motor_speed: float, r_motor_speed: float):
+        get_diff_angle = lambda a, b: abs((a - b + np.pi) % (2 * np.pi) - np.pi)
+        clip_angle = lambda a: a - 2 * np.pi * np.sign(a) if abs(a) > np.pi else a
+        vel_simplified = (l_motor_speed + r_motor_speed) / 2
+
+        if vel_simplified == 0:
+            self.step(l_motor_speed, r_motor_speed)
+        elif vel_simplified > 0:
+            angle_diff = get_diff_angle(angle_of_blockage_relative_to_ego, self.pointing_angle)
+            if angle_diff > restricted_angle:
+                self.step(l_motor_speed, r_motor_speed)
+            else:
+                self.step(l_motor_speed - vel_simplified, r_motor_speed - vel_simplified)
+        elif vel_simplified < 0:
+            move_pointing_ang = clip_angle(self.pointing_angle + np.pi)
+            angle_diff = get_diff_angle(angle_of_blockage_relative_to_ego, move_pointing_ang)
+            if angle_diff > restricted_angle:
+                self.step(l_motor_speed, r_motor_speed)
+            else:
+                self.step(l_motor_speed - vel_simplified, r_motor_speed - vel_simplified)
 
 
 class RobotModelTests:

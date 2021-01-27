@@ -7,9 +7,8 @@ from GameEngine.collisions import CollisionTypes
 class GameSimulator:
 
     def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 1, number_of_robots: int = 1,
-                 size_of_field: tuple = (18, 12)):
+                 size_of_field: tuple = (10, 6)):
         """
-
 
         Ego field coordinate system: located in the middle of the field, positive X towards opponent's goal
         positive Y 90deg rotated counterclockwise from X axis
@@ -25,7 +24,7 @@ class GameSimulator:
         self._size_of_field = size_of_field
         self._robots = [list() for _ in range(self._number_of_teams)]
         self.team_CS_rotations = [0, np.pi]
-        self.team_starting_points = [(-7,3), (-7,-3), (-3,3), (-3, -3), (-8, 0)]
+        self.team_starting_points = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
                 self._robots[team].append(
@@ -75,7 +74,7 @@ class GameSimulator:
             #tp1_x, tp1_y = self._robots[01[player_id].get_position_components_wcs() # TODO: add for other team
         team_0 = np.array(team_0) + np.array(self._size_of_field) / 2
         ball = ball + np.array(self._size_of_field) / 2
-        return team_0 * 50, team_1, ball * 50  # FIXME: 50 is scalar factor to match the visualization size
+        return team_0, team_1, ball  # FIXME: 50 is scalar factor to match the visualization size
 
     def get_positions(self):
         """
