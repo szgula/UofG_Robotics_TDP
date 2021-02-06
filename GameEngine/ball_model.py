@@ -200,13 +200,21 @@ class BallBasicModel(BallModel):
             return
         delta_root = delta ** 0.5
         sol1, sol2 = (-b + delta_root) / (2 * a), (-b - delta_root) / (2 * a)
-        if abs(self._x_vel) >= move_vel_threshold or abs(player_vx) > move_vel_threshold:
+        if abs(self._x_vel) >= move_vel_threshold:
             x1, x2 = sol1, sol2
             get_y = lambda _x_: self._y_pos + self._y_vel * (_x_ - self._x_pos) / self._x_vel
             y1, y2 = get_y(x1), get_y(x2)
-        else:
+        elif abs(self._y_vel) >= move_vel_threshold:
             x1, x2 = self._x_pos, self._x_pos
             y1, y2 = sol1, sol2
+        elif abs(player_vx) > move_vel_threshold:
+            x1, x2 = sol1, sol2
+            get_y = lambda _x_: self._y_pos + self._y_vel * (_x_ - self._x_pos) / player_vx
+            y1, y2 = get_y(x1), get_y(x2)
+        elif abs(player_vy) > move_vel_threshold:
+            raise NotImplementedError
+        else:
+            raise ValueError("No collision should happen if all vel are ~0")
 
         dist_1 = (x1 - self._x_pos)**2 + (y1 - self._y_pos)**2
         dist_2 = (x2 - self._x_pos)**2 + (y2 - self._y_pos)**2
