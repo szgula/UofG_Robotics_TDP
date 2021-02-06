@@ -10,7 +10,7 @@ import logging
 
 class BasicVisualizer:
 
-    def __init__(self, simulator: None, number_of_players: int = 2, field_size: tuple = (10, 6),
+    def __init__(self, simulator: None, number_of_players: int = 5, field_size: tuple = (10, 6),
                  display_scale: int = 100):
         #self._simulator = simsimulatorulator
         self._number_of_players = number_of_players

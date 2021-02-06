@@ -1,12 +1,13 @@
 import numpy as np
-from Robots.robot_model import RobotModel
-from Robots.ball_model import BallModel, BallActions
+from Robots.robot_model import RobotModel, RobotBasicModel
+from Robots.ball_model import BallModel, BallActions, BallBasicModel
 from Robots.collisions import CollisionTypes
 
 
-class GameSimulator:
 
-    def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 1, number_of_robots: int = 1,
+
+class GameSimulator:
+    def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 1, number_of_robots: int = 5,
                  size_of_field: tuple = (10, 6)):
         """
 
@@ -32,17 +33,21 @@ class GameSimulator:
 
         self.ball = ball_model(0, 0)
 
-    def step(self, actions_per_team_per_player):
+    def step(self, actions_per_team_per_player) -> bool:
         """
         Execute the simulation step for all components
         In this version the steps are sequential -> team 1 players, team 2 players, ball
         :param actions_per_team_per_player:
-        :return:
+        :return: step execution status
         """
         other_players_actions = []
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
-                action = actions_per_team_per_player[team][player_id]
+                if ROS:
+                    action = actions_per_team_per_player[team].players_commands[player_id]
+                    action = [action.left_rpm, action.right_rpm, BallActions(action.extra_action)]
+                else:
+                    action = actions_per_team_per_player[team][player_id]
                 any_collision, *collisions = self.check_for_player_collisions(team, player_id)
 
                 if not any_collision:
@@ -58,6 +63,7 @@ class GameSimulator:
         if len(other_players_actions) != 0:
             self.ball.players_actions(other_players_actions)
         self.ball.step()
+        return True
 
     def get_positions_for_visualizer(self):
         """
@@ -183,6 +189,40 @@ class GameSimulator:
         raise NotImplementedError
 
 
+ROS = True
+VISUALIZER = True
+
+if ROS and __name__ == "__main__":
+    import rospy
+    from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
+    from visualizer import BasicVisualizer
+    pass
+
+
+class GameSimulationServer(GameSimulator):
+    def __init__(self):
+        super().__init__(RobotBasicModel, BallBasicModel)
+        rospy.init_node('game_simulation_server')
+        s = rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
+        print("Ready to add two ints.")
+        self.visualizer = BasicVisualizer(None)
+        rospy.spin()
+
+    def handle_simulation_call(self, simulation_request):
+        print(f" Get simulation request:  update = {simulation_request.update} reset = {simulation_request.reset}")
+        if not simulation_request.reset and simulation_request.update:
+            self.step(simulation_request.teams_commands)
+        response = SimulationUpdateResponse(True)
+        if VISUALIZER:
+            self.visualizer.send_game_state(*self.get_positions_for_visualizer())
+            self.visualizer.display()
+        return response
+
+
+if ROS and __name__ == "__main__":
+    GSS = GameSimulationServer()
+
+
 class TestGameSimulation:
     @staticmethod
     def test_game_initialization():
@@ -267,7 +307,7 @@ class TestGameSimulation:
         plt.gca().set_aspect('equal')
         pass
 
-if __name__ == "__main__":
+if not ROS and __name__ == "__main__":
     #TestGameSimulation.test_game_initialization()
     #TestGameSimulation.test_game_collision_steps_with_visualizer()
     TestGameSimulation.test_game_collision_steps_with_visualizer()

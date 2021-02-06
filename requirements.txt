@@ -1,1 +1,5 @@
 pygame
+numpy
+pandas
+matplotlib
+pyyaml
