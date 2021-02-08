@@ -1,4 +1,10 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+
+
+class Goal(Enum):
+    NO = 0
+    ChaseBall = 1
 
 
 class Robot(ABC):
