@@ -1,4 +1,8 @@
 import numpy as np
+import sys, os
+sys.path.append('../')
+cwd = os.getcwd()
+sys.path.append(cwd)
 from Robots.robot_model import RobotModel, RobotBasicModel
 from Robots.ball_model import BallModel, BallActions, BallBasicModel
 from Robots.collisions import CollisionTypes
@@ -201,11 +205,11 @@ if ROS and __name__ == "__main__":
 
 class GameSimulationServer(GameSimulator):
     def __init__(self):
+        self.visualizer = BasicVisualizer(None)
         super().__init__(RobotBasicModel, BallBasicModel)
         rospy.init_node('game_simulation_server')
         s = rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
         print("Ready to add two ints.")
-        self.visualizer = BasicVisualizer(None)
         rospy.spin()
 
     def handle_simulation_call(self, simulation_request):

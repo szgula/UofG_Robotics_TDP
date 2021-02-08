@@ -1,5 +1,11 @@
-import sys
-#sys.path.append('../')
+import sys, os
+sys.path.append('../')
+cwd = os.getcwd()
+sys.path.append(cwd)
+
+print(f'cwd = {cwd}')
+print(f'path = {sys.path}')
+
 from Robots.robot_model import RobotBasicModel
 from Robots.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
