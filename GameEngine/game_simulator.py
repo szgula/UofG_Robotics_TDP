@@ -32,6 +32,9 @@ class GameSimulator:
 
         self.ball = ball_model(0, 0)
 
+    def get_robot_model(self, team_id: int, player_id: int):
+        return self._robots[team_id][player_id]
+
     def step(self, actions_per_team_per_player):
         """
         Execute the simulation step for all components
