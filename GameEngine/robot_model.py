@@ -7,7 +7,8 @@ from GameEngine.collisions import CollisionTypes
 
 class RobotModel(ABC):
     @abstractmethod
-    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, robot_radius: float = 0.1, wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05):
+    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, robot_radius: float = 0.1,
+                 wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05):
         """
         :param dt: simulation time step
         """
@@ -91,6 +92,14 @@ class RobotModel(ABC):
         """
         return self._convert_EFCS_to_field_CS(self._x_pos_EFCS, self._y_pos_EFCS)
 
+    def get_point_angle_wcs(self):
+
+        return self.pointing_angle
+
+    def get_axis_len(self):
+
+        return self._axis_len
+
 
 class RobotBasicModel(RobotModel):
 
@@ -131,18 +140,26 @@ class RobotBasicModel(RobotModel):
 
         elif wall_collision != CollisionTypes.NO:
             if wall_collision == CollisionTypes.WALL_VERTICAL:
-                if self._x_pos_EFCS > 0: blocker_angle, restricted_angle = 0, np.pi / 2
-                else: blocker_angle, restricted_angle = -np.pi, np.pi/2
+                if self._x_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = 0, np.pi / 2
+                else:
+                    blocker_angle, restricted_angle = -np.pi, np.pi / 2
                 self._x_pos_EFCS = np.round(self._x_pos_EFCS)
             elif wall_collision == CollisionTypes.WALL_HORIZONTAL:
-                if self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/2, np.pi / 2
-                else: blocker_angle, restricted_angle = -np.pi/2, np.pi/2
+                if self._y_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = np.pi / 2, np.pi / 2
+                else:
+                    blocker_angle, restricted_angle = -np.pi / 2, np.pi / 2
                 self._y_pos_EFCS = np.round(self._y_pos_EFCS)
             else:
-                if self._x_pos_EFCS > 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/4, 3*np.pi/4
-                elif self._x_pos_EFCS > 0 and self._y_pos_EFCS < 0: blocker_angle, restricted_angle = -np.pi/4, 3*np.pi/4
-                elif self._x_pos_EFCS < 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = 3*np.pi/4, 3*np.pi/4
-                else: blocker_angle, restricted_angle = -3*np.pi/4, 3*np.pi/4
+                if self._x_pos_EFCS > 0 and self._y_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = np.pi / 4, 3 * np.pi / 4
+                elif self._x_pos_EFCS > 0 > self._y_pos_EFCS:
+                    blocker_angle, restricted_angle = -np.pi / 4, 3 * np.pi / 4
+                elif self._x_pos_EFCS < 0 < self._y_pos_EFCS:
+                    blocker_angle, restricted_angle = 3 * np.pi / 4, 3 * np.pi / 4
+                else:
+                    blocker_angle, restricted_angle = -3 * np.pi / 4, 3 * np.pi / 4
                 self._x_pos_EFCS = np.round(self._x_pos_EFCS)
                 self._y_pos_EFCS = np.round(self._y_pos_EFCS)
         else:
