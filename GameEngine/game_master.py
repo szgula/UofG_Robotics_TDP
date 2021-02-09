@@ -25,7 +25,6 @@ class BaseGameMaster:
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
         self.number_of_robots = 5
-        # self.number_of_robots = 1
         self.number_of_teams = 1
         self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
         self.simulator = None
@@ -95,28 +94,23 @@ class TestGameMaster:
 
 if __name__ == "__main__":
     game_master = BaseGameMaster()
-    actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
+    team01Goalkeeper = GoalkeeperController()
+
     kick_done = False
 
-    for i in range(game_master.full_game_length):
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+        team01Goalkeeper.accrue_sensors_data(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
+
         if not kick_done and game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 2.5:
-            game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),
-                                                 (1.2, 1.2, BallActions.KICK)))
+            game_master.update_robot_actions(0, (team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (1.2, 1.4, BallActions.KICK)))
             kick_done = True
         else:
-            game_master.update_robot_actions(0, actions)
+            if game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 4:
+                game_master.update_robot_actions(0, [team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (0, 0)])
+            else:
+                game_master.update_robot_actions(0, [team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (1.2, 1.2)])
         game_master.step()
-
-# if __name__ == "__main__":
-#     game_master = BaseGameMaster()
-#     team01Goalkeeper = GoalkeeperController()
-#
-#     while True:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 sys.exit()
-#
-#         team01Goalkeeper.accrue_sensors_data(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
-#         actions = [team01Goalkeeper.get_action(Goal.ChaseBall)]
-#         game_master.update_robot_actions(0, actions)
-#         game_master.step()

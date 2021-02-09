@@ -33,10 +33,9 @@ class GoalkeeperController(Robot):
         self._ball = ball_model
 
     def curvature(self, lookahead, pos, angle):
-        side = np.sign(math.sin(3.1415 / 2 - angle) * (lookahead[0] - pos[0]) - math.cos(3.1415 / 2 - angle) * (
-                    lookahead[1] - pos[1]))
-        a = -math.tan(3.1415 / 2 - angle)
-        c = math.tan(3.1415 / 2 - angle) * pos[0] - pos[1]
+        side = np.sign(math.sin(angle) * (lookahead[0] - pos[0]) - math.cos(angle) * (lookahead[1] - pos[1]))
+        a = -math.tan(angle)
+        c = math.tan(angle) * pos[0] - pos[1]
 
         x = abs(a * lookahead[0] + lookahead[1] + c) / math.sqrt(a ** 2 + 1)
-        return side * (2 * x / (float(4.4) ** 2))
+        return side * (2 * x / (float(1) ** 2))
