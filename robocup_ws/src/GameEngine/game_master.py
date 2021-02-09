@@ -10,6 +10,7 @@ sys.path.insert(0,parentdir)
 print(f'cwd = {cwd}')
 print(f'path = {sys.path}')
 
+from tqdm import tqdm
 from Robots.robot_model import RobotBasicModel
 from Robots.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
@@ -129,8 +130,7 @@ if __name__ == "__main__" and ROS:
     GMC = GameMasterClient()
 
     actions = [[(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
-    for i in range(1000):
-        print(f'Game master step = {i}')
+    for i in tqdm(range(1000)):
         GMC.send_update_request(actions)
 
 
