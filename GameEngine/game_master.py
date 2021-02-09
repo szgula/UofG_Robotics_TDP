@@ -1,9 +1,16 @@
+import sys
+
+import pygame
+
 from GameEngine.robot_model import RobotBasicModel
 from GameEngine.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
 from GameEngine.visualizer import BasicVisualizer
 from GameEngine.game_simulator import GameSimulator
 import logging
+
+from Robots.goalkeeper_controller import GoalkeeperController
+from Robots.robot_control import Goal
 
 
 class BaseGameMaster:
@@ -18,6 +25,7 @@ class BaseGameMaster:
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
         self.number_of_robots = 5
+        # self.number_of_robots = 1
         self.number_of_teams = 1
         self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
         self.simulator = None
@@ -99,3 +107,16 @@ if __name__ == "__main__":
             game_master.update_robot_actions(0, actions)
         game_master.step()
 
+# if __name__ == "__main__":
+#     game_master = BaseGameMaster()
+#     team01Goalkeeper = GoalkeeperController()
+#
+#     while True:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 sys.exit()
+#
+#         team01Goalkeeper.accrue_sensors_data(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
+#         actions = [team01Goalkeeper.get_action(Goal.ChaseBall)]
+#         game_master.update_robot_actions(0, actions)
+#         game_master.step()
