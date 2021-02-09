@@ -2,6 +2,10 @@ import sys, os
 sys.path.append('../')
 cwd = os.getcwd()
 sys.path.append(cwd)
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
 
 print(f'cwd = {cwd}')
 print(f'path = {sys.path}')
@@ -9,8 +13,8 @@ print(f'path = {sys.path}')
 from Robots.robot_model import RobotBasicModel
 from Robots.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
-from visualizer import BasicVisualizer
-from game_simulator import GameSimulator
+from GameEngine.visualizer import BasicVisualizer
+from GameEngine.game_simulator import GameSimulator
 import logging
 
 
@@ -86,8 +90,8 @@ class BaseGameMaster:
 ROS = True
 if __name__ == "__main__" and ROS:
     import rospy
-    from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
-    from game_interfaces.msg import TeamCommand, PlayerCommand
+    from game_interfaces.srv import *
+    from game_interfaces.msg import *
     pass
 
 
