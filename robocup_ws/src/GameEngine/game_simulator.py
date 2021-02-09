@@ -3,6 +3,10 @@ import sys, os
 sys.path.append('../')
 cwd = os.getcwd()
 sys.path.append(cwd)
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
 from Robots.robot_model import RobotModel, RobotBasicModel
 from Robots.ball_model import BallModel, BallActions, BallBasicModel
 from Robots.collisions import CollisionTypes
@@ -199,7 +203,7 @@ VISUALIZER = True
 if ROS and __name__ == "__main__":
     import rospy
     from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
-    from visualizer import BasicVisualizer
+    from GameEngine.visualizer import BasicVisualizer
     pass
 
 
