@@ -1,10 +1,21 @@
-import sys
-sys.path.append('../')
-from Robots.robot_model import RobotBasicModel
-from Robots.ball_model import BallBasicModel, BallActions
+import sys, os
+sys.path.append('../../')
+cwd = os.getcwd()
+sys.path.append(cwd)
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+
+print(f'cwd = {cwd}')
+print(f'path = {sys.path}')
+
+from tqdm import tqdm
+from src.robot_model import RobotBasicModel
+from src.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
-from visualizer import BasicVisualizer
-from game_simulator import GameSimulator
+from src.visualizer import BasicVisualizer
+from src.game_simulator import GameSimulator
 import logging
 
 
@@ -77,6 +88,53 @@ class BaseGameMaster:
         return self.goals, self.game_current_step
 
 
+ROS = True
+if __name__ == "__main__" and ROS:
+    import rospy
+    from game_interfaces.srv import *
+    from game_interfaces.msg import *
+    pass
+
+
+class GameMasterClient:
+    def __init__(self):
+        rospy.init_node('game_master_client')
+        rospy.wait_for_service(r'game_engine/game_simulation')
+        try:
+            self.server = rospy.ServiceProxy(r'game_engine/game_simulation', SimulationUpdate)
+        except rospy.ServiceException as e:
+            print("Service call failed: %s" % e)
+            raise e
+
+    def send_update_request(self, actions_list):
+        team_actions = self.convert_action_list_to_team_commands(actions_list)
+        rq = SimulationUpdateRequest(True, False, team_actions)
+        resp = self.server(rq)
+        return resp.status
+
+    @staticmethod
+    def convert_action_list_to_team_commands(action_list):
+        out = []
+        for team_id, team_actions in enumerate(action_list):
+            tc = TeamCommand()
+            tc.team_id = team_id
+            for player_idx, (lw, rw) in enumerate(team_actions):
+                tc.players_commands[player_idx].left_rpm = lw
+                tc.players_commands[player_idx].right_rpm = rw
+                tc.players_commands[player_idx].extra_action = 0
+            out.append(tc)
+        return out
+
+
+if __name__ == "__main__" and ROS:
+    GMC = GameMasterClient()
+
+    actions = [[(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
+    for i in tqdm(range(1000)):
+        GMC.send_update_request(actions)
+
+
+
 class TestGameMaster:
     @staticmethod
     def test_game_master_initialization():
@@ -87,7 +145,7 @@ class TestGameMaster:
         pass
 
 
-if __name__ == "__main__":
+if not ROS and __name__ == "__main__":
     game_master = BaseGameMaster()
     actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
     kick_done = False

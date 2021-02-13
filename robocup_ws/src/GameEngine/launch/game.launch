@@ -1,0 +1,4 @@
+<launch>
+  <node name="game_master" pkg="GameEngine" type="game_master.py"/>
+  <node name="game_simulator" pkg="GameEngine" type="game_simulator.py"/>
+</launch>

@@ -1,0 +1,5 @@
+bool update
+bool reset
+TeamCommand[2] teams_commands
+---
+int8 status
