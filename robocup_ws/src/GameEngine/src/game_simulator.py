@@ -1,15 +1,17 @@
+#!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
 import sys, os
-sys.path.append('../')
+sys.path.append('../../')
 cwd = os.getcwd()
 sys.path.append(cwd)
 import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
-from Robots.robot_model import RobotModel, RobotBasicModel
-from Robots.ball_model import BallModel, BallActions, BallBasicModel
-from Robots.collisions import CollisionTypes
+sys.path.insert(0,parentdir)
+print('Dupa' + str(sys.version))
+from src.robot_model import RobotModel, RobotBasicModel
+from src.ball_model import BallModel, BallActions, BallBasicModel
+from src.collisions import CollisionTypes
 
 
 
@@ -203,7 +205,7 @@ VISUALIZER = True
 if ROS and __name__ == "__main__":
     import rospy
     from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
-    from GameEngine.visualizer import BasicVisualizer
+    from src.visualizer import BasicVisualizer
     pass
 
 

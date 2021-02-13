@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from Robots.ball_model import BallActions
+from src.ball_model import BallActions
 import matplotlib.pyplot as plt
-from Robots.collisions import CollisionTypes
+from src.collisions import CollisionTypes
 
 
 class RobotModel(ABC):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from Robots.collisions import CollisionTypes
+from src.collisions import CollisionTypes
 import logging
 import numpy as np
 

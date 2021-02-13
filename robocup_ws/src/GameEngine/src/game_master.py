@@ -1,5 +1,5 @@
 import sys, os
-sys.path.append('../')
+sys.path.append('../../')
 cwd = os.getcwd()
 sys.path.append(cwd)
 import inspect
@@ -11,11 +11,11 @@ print(f'cwd = {cwd}')
 print(f'path = {sys.path}')
 
 from tqdm import tqdm
-from Robots.robot_model import RobotBasicModel
-from Robots.ball_model import BallBasicModel, BallActions
+from src.robot_model import RobotBasicModel
+from src.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
-from GameEngine.visualizer import BasicVisualizer
-from GameEngine.game_simulator import GameSimulator
+from src.visualizer import BasicVisualizer
+from src.game_simulator import GameSimulator
 import logging
 
 
