@@ -87,6 +87,11 @@ class BaseGameMaster:
         """
         return self.goals, self.game_current_step
 
+    def update_goal_counter(self, goal_status):
+        if goal_status != 0:
+            team_id = goal_status - 1
+            self.goals[team_id] += 1
+
 
 ROS = True
 if __name__ == "__main__" and ROS:
@@ -130,7 +135,7 @@ if __name__ == "__main__" and ROS:
     GMC = GameMasterClient()
 
     actions = [[(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
-    for i in tqdm(range(1000)):
+    for i in tqdm(range(5000)):
         GMC.send_update_request(actions)
 
 
