@@ -54,7 +54,7 @@ class BasicVisualizer:
                 self._exit_display()
         self.screen.fill((255, 255, 255))
         for pos in state_players_1:
-            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 7)
+            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 10)
         pygame.draw.circle(self.screen, (255, 0, 0), (ball*self.scale).astype(int), 5)
         pygame.draw.line(self.screen, (0, 255, 0),
                          (5, 50 + self._display_size[1] / 2),

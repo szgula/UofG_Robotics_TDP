@@ -34,3 +34,15 @@ Robotics Team Design Project at University of Glasgow
     
 
 ...to be continue
+
+
+1) git clone
+2) git checkout speccific branch
+3) source base ROS ```source /opt/ros/__vrsion__/setup.bash```
+4) cd robotcup
+5) catkin_make
+6) source devel/setup.bash
+7) cd ../
+8) sudo pip3 install -r requirements.txt (if pip3 is not working install it)
+9) cd robotcup
+10) roslaunch GameEngine game.launch
