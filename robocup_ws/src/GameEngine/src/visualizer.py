@@ -48,13 +48,13 @@ class BasicVisualizer:
         """
         if not self.vis_running:
             logging.warning('The visualization was closed')
-        state_players_1, state_players_2, ball = self.accrue_data_from_simulatior()
+        state_players_1, state_players_2, ball, score = self.accrue_data_from_simulatior()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._exit_display()
         self.screen.fill((255, 255, 255))
         for pos in state_players_1:
-            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 7)
+            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 10)
         pygame.draw.circle(self.screen, (255, 0, 0), (ball*self.scale).astype(int), 5)
         pygame.draw.line(self.screen, (0, 255, 0),
                          (5, 50 + self._display_size[1] / 2),
@@ -62,6 +62,11 @@ class BasicVisualizer:
         pygame.draw.line(self.screen, (0, 255, 0),
                          (self._display_size[0] - 5, 50 + self._display_size[1] / 2),
                          (self._display_size[0] - 5, -50 + self._display_size[1] / 2), 3)
+
+        font = pygame.font.SysFont(None, 48)
+        img = font.render(f'{score[0]} - {score[1]}', True, (255, 0, 0))
+        self.screen.blit(img, (self._display_size[0]/2-50, 20))
+
         pygame.display.flip()
 
     def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer
@@ -76,9 +81,9 @@ class BasicVisualizer:
             return self._data_provided_buffer
 
 
-    def send_game_state(self, team_1, team_2, ball):
+    def send_game_state(self, team_1, team_2, ball, score):
         self._data_provided = True
-        self._data_provided_buffer = (team_1, team_2, ball)
+        self._data_provided_buffer = (team_1, team_2, ball, score)
 
     def _temp_generate_random_data_from_simulation(self):
         # generate random positions
@@ -104,7 +109,7 @@ class BasicVisualizer:
             random_position_team_1[:, 0] = random_position_team_1[:, 0].clip(min=0, max=self._display_size[0])
             random_position_team_1[:, 1] = random_position_team_1[:, 1].clip(min=0, max=self._display_size[1])
 
-        return random_position_team_1, None, ball_position
+        return random_position_team_1, None, ball_position, [0,0]
 
 
 if __name__ == "__main__":

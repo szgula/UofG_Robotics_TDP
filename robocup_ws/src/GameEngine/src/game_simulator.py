@@ -34,6 +34,7 @@ class GameSimulator:
         self._number_of_robots = number_of_robots
         self._size_of_field = size_of_field
         self._robots = [list() for _ in range(self._number_of_teams)]
+        self.size_of_net = 2
         self.team_CS_rotations = [0, np.pi]
         self.team_starting_points = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
         for team in range(self._number_of_teams):
@@ -42,6 +43,16 @@ class GameSimulator:
                     self._robot_class(*self.team_starting_points[player_id], cord_system_rot=self.team_CS_rotations[team]))
 
         self.ball = ball_model(0, 0)
+        self._internal_goal_counter = [0, 0]
+
+    def reset(self):
+        """
+        Reset simulation to initial condition
+        """
+        self.ball.reset()
+        for team in range(self._number_of_teams):
+            for robot_ in self._robots[team]:
+                robot_.reset()
 
     def step(self, actions_per_team_per_player) -> bool:
         """
@@ -73,7 +84,8 @@ class GameSimulator:
         if len(other_players_actions) != 0:
             self.ball.players_actions(other_players_actions)
         self.ball.step()
-        return True
+        goal_status = self.check_if_ball_in_net()
+        return True, goal_status
 
     def get_positions_for_visualizer(self):
         """
@@ -90,7 +102,7 @@ class GameSimulator:
             #tp1_x, tp1_y = self._robots[01[player_id].get_position_components_wcs() # TODO: add for other team
         team_0 = np.array(team_0) + np.array(self._size_of_field) / 2
         ball = ball + np.array(self._size_of_field) / 2
-        return team_0, team_1, ball  # FIXME: 50 is scalar factor to match the visualization size
+        return team_0, team_1, ball, self._internal_goal_counter
 
     def get_positions(self):
         """
@@ -195,9 +207,25 @@ class GameSimulator:
         collision = CollisionTypes.PLAYER if len(collisions_list) else CollisionTypes.NO
         return collision, collisions_list
 
-    def check_if_ball_in_net(self):
-        raise NotImplementedError
+    def check_if_ball_in_net(self) -> int:
+        """
+        :return: 0 no goal, or id of team who score a goal
+        """
+        ball_pos = self.ball.get_position()
+        field_size = self._size_of_field
+        goal_state = 0
 
+        ball_in_net_x_threshold = 0.2
+        if field_size[0]/2 - abs(ball_pos[0]) < ball_in_net_x_threshold:
+            if abs(ball_pos[1]) <= self.size_of_net:
+                if ball_pos[0] > 0:
+                    goal_state = 1
+                    self._internal_goal_counter[0] += 1
+                else:
+                    goal_state = 2
+                    self._internal_goal_counter[1] += 1
+                self.reset()
+        return goal_state
 
 ROS = True
 VISUALIZER = True
@@ -221,11 +249,12 @@ class GameSimulationServer(GameSimulator):
     def handle_simulation_call(self, simulation_request):
         print(f" Get simulation request:  update = {simulation_request.update} reset = {simulation_request.reset}")
         if not simulation_request.reset and simulation_request.update:
-            self.step(simulation_request.teams_commands)
-        response = SimulationUpdateResponse(True)
+            update_status, goal_status = self.step(simulation_request.teams_commands)
+        response = SimulationUpdateResponse(update_status, goal_status)
         if VISUALIZER:
             self.visualizer.send_game_state(*self.get_positions_for_visualizer())
             self.visualizer.display()
+
         return response
 
 

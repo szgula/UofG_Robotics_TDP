@@ -22,14 +22,17 @@ class RobotModel(ABC):
         # pointing angle [rad], 0rad with X axis, positive towards the Y axis (counterclockwise)
         self._cord_system_rot = cord_system_rot  # team coordinate system (EFCS) rotation in respect to game CS
         x_init, y_init = self._convert_field_CS_to_EFCS(init_x_pos, init_y_pos)
+        self._init_pos = [x_init, y_init]
         self._x_pos_EFCS = x_init                           # robot x coordinate in field coordinate system
         self._y_pos_EFCS = y_init                           # robot x coordinate in field coordinate system
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
         self._axis_len = axis_len                           # distance between wheels
 
-        #self.last_collision_object = None
-        #self.steps_since_last_collision = 1000
+    def reset(self):
+        self._x_pos_EFCS, self._y_pos_EFCS = self._init_pos[0], self._init_pos[1]
+        self.vel = 0
+        self.pointing_angle = 0
 
     def _convert_field_CS_to_EFCS(self, pos_x: float, pos_y: float) -> (float, float):
         """
