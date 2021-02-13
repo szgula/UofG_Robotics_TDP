@@ -1,8 +1,10 @@
-from GameEngine.robot_model import RobotBasicModel
-from GameEngine.ball_model import BallBasicModel, BallActions
+import sys
+sys.path.append('../')
+from Robots.robot_model import RobotBasicModel
+from Robots.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
-from GameEngine.visualizer import BasicVisualizer
-from GameEngine.game_simulator import GameSimulator
+from visualizer import BasicVisualizer
+from game_simulator import GameSimulator
 import logging
 
 

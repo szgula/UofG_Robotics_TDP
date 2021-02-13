@@ -1,7 +1,7 @@
 import numpy as np
-from GameEngine.robot_model import RobotModel
-from GameEngine.ball_model import BallModel, BallActions
-from GameEngine.collisions import CollisionTypes
+from Robots.robot_model import RobotModel
+from Robots.ball_model import BallModel, BallActions
+from Robots.collisions import CollisionTypes
 
 
 class GameSimulator:
