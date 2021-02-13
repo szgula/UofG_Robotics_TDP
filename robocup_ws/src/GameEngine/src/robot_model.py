@@ -21,10 +21,10 @@ class RobotModel(ABC):
         # positive Y 90deg rotated counterclockwise from X axis
         # pointing angle [rad], 0rad with X axis, positive towards the Y axis (counterclockwise)
         self._cord_system_rot = cord_system_rot  # team coordinate system (EFCS) rotation in respect to game CS
-        x_init, y_init = self._convert_field_CS_to_EFCS(init_x_pos, init_y_pos)
-        self._init_pos = [x_init, y_init]
-        self._x_pos_EFCS = x_init                           # robot x coordinate in field coordinate system
-        self._y_pos_EFCS = y_init                           # robot x coordinate in field coordinate system
+        #x_init, y_init = self._convert_field_CS_to_EFCS(init_x_pos, init_y_pos)
+        self._init_pos = [init_x_pos, init_y_pos]
+        self._x_pos_EFCS = init_x_pos                           # robot x coordinate in field coordinate system
+        self._y_pos_EFCS = init_y_pos                           # robot x coordinate in field coordinate system
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
         self._axis_len = axis_len                           # distance between wheels
@@ -94,6 +94,12 @@ class RobotModel(ABC):
         """
         return self._convert_EFCS_to_field_CS(self._x_pos_EFCS, self._y_pos_EFCS)
 
+    def get_pointing_angle_wcs(self) -> float:
+        angle = self.pointing_angle + self._cord_system_rot
+        if angle > np.pi: angle -= 2*np.pi
+        if angle < -np.pi: angle += 2*np.pi
+        return angle
+
 
 class RobotBasicModel(RobotModel):
 
@@ -155,21 +161,20 @@ class RobotBasicModel(RobotModel):
 
     def step_with_restrictions(self, angle_of_blockage_relative_to_ego, restricted_angle,
                                l_motor_speed: float, r_motor_speed: float):
-        # FIXME: angle_of_blockage_relative_to_ego is in WCS while self.pointing_angle is in EFCS
         get_diff_angle = lambda a, b: abs((a - b + np.pi) % (2 * np.pi) - np.pi)
-        clip_angle = lambda a: a - 2 * np.pi * np.sign(a) if abs(a) > np.pi else a
+        clip_angle = lambda a: a - 2 * np.pi * np.sign(a) if abs(a) > np.pi else a  # TODO: in convert_angle_to_wcs same is done; remove code duplication
         vel_simplified = (l_motor_speed + r_motor_speed) / 2
 
         if vel_simplified == 0:
             self.step(l_motor_speed, r_motor_speed)
         elif vel_simplified > 0:
-            angle_diff = get_diff_angle(angle_of_blockage_relative_to_ego, self.pointing_angle)
+            angle_diff = get_diff_angle(angle_of_blockage_relative_to_ego, self.get_pointing_angle_wcs())
             if angle_diff > restricted_angle:
                 self.step(l_motor_speed, r_motor_speed)
             else:
                 self.step(l_motor_speed - vel_simplified, r_motor_speed - vel_simplified)
         elif vel_simplified < 0:
-            move_pointing_ang = clip_angle(self.pointing_angle + np.pi)
+            move_pointing_ang = clip_angle(self.get_pointing_angle_wcs() + np.pi)
             angle_diff = get_diff_angle(angle_of_blockage_relative_to_ego, move_pointing_ang)
             if angle_diff > restricted_angle:
                 self.step(l_motor_speed, r_motor_speed)
