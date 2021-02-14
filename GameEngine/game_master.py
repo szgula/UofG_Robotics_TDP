@@ -1,3 +1,5 @@
+import sys             #from omar
+sys.path.append('../') #from omar
 from GameEngine.robot_model import RobotBasicModel
 from GameEngine.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
