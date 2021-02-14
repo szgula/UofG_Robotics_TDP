@@ -57,8 +57,11 @@ class BasicVisualizer:
         self.screen.fill((255, 255, 255))
         for pos in state_players_1:
             pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 10)
+            self.draw_direction_arrow(pos)
         for pos in state_players_2:
             pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2]*self.scale).astype(int), 10)
+            self.draw_direction_arrow(pos)
+
         pygame.draw.circle(self.screen, (255, 0, 0), (ball*self.scale).astype(int), 5)
         pygame.draw.line(self.screen, (0, 255, 0),
                          (5, 50 + self._display_size[1] / 2),
@@ -73,6 +76,11 @@ class BasicVisualizer:
 
         pygame.display.flip()
         self.fclock.tick(self.fps)
+
+    def draw_direction_arrow(self, pos):
+        start = np.array(pos[:2] * self.scale).reshape(2, 1)
+        change = np.array([10 * np.cos(pos[2:]), -10 * np.sin(pos[2:])]).reshape(2, 1)
+        pygame.draw.line(self.screen, (0, 0, 0), (pos[:2] * self.scale).astype(int), (start + change)[:, 0].astype(int), 3)
 
     def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer
         """
