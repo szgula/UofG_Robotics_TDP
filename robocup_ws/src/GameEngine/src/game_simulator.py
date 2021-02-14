@@ -230,7 +230,7 @@ class GameSimulator:
                 self.reset()
         return goal_state
 
-ROS = True
+ROS = False
 VISUALIZER = True
 
 if ROS and __name__ == "__main__":
