@@ -31,7 +31,7 @@ class BaseGameMaster:
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
         self.number_of_robots = 5
-        self.number_of_teams = 1
+        self.number_of_teams = 2
         self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
         self.simulator = None
         self.reset()
@@ -134,7 +134,7 @@ class GameMasterClient:
 if __name__ == "__main__" and ROS:
     GMC = GameMasterClient()
 
-    actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
+    actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (0.99, 1.0)], [(0,0), (0,0), (0,0), (0,0), (1.1, 1.1)]]
     for i in tqdm(range(5000)):
         GMC.send_update_request(actions)
 

@@ -17,7 +17,7 @@ from src.collisions import CollisionTypes
 
 
 class GameSimulator:
-    def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 1, number_of_robots: int = 5,
+    def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 2, number_of_robots: int = 5,
                  size_of_field: tuple = (10, 6)):
         """
 
@@ -95,18 +95,21 @@ class GameSimulator:
         """
         ball = self.ball.get_position()
         ball = np.array([ball[0], -ball[1]])  # FIXME: minus is due to inverted axis in pygames
-        team_0, team_1 = [], None
+        team_0, team_1 = [], []
         for player_id in range(self._number_of_robots):
             tp0_x, tp0_y = self._robots[0][player_id].get_position_components_wcs()
             team_0.append([tp0_x, -tp0_y])                                             # FIXME: minus is due to inverted axis in pygames
-            #tp1_x, tp1_y = self._robots[01[player_id].get_position_components_wcs() # TODO: add for other team
+            tp1_x, tp1_y = self._robots[1][player_id].get_position_components_wcs()
+            team_1.append([tp1_x, -tp1_y])                                              # FIXME: minus is due to inverted axis in pygames
         team_0 = np.array(team_0) + np.array(self._size_of_field) / 2
+        team_1 = np.array(team_1) + np.array(self._size_of_field) / 2
         ball = ball + np.array(self._size_of_field) / 2
         return team_0, team_1, ball, self._internal_goal_counter
 
     def get_positions(self):
         """
         FIXME: should return positions of all robots in teams - currently it is fixed for single team
+        FIXME: .... the above is done, but verify if any calls to this method need to be modified
         :return:
         """
         x_pos_1, x_pos_2 = [], []
@@ -114,10 +117,10 @@ class GameSimulator:
         for player_id in range(self._number_of_robots):
             x, y = self._robots[0][player_id].get_position_components_wcs()
             x_pos_1.append(x), y_pos_1.append(y)
-            #x, y = self._robots[1][player_id].get_position_components_wcs()
-            #x_pos_2.append(x), y_pos_2.append(y)
+            x, y = self._robots[1][player_id].get_position_components_wcs()
+            x_pos_2.append(x), y_pos_2.append(y)
 
-        return np.array([x_pos_1, y_pos_1])
+        return np.array([x_pos_1, y_pos_1]), np.array([x_pos_2, y_pos_2])
 
     def check_ball_collisions(self):
         x, y = self.ball.get_position()
@@ -217,7 +220,7 @@ class GameSimulator:
 
         ball_in_net_x_threshold = 0.2
         if field_size[0]/2 - abs(ball_pos[0]) < ball_in_net_x_threshold:
-            if abs(ball_pos[1]) <= self.size_of_net:
+            if abs(ball_pos[1]) <= self.size_of_net/2:
                 if ball_pos[0] > 0:
                     goal_state = 1
                     self._internal_goal_counter[0] += 1
