@@ -101,11 +101,14 @@ class GameSimulator:
         team_0, team_1 = [], []
         for player_id in range(self._number_of_robots):
             tp0_x, tp0_y = self._robots[0][player_id].get_position_components_wcs()
-            team_0.append([tp0_x, -tp0_y])                                             # FIXME: minus is due to inverted axis in pygames
+            tp0_angle = self._robots[0][player_id].get_pointing_angle_wcs()
+            team_0.append([tp0_x, -tp0_y, tp0_angle])  # FIXME: minus is due to inverted axis in pygames
             tp1_x, tp1_y = self._robots[1][player_id].get_position_components_wcs()
-            team_1.append([tp1_x, -tp1_y])                                              # FIXME: minus is due to inverted axis in pygames
-        team_0 = np.array(team_0) + np.array(self._size_of_field) / 2
-        team_1 = np.array(team_1) + np.array(self._size_of_field) / 2
+            tp1_angle = self._robots[1][player_id].get_pointing_angle_wcs()
+            team_1.append([tp1_x, -tp1_y, tp1_angle])  # FIXME: minus is due to inverted axis in pygames
+
+        team_0 = np.array(team_0) + np.hstack((np.array(self._size_of_field) / 2, [0]))
+        team_1 = np.array(team_1) + np.hstack((np.array(self._size_of_field) / 2, [0]))
         ball = ball + np.array(self._size_of_field) / 2
         return team_0, team_1, ball, self._internal_goal_counter
 

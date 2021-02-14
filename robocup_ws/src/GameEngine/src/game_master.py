@@ -140,40 +140,14 @@ if __name__ == "__main__" and ROS:
 
 
 
-class TestGameMaster:
-    @staticmethod
-    def test_game_master_initialization():
-        pass
-
-    @staticmethod
-    def test_game_with_simple_actions():
-        pass
-
-
-# if not ROS and __name__ == "__main__":
-#     game_master = BaseGameMaster()
-#     actions = [(0.97, 1.0), (1.5, 0.97), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
-#     kick_done = False
+# class TestGameMaster:
+#     @staticmethod
+#     def test_game_master_initialization():
+#         pass
 #
-#     for i in range(game_master.full_game_length):
-#         if not kick_done and game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 2.5:
-#             game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),
-#                                                  (1.2, 1.2, BallActions.KICK)))
-#             kick_done = True
-#         else:
-#             game_master.update_robot_actions(0, actions)
-#         game_master.step()
-
-# if not ROS and __name__ == "__main__":
-#     game_master = BaseGameMaster()
-#     actions_team_1 = [(0.97, 1.0), (1.5, 0.97), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
-#     actions_team_2 = [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
-#     kick_done = False
-#
-#     while True:
-#         game_master.update_robot_actions(0, actions_team_1)
-#         game_master.update_robot_actions(1, actions_team_2)
-#         game_master.step()
+#     @staticmethod
+#     def test_game_with_simple_actions():
+#         pass
 
 
 if not ROS and __name__ == "__main__":
@@ -189,3 +163,4 @@ if not ROS and __name__ == "__main__":
         game_master.update_robot_actions(0, [team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (0, 0)])
         game_master.update_robot_actions(1, actions)
         game_master.step()
+
