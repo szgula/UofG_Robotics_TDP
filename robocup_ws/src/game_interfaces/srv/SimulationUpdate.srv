@@ -1,0 +1,6 @@
+bool update
+bool reset
+TeamCommand[2] teams_commands
+---
+int8 status
+int8 goal_status

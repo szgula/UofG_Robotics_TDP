@@ -127,4 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-.idea
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode
+
+# ROS
+robocup_ws/devel/
+
+.vscode

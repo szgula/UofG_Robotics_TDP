@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from GameEngine.collisions import CollisionTypes
+from src.collisions import CollisionTypes
 import logging
 import numpy as np
 
@@ -11,7 +11,6 @@ class BallModel(ABC):
         :param dt: simulation time step
         """
         self._dt = dt
-        self._heading_angle = 0                             # robot heading direction, range <-pi, pi>
         self._x_vel = 0                                     # robot velocity
         self._y_vel = 0                                     # robot velocity
         self.vel_limit = (-float('int'), float('int'))      # robot velocity limits
@@ -25,6 +24,14 @@ class BallModel(ABC):
     def step(self, action):
         """
         Execute simulation step
+        :return:
+        """
+        pass
+
+    @abstractmethod
+    def reset(self):
+        """
+        Reset ball state to initial condition
         :return:
         """
         pass
@@ -51,10 +58,10 @@ class BallBasicModel(BallModel):
         :param dt: simulation time step
         """
         self._dt = dt
-        self._heading_angle = 0                             # robot heading direction, range <-pi, pi>
         self._x_vel = 0                                     # robot velocity x component
         self._y_vel = 0                                     # robot velocity y component
         self._max_vel = ball_max_vel                        # robot velocity limits
+        self._init_pos = [init_x_pos, init_y_pos]
         self._x_pos = init_x_pos                            # ball x coordinate in field coordinate system
         self._y_pos = init_y_pos                            # ball y coordinate in field coordinate system
         self._friction = friction                           # friction proportional to vel
@@ -65,6 +72,12 @@ class BallBasicModel(BallModel):
         self.last_collision_object = None
         self.steps_since_last_collision = 1000
         self.MINIMAL_TIME_BETWEEN_COLLISION_WITH_SAME_OBJECT = 0
+
+    def reset(self):
+        self._x_vel, self._y_vel = 0, 0
+        self._x_pos, self._y_pos = self._init_pos[0], self._init_pos[1]
+        self.last_collision_object = None
+        self.steps_since_last_collision = 1000
 
     def step(self):
         """
