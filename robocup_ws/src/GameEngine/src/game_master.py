@@ -134,7 +134,7 @@ class GameMasterClient:
 if __name__ == "__main__" and ROS:
     GMC = GameMasterClient()
 
-    actions = [[(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
+    actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)], []]
     for i in tqdm(range(5000)):
         GMC.send_update_request(actions)
 
@@ -152,7 +152,7 @@ class TestGameMaster:
 
 if not ROS and __name__ == "__main__":
     game_master = BaseGameMaster()
-    actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
+    actions = [(0.97, 1.0), (1.5, 0.97), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
     kick_done = False
 
     for i in range(game_master.full_game_length):

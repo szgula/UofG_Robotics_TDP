@@ -128,7 +128,7 @@ class RobotBasicModel(RobotModel):
             collision_object = collision_list[0]  # TODO, handle collision with multiple players
             other_pos_x, other_pos_y = collision_object.get_position_components_wcs()
             self_pos_x, self_pos_y = self.get_position_components_wcs()
-            diff_x, diff_y = self_pos_x - other_pos_x, self_pos_y - other_pos_y
+            diff_x, diff_y = - self_pos_x + other_pos_x, - self_pos_y + other_pos_y
             blocker_angle = np.arctan2(diff_y, diff_x)
             restricted_angle = np.pi / 2
 
@@ -155,6 +155,7 @@ class RobotBasicModel(RobotModel):
 
     def step_with_restrictions(self, angle_of_blockage_relative_to_ego, restricted_angle,
                                l_motor_speed: float, r_motor_speed: float):
+        # FIXME: angle_of_blockage_relative_to_ego is in WCS while self.pointing_angle is in EFCS
         get_diff_angle = lambda a, b: abs((a - b + np.pi) % (2 * np.pi) - np.pi)
         clip_angle = lambda a: a - 2 * np.pi * np.sign(a) if abs(a) > np.pi else a
         vel_simplified = (l_motor_speed + r_motor_speed) / 2

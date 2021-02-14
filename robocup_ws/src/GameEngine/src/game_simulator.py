@@ -191,7 +191,7 @@ class GameSimulator:
         :param this_team_id: object to check player id (if not a player: -1)
         :return:
         """
-        safe_collision_threshold = 1.2  # FIXME
+        safe_collision_threshold = 1.1  # FIXME
         #p_x, p_y = player.get_position_components_wcs()
         R = R + self._robots[0][0].radius  * safe_collision_threshold
         collisions_list = []
