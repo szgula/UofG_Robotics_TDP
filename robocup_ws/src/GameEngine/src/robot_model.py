@@ -28,7 +28,7 @@ class RobotModel(ABC):
         self._y_pos_EFCS = init_y_pos                           # robot x coordinate in field coordinate system
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
-        self._axis_len = axis_len                           # distance between wheels
+        self.axis_len = axis_len                           # distance between wheels
 
     def reset(self):
         self._x_pos_EFCS, self._y_pos_EFCS = self._init_pos[0], self._init_pos[1]
@@ -95,14 +95,6 @@ class RobotModel(ABC):
         """
         return self._convert_EFCS_to_field_CS(self._x_pos_EFCS, self._y_pos_EFCS)
 
-    def get_point_angle_wcs(self):
-
-        return self.pointing_angle
-
-    def get_axis_len(self):
-
-        return self._axis_len
-
     def get_pointing_angle_wcs(self) -> float:
         angle = self.pointing_angle + self._cord_system_rot
         if angle > np.pi: angle -= 2*np.pi
@@ -128,7 +120,7 @@ class RobotBasicModel(RobotModel):
         self.vel = (self._wheel_radius / 2.0) * (l_motor_speed + r_motor_speed)
         xn = self._x_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.cos(self.pointing_angle)
         yn = self._y_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.sin(self.pointing_angle)
-        qn = self.pointing_angle + (self._wheel_radius * self._dt / (self._axis_len)) * (l_motor_speed - r_motor_speed)
+        qn = self.pointing_angle + (self._wheel_radius * self._dt / (self.axis_len)) * (l_motor_speed - r_motor_speed)
         clip_angle = lambda a: a - 2*np.pi*np.sign(a) if abs(a) > np.pi else a
         self._x_pos_EFCS, self._y_pos_EFCS, self.pointing_angle = xn, yn, clip_angle(qn)
         return extra_action
