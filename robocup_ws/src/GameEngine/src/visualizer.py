@@ -23,7 +23,7 @@ class BasicVisualizer:
         self._temp_initialized_data = False
         self._data_provided = False
         self._data_provided_buffer = ()
-        self.fps = 60
+        self.fps = 500
         self.fclock = pygame.time.Clock()
 
     def __del__(self):
