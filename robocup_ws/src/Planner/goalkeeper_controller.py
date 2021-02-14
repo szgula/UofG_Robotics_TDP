@@ -20,6 +20,7 @@ class GoalkeeperController(Robot):
     def get_action(self, goal) -> tuple:
         if goal == Goal.ChaseBall:
             self._bscActHander.action = ChaseBallAction([self._goalkeeper, self._ball])
+        ChaseBallAction.judge_distance_ball(self, self._ball.get_position(), self._goalkeeper.get_position_components_wcs())
         return self._bscActHander.handle()
 
     def accrue_sensors_data(self):

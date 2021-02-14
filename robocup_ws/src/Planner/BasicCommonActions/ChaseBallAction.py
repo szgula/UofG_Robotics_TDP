@@ -25,3 +25,28 @@ class ChaseBallAction(Action):
         c = math.tan(angle) * pos[0] - pos[1]
         x = abs(a * lookahead[0] + lookahead[1] + c) / math.sqrt(a ** 2 + 1)
         return side * (2 * x / (float(1) ** 2))
+
+    def judge_distance_ball(self, lookahead, pos):
+        distance_ball = np.sqrt((lookahead[0]-pos[0]) ** 2 + (lookahead[1] - pos[1])**2)
+        print('distance_ball:', distance_ball)
+        return distance_ball
+
+    def judge_distance_teammates(self, pos, teammates_pos):
+        distance_teammates = []
+        for i in range(len(teammates_pos)):
+            distance_teammates[i] = np.sqrt((teammates_pos[i][0] - pos[0])**2 + (teammates_pos[i][1]-pos[1])**2)
+        return distance_teammates
+
+    def judge_distance_opponents(self, pos, opponents_pos):
+        distance_opponents = []
+        for i in range(len(opponents_pos)):
+            distance_opponents[i] = np.sqrt((opponents_pos[i][0] - pos[0])**2 + (opponents_pos[i][1]-pos[1])**2)
+        return distance_opponents
+
+    def judge_distance_OurGoal(self, pos, OurGoal_pos):
+        distance_ourGoal = np.sqrt((OurGoal_pos[0] - pos[0]) ** 2 + (OurGoal_pos[1] - pos[1]) ** 2)
+        return distance_ourGoal
+
+    def judge_distance_TheirGoal(self, pos, TheirGoal_pos):
+        distance_TheirGoal = np.sqrt((TheirGoal_pos[0] - pos[0]) ** 2 + (TheirGoal_pos[1] - pos[1]) ** 2)
+        return distance_TheirGoal
