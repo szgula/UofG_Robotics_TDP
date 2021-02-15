@@ -13,7 +13,7 @@ class ChaseBallAction(Action):
     def chase_ball(self, goalkeeper_model: RobotModel, ball_model: BallModel):
         lookahead = ball_model.get_position()
         pos = goalkeeper_model.get_position_components_wcs()
-        angle = goalkeeper_model.get_pointing_angle_wcs()
+        angle = goalkeeper_model.pointing_angle
         curv = self.curvature(lookahead, pos, angle)
         width = float(goalkeeper_model.axis_len)
         wheels = [(2 + curv * width) / 2, (2 - curv * width) / 2]
