@@ -57,6 +57,7 @@ class BasicVisualizer:
             pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2]*self.scale).astype(int), 7)
         pygame.draw.circle(self.screen, (255, 0, 0), (ball*self.scale).astype(int), 5)
         #Drawing goal post one
+        #This draws the goalpost
         pygame.draw.line(self.screen, (0, 255, 0),
                          (5, 50 + self._display_size[1] / 2),
                          (5, -50 + self._display_size[1] / 2), 3)
