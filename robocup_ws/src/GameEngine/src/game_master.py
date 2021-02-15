@@ -156,11 +156,12 @@ if not ROS and __name__ == "__main__":
 
     game_master = BaseGameMaster()
     team01Goalkeeper = GoalkeeperController(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
+    team02Goalkeeper = GoalkeeperController(game_master.simulator.get_robot_model(1, 4), game_master.simulator.ball)
     actions = [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
     kick_done = False
 
     while True:
         game_master.update_robot_actions(0, [team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (0, 0)])
-        game_master.update_robot_actions(1, actions)
+        game_master.update_robot_actions(1, [(0,0),  (0, 0), (0, 0), (0, 0),team02Goalkeeper.get_action(Goal.ChaseBall)])
         game_master.step()
 
