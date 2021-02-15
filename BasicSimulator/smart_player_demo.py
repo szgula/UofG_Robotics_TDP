@@ -6,7 +6,7 @@ from GameEngine.game_simulator import GameSimulator
 import logging
 
 
-class Dribble_Demo:
+class Shoot_Demo:
     def __init__(self):
         """
         :param robot_class:
@@ -23,7 +23,7 @@ class Dribble_Demo:
         self.simulator = None
         self.reset()
 
-        self.full_game_length = 30000
+        self.full_game_length = 6000
         self.game_current_step = 0
         self.goals = [0, 0]
 
@@ -86,17 +86,11 @@ class TestGameMaster:
 
 
 if __name__ == "__main__":
-    game_master = BaseGameMaster()
-    actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
+    game_master = Shoot_Demo()
+    actions = [(1.2, 1.2)]
     kick_done = False
 
     #The simulation begins and lasts for full_game_length
     for i in range(game_master.full_game_length):
-        if not kick_done and game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 2.5:
-            game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),
-                                                 (1.2, 1.2, BallActions.KICK)))
-            kick_done = True
-        else:
-            game_master.update_robot_actions(0, actions)
+        game_master.update_robot_actions(0, actions)
         game_master.step()
-

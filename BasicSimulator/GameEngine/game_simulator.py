@@ -20,13 +20,16 @@ class GameSimulator:
         :param number_of_robots:
         :param size_of_field:
         """
+        starting_points_sample_one = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
+        starting_points_sample_two = [(-3,2)]
+
         self._robot_class = robot_class
         self._number_of_teams = number_of_teams
         self._number_of_robots = number_of_robots
         self._size_of_field = size_of_field
         self._robots = [list() for _ in range(self._number_of_teams)]
         self.team_CS_rotations = [0, np.pi]
-        self.team_starting_points = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
+        self.team_starting_points = starting_points_sample_two  
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
                 self._robots[team].append(
