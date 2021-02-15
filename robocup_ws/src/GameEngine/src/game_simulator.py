@@ -54,6 +54,9 @@ class GameSimulator:
             for robot_ in self._robots[team]:
                 robot_.reset()
 
+    def get_robot_model(self, team_id: int, player_id: int):
+        return self._robots[team_id][player_id]
+
     def step(self, actions_per_team_per_player) -> bool:
         """
         Execute the simulation step for all components

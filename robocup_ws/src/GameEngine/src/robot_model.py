@@ -7,7 +7,8 @@ from src.collisions import CollisionTypes
 
 class RobotModel(ABC):
     @abstractmethod
-    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, robot_radius: float = 0.1, wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05):
+    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, robot_radius: float = 0.1,
+                 wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05):
         """
         :param dt: simulation time step
         """
@@ -27,7 +28,7 @@ class RobotModel(ABC):
         self._y_pos_EFCS = init_y_pos                           # robot x coordinate in field coordinate system
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
-        self._axis_len = axis_len                           # distance between wheels
+        self.axis_len = axis_len                           # distance between wheels
 
     def reset(self):
         self._x_pos_EFCS, self._y_pos_EFCS = self._init_pos[0], self._init_pos[1]
@@ -119,7 +120,7 @@ class RobotBasicModel(RobotModel):
         self.vel = (self._wheel_radius / 2.0) * (l_motor_speed + r_motor_speed)
         xn = self._x_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.cos(self.pointing_angle)
         yn = self._y_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.sin(self.pointing_angle)
-        qn = self.pointing_angle + (self._wheel_radius * self._dt / (self._axis_len)) * (l_motor_speed - r_motor_speed)
+        qn = self.pointing_angle + (self._wheel_radius * self._dt / (self.axis_len)) * (l_motor_speed - r_motor_speed)
         clip_angle = lambda a: a - 2*np.pi*np.sign(a) if abs(a) > np.pi else a
         self._x_pos_EFCS, self._y_pos_EFCS, self.pointing_angle = xn, yn, clip_angle(qn)
         return extra_action
@@ -140,18 +141,26 @@ class RobotBasicModel(RobotModel):
 
         elif wall_collision != CollisionTypes.NO:
             if wall_collision == CollisionTypes.WALL_VERTICAL:
-                if self._x_pos_EFCS > 0: blocker_angle, restricted_angle = 0, np.pi / 2
-                else: blocker_angle, restricted_angle = -np.pi, np.pi/2
+                if self._x_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = 0, np.pi / 2
+                else:
+                    blocker_angle, restricted_angle = -np.pi, np.pi / 2
                 self._x_pos_EFCS = np.round(self._x_pos_EFCS)
             elif wall_collision == CollisionTypes.WALL_HORIZONTAL:
-                if self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/2, np.pi / 2
-                else: blocker_angle, restricted_angle = -np.pi/2, np.pi/2
+                if self._y_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = np.pi / 2, np.pi / 2
+                else:
+                    blocker_angle, restricted_angle = -np.pi / 2, np.pi / 2
                 self._y_pos_EFCS = np.round(self._y_pos_EFCS)
             else:
-                if self._x_pos_EFCS > 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = np.pi/4, 3*np.pi/4
-                elif self._x_pos_EFCS > 0 and self._y_pos_EFCS < 0: blocker_angle, restricted_angle = -np.pi/4, 3*np.pi/4
-                elif self._x_pos_EFCS < 0 and self._y_pos_EFCS > 0: blocker_angle, restricted_angle = 3*np.pi/4, 3*np.pi/4
-                else: blocker_angle, restricted_angle = -3*np.pi/4, 3*np.pi/4
+                if self._x_pos_EFCS > 0 and self._y_pos_EFCS > 0:
+                    blocker_angle, restricted_angle = np.pi / 4, 3 * np.pi / 4
+                elif self._x_pos_EFCS > 0 > self._y_pos_EFCS:
+                    blocker_angle, restricted_angle = -np.pi / 4, 3 * np.pi / 4
+                elif self._x_pos_EFCS < 0 < self._y_pos_EFCS:
+                    blocker_angle, restricted_angle = 3 * np.pi / 4, 3 * np.pi / 4
+                else:
+                    blocker_angle, restricted_angle = -3 * np.pi / 4, 3 * np.pi / 4
                 self._x_pos_EFCS = np.round(self._x_pos_EFCS)
                 self._y_pos_EFCS = np.round(self._y_pos_EFCS)
         else:

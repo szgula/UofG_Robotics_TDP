@@ -23,6 +23,8 @@ class BasicVisualizer:
         self._temp_initialized_data = False
         self._data_provided = False
         self._data_provided_buffer = ()
+        self.fps = 500
+        self.fclock = pygame.time.Clock()
 
     def __del__(self):
         pygame.quit()
@@ -70,6 +72,7 @@ class BasicVisualizer:
         self.screen.blit(img, (self._display_size[0]/2-50, 20))
 
         pygame.display.flip()
+        self.fclock.tick(self.fps)
 
     def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer
         """
