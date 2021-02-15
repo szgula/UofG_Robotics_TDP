@@ -155,13 +155,16 @@ if not ROS and __name__ == "__main__":
     from robot_control import Goal
 
     game_master = BaseGameMaster()
-    team01Goalkeeper = GoalkeeperController(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
-    team02Goalkeeper = GoalkeeperController(game_master.simulator.get_robot_model(1, 4), game_master.simulator.ball)
+    team01Attacker01 = GoalkeeperController(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
+    team01GoalkeeperGate = GoalkeeperController(game_master.simulator.get_robot_model(0, 4), game_master.simulator.ball)
+    team02Attacker01 = GoalkeeperController(game_master.simulator.get_robot_model(1, 4), game_master.simulator.ball)
     actions = [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
     kick_done = False
 
     while True:
-        game_master.update_robot_actions(0, [team01Goalkeeper.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), (0, 0)])
-        game_master.update_robot_actions(1, [(0,0),  (0, 0), (0, 0), (0, 0),team02Goalkeeper.get_action(Goal.ChaseBall)])
+        game_master.update_robot_actions(0, [team01Attacker01.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), team01GoalkeeperGate.get_action(Goal.RotateToPoint)])
+        game_master.update_robot_actions(1, [(0,0), (0, 0), (0, 0), (0, 0), team02Attacker01.get_action(Goal.ChaseBall)])
+        # game_master.update_robot_actions(0, [(0,0), (0, 0), (0, 0), (0, 0), (0, 0)])
+        # game_master.update_robot_actions(1, [(0,0),  (0, 0), (0, 0), (0, 0), (0,0)])
         game_master.step()
 
