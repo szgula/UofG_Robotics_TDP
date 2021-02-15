@@ -1,5 +1,3 @@
-import sys             #from omar
-sys.path.append('../') #from omar
 from GameEngine.robot_model import RobotBasicModel
 from GameEngine.ball_model import BallBasicModel, BallActions
 # import matplotlib.pyplot as plt
@@ -8,7 +6,7 @@ from GameEngine.game_simulator import GameSimulator
 import logging
 
 
-class BaseGameMaster:
+class Dribble_Demo:
     def __init__(self):
         """
         :param robot_class:
@@ -19,7 +17,7 @@ class BaseGameMaster:
         # Ego field coordinate system: located in the middle of the field,
         # positive X towards opponent's goal
         # positive Y 90deg rotated counterclockwise from X axis
-        self.number_of_robots = 5
+        self.number_of_robots = 1
         self.number_of_teams = 1
         self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
         self.simulator = None
@@ -92,6 +90,7 @@ if __name__ == "__main__":
     actions = [(0.6, 1.0), (1.65, 1.6), (-0.7, -1.0), (1.3, 1.05), (1.2, 1.2)]
     kick_done = False
 
+    #The simulation begins and lasts for full_game_length
     for i in range(game_master.full_game_length):
         if not kick_done and game_master.simulator._robots[0][4].get_position_components_wcs()[0] > 2.5:
             game_master.update_robot_actions(0, ((0.6, 0.7), (0.9, 0.5), (-0.6, -0.7), (1.3, 1.25),

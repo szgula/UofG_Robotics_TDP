@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import numpy as np
 from GameEngine.robot_model import RobotModel
 from GameEngine.ball_model import BallModel, BallActions
