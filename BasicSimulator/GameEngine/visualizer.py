@@ -65,6 +65,8 @@ class BasicVisualizer:
         pygame.draw.line(self.screen, (0, 255, 0),
                          (self._display_size[0] - 5, 50 + self._display_size[1] / 2),
                          (self._display_size[0] - 5, -50 + self._display_size[1] / 2), 3)
+        pygame.draw.circle(self.screen, (77, 200, 77),
+                         (self._display_size[0] -5, self._display_size[1]/2), 5) 
         pygame.display.flip()
 
     def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):  # FIXME: rename to send data to visualizer

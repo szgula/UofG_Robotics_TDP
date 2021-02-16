@@ -4,6 +4,7 @@ from GameEngine.ball_model import BallBasicModel, BallActions
 from GameEngine.visualizer import BasicVisualizer
 from GameEngine.game_simulator import GameSimulator
 import logging
+from time import sleep
 
 
 class Shoot_Demo:
@@ -23,7 +24,7 @@ class Shoot_Demo:
         self.simulator = None
         self.reset()
 
-        self.full_game_length = 6000
+        self.full_game_length = 1000
         self.game_current_step = 0
         self.goals = [0, 0]
 
@@ -94,3 +95,5 @@ if __name__ == "__main__":
     for i in range(game_master.full_game_length):
         game_master.update_robot_actions(0, actions)
         game_master.step()
+        if i == 0:
+            sleep(0.75)

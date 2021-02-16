@@ -4,6 +4,8 @@ import numpy as np
 from GameEngine.robot_model import RobotModel
 from GameEngine.ball_model import BallModel, BallActions
 from GameEngine.collisions import CollisionTypes
+from time import sleep
+import random
 
 
 class GameSimulator:
@@ -20,15 +22,25 @@ class GameSimulator:
         :param number_of_robots:
         :param size_of_field:
         """
-        self._size_of_field = [10,6]
+        #self._size_of_field = [10,6]
+        self._size_of_field = size_of_field
         #Starting Points of the players defined
         starting_points_sample_one = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
         starting_points_sample_two = [(-3,2)]
 
         goal_post_of_team_2_top = np.array([1000 - 5, 50 + 300])/100
         goal_post_of_team_2_bottom = np.array([1000 - 5, -50 + 300])/100
-        ball_pos = (goal_post_of_team_2_top + 3 * goal_post_of_team_2_bottom)/4
-        ball_pos = ball_pos + np.array([-1, 0])
+
+        rint = random.randint(1,3)
+
+        if rint == 1:
+            ball_pos = np.array([random.uniform(8,9), random.uniform(0.3, 0.5)])
+        elif rint == 2:
+            ball_pos = np.array([random.uniform(8,9), random.uniform(5.7,5.9)])
+        elif rint == 3:
+            ball_pos = np.array([random.uniform(5,6), random.uniform(5,6)])
+
+        #ball_pos = np.array([9,5.5])
 
         ball_pos = ball_pos - np.array(self._size_of_field) / 2 
         goal_post_of_team_2_top = goal_post_of_team_2_top - np.array(self._size_of_field) / 2  
@@ -39,7 +51,11 @@ class GameSimulator:
 
         norm_top = np.linalg.norm(post_rel_top)
         norm_bottom = np.linalg.norm(post_rel_bottom)
-        direction_of_shoot = post_rel_top * norm_bottom + post_rel_bottom * norm_top 
+
+        unit_rel_top = post_rel_top/norm_top
+        unit_rel_bottom = post_rel_bottom/norm_bottom
+
+        direction_of_shoot = unit_rel_top * norm_bottom + unit_rel_bottom * norm_top 
         direction_of_shoot = direction_of_shoot/(norm_bottom + norm_top)
         direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
 
