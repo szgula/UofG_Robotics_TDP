@@ -7,7 +7,7 @@ import logging
 from time import sleep
 
 
-class Shoot_Demo:
+class Game_Master:
     def __init__(self):
         """
         :param robot_class:
@@ -87,13 +87,16 @@ class TestGameMaster:
 
 
 if __name__ == "__main__":
-    game_master = Shoot_Demo()
+    game_master = Game_Master()
     actions = [(0, 0, BallActions.KICK)]
     kick_done = False
 
     #The simulation begins and lasts for full_game_length
+    key = "s"
     for i in range(game_master.full_game_length):
         game_master.update_robot_actions(0, actions)
         game_master.step()
+        if key != "c":
+            key = input("Press Enter to continue...")
         if i == 0:
             sleep(0.75)

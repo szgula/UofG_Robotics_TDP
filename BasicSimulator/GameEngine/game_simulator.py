@@ -55,9 +55,22 @@ class GameSimulator:
         unit_rel_top = post_rel_top/norm_top
         unit_rel_bottom = post_rel_bottom/norm_bottom
 
-        direction_of_shoot = unit_rel_top * norm_bottom + unit_rel_bottom * norm_top 
-        direction_of_shoot = direction_of_shoot/(norm_bottom + norm_top)
-        direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
+        mid_point = (post_rel_top + post_rel_bottom)/2
+        norm_mid = np.linalg.norm(mid_point)
+        unit_mid_point = mid_point/norm_mid
+
+        if norm_top < norm_bottom:
+            direction_of_shoot = unit_mid_point * norm_top + unit_rel_top * norm_mid
+            direction_of_shoot = direction_of_shoot/(norm_top + norm_mid)
+            direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
+        elif norm_bottom < norm_top:
+            direction_of_shoot = unit_mid_point * norm_bottom + unit_rel_bottom * norm_mid
+            direction_of_shoot = direction_of_shoot/(norm_bottom + norm_mid)
+            direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
+        else:
+            direction_of_shoot = unit_rel_top * norm_bottom + unit_rel_bottom * norm_top 
+            direction_of_shoot = direction_of_shoot/(norm_bottom + norm_top)
+            direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
 
         position_of_shooter = ball_pos - 0.1 * direction_of_shoot
 
