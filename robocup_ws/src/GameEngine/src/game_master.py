@@ -97,6 +97,7 @@ ROS = True
 if __name__ == "__main__" and ROS:
     import rospy
     from game_interfaces.srv import *
+    from Planner.robocup_control.srv import *
     from game_interfaces.msg import *
     pass
 
@@ -109,6 +110,15 @@ class GameMasterClient:
             self.server = rospy.ServiceProxy(r'game_engine/game_simulation', SimulationUpdate)
         except rospy.ServiceException as e:
             print("Service call failed: %s" % e)
+            raise e
+    def action_request(self,ball):
+        rospy.wait_for_service("actions_return")
+        try:
+            self.action_service = rospy.ServiceProxy("actions_return", ActionServices)
+            actions = self.action_service(0,0,ball._x_pos,ball._y_pos)
+            return actions.left_wheel, actions.right_wheel
+        except rospy.ServiceException as e:
+            print("Service call failed: %s " % e)
             raise e
 
     def send_update_request(self, actions_list):
@@ -132,10 +142,14 @@ class GameMasterClient:
 
 
 if __name__ == "__main__" and ROS:
+    game_master = BaseGameMaster()
     GMC = GameMasterClient()
-
-    actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (0.99, 1.0)], [(0,0), (0,0), (0,0), (0,0), (1.1, 1.1)]]
+    action = GMC.action_request(game_master.simulator.ball)
+    actions = [[(0,0), (0.0, 0.0), (0, 0), (0,0), (0, 0)],
+               [(0, 0), (0, 0), (0, 0), (0, 0), (0,0)]]
     for i in tqdm(range(5000)):
+        action = GMC.action_request(game_master.simulator.ball)
+        actions[0][1] = action
         GMC.send_update_request(actions)
 
 

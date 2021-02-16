@@ -5,7 +5,7 @@ import numpy as np
 import math
 
 
-def rotate_to_point(robot_model: RobotModel, ball_model: BallModel):
+def move_to_point(robot_model: RobotModel, ball_model: BallModel):
     lookahead = ball_model.get_position()
     pos = robot_model.get_position_components_wcs()
     angle = robot_model.get_pointing_angle_wcs()
@@ -19,8 +19,8 @@ def rotate_to_point(robot_model: RobotModel, ball_model: BallModel):
     return wheels[1], wheels[0]
 
 
-class RotateToPointAction(Action):
+class MoveToPoint(Action):
 
     def do_algorithm(self):
-        return rotate_to_point(self._data[0], self._data[1])
+        return move_to_point(self._data[0], self._data[1])
 

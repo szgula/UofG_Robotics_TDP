@@ -57,6 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
    FILES
    AddTwoInts.srv
+   ActionServices.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -204,5 +205,8 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 catkin_install_python(PROGRAMS scripts/add_two_ints_server.py scripts/add_two_ints_client.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS ../goalkeeper_controller.py ../test_controller.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

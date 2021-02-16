@@ -1,5 +1,5 @@
-from BasicCommonActions.Action import Action
-from robot_model import RobotModel
+from Planner.BasicCommonActions.Action import Action
+from GameEngine.src.robot_model import RobotModel
 
 
 class DoNothingAction(Action):

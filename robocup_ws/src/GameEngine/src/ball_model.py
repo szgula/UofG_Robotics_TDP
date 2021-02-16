@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from src.collisions import CollisionTypes
+from GameEngine.src.collisions import CollisionTypes
 import logging
 import numpy as np
 

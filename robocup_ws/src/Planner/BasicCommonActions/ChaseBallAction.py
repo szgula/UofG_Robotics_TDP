@@ -1,6 +1,6 @@
-from BasicCommonActions.Action import Action
-from ball_model import BallModel
-from robot_model import RobotModel
+from Planner.BasicCommonActions.Action import Action
+from GameEngine.src.ball_model import BallBasicModel
+from GameEngine.src.robot_model import RobotBasicModel
 import numpy as np
 import math
 
@@ -10,7 +10,7 @@ class ChaseBallAction(Action):
     def do_algorithm(self):
         return self.chase_ball(self._data[0], self._data[1])
 
-    def chase_ball(self, goalkeeper_model: RobotModel, ball_model: BallModel):
+    def chase_ball(self, goalkeeper_model: RobotBasicModel, ball_model: BallBasicModel):
         lookahead = ball_model.get_position()
         pos = goalkeeper_model.get_position_components_wcs()
         angle = goalkeeper_model.get_pointing_angle_wcs()

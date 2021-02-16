@@ -1,18 +1,21 @@
 import numpy as np
 import math
-
-from BasicCommonActions.BasicCommonActionsHandler import BasicCommonActionsHandler
-from BasicCommonActions.ChaseBallAction import ChaseBallAction
-from BasicCommonActions.DoNothingAction import DoNothingAction
-from BasicCommonActions.RotateToPointAction import RotateToPointAction
-from ball_model import BallModel
-from robot_model import RobotModel
-from robot_control import Robot, Goal
+import rospy
+from robocup_control.srv import ActionServices, ActionServicesResponse
+from GameEngine.src.game_master import BaseGameMaster
+from GameEngine.src.game_simulator import *
+from Planner.BasicCommonActions.BasicCommonActionsHandler import BasicCommonActionsHandler
+from Planner.BasicCommonActions.ChaseBallAction import ChaseBallAction
+from Planner.BasicCommonActions.DoNothingAction import DoNothingAction
+from Planner.BasicCommonActions.RotateToPointAction import RotateToPointAction
+from GameEngine.src.ball_model import BallBasicModel
+from GameEngine.src.robot_model import RobotBasicModel
+from Planner.robot_control import Robot, Goal
 
 
 class GoalkeeperController(Robot):
 
-    def __init__(self, goalkeeper_model: RobotModel, ball_model: BallModel):
+    def __init__(self, goalkeeper_model: RobotBasicModel, ball_model: BallBasicModel):
         self._goalkeeper = goalkeeper_model
         self._ball = ball_model
         self._lookhead = 10
@@ -27,3 +30,19 @@ class GoalkeeperController(Robot):
 
     def accrue_sensors_data(self):
         pass
+
+def handle_actions(req):
+    print(req)
+    robot_model = RobotBasicModel(req.team_id,req.player_id)
+    ball_model = BallBasicModel(req.ball_x,req.ball_y)
+    team01_goalkeeper = GoalkeeperController(robot_model,ball_model)
+    actions = team01_goalkeeper.get_action(Goal.ChaseBall)
+    print(actions)
+    return ActionServicesResponse(actions[1],actions[0])
+def actions_server():
+    rospy.init_node("actions_server")
+    s = rospy.Service("actions_return",ActionServices,handle_actions)
+    print("Ready to handle actions.")
+    rospy.spin()
+if __name__ == "__main__":
+    actions_server()

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from src.ball_model import BallActions
+from GameEngine.src.ball_model import BallActions
 import matplotlib.pyplot as plt
-from src.collisions import CollisionTypes
+from GameEngine.src.collisions import CollisionTypes
 
 
 class RobotModel(ABC):

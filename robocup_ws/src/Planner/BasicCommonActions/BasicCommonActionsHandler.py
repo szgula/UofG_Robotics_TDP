@@ -1,4 +1,4 @@
-from BasicCommonActions.Action import Action
+from Planner.BasicCommonActions.Action import Action
 
 
 class BasicCommonActionsHandler:
