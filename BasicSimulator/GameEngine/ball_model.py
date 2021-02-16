@@ -76,6 +76,7 @@ class BallBasicModel(BallModel):
         acc = -vel * self._friction / self._mass
 
         acceleration_threshold = 0.01
+        #EXPLAIN
         if abs(acc) > acceleration_threshold:
             acc_x = acc * self._x_vel / vel
             acc_y = acc * self._y_vel / vel
@@ -256,9 +257,12 @@ class BallBasicModel(BallModel):
         player_pos_x, player_pos_y = collision_object.get_position_components_wcs()
         dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
         diff = (dx**2 + dy**2)**0.5
-        kick_vel = min(kick_vel, self._max_vel)
-        self._x_vel = kick_vel * dx / diff
-        self._y_vel = kick_vel * dy / diff
+        #Shreyansh (If distance between the ball and the player is less than a meter, 
+        #only then the ball will be kicked)
+        if diff < 0.2:
+            kick_vel = min(kick_vel, self._max_vel)
+            self._x_vel = kick_vel * dx / diff
+            self._y_vel = kick_vel * dy / diff
 
     def _receive_collision(self, collision_object):
         """

@@ -87,7 +87,7 @@ class TestGameMaster:
 
 if __name__ == "__main__":
     game_master = Shoot_Demo()
-    actions = [(1.2, 1.2)]
+    actions = [(0, 0, BallActions.KICK)]
     kick_done = False
 
     #The simulation begins and lasts for full_game_length

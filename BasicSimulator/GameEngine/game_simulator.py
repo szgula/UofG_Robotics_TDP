@@ -20,8 +20,32 @@ class GameSimulator:
         :param number_of_robots:
         :param size_of_field:
         """
+        self._size_of_field = [10,6]
+        #Starting Points of the players defined
         starting_points_sample_one = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
         starting_points_sample_two = [(-3,2)]
+
+        goal_post_of_team_2_top = np.array([1000 - 5, 50 + 300])/100
+        goal_post_of_team_2_bottom = np.array([1000 - 5, -50 + 300])/100
+        ball_pos = (goal_post_of_team_2_top + 3 * goal_post_of_team_2_bottom)/4
+        ball_pos = ball_pos + np.array([-1, 0])
+
+        ball_pos = ball_pos - np.array(self._size_of_field) / 2 
+        goal_post_of_team_2_top = goal_post_of_team_2_top - np.array(self._size_of_field) / 2  
+        goal_post_of_team_2_bottom = goal_post_of_team_2_bottom - np.array(self._size_of_field) / 2  
+
+        post_rel_top = goal_post_of_team_2_top - ball_pos
+        post_rel_bottom = goal_post_of_team_2_bottom - ball_pos
+
+        norm_top = np.linalg.norm(post_rel_top)
+        norm_bottom = np.linalg.norm(post_rel_bottom)
+        direction_of_shoot = post_rel_top * norm_bottom + post_rel_bottom * norm_top 
+        direction_of_shoot = direction_of_shoot/(norm_bottom + norm_top)
+        direction_of_shoot = direction_of_shoot/np.linalg.norm(direction_of_shoot)
+
+        position_of_shooter = ball_pos - 0.1 * direction_of_shoot
+
+        starting_points_sample_three = [(position_of_shooter[0],position_of_shooter[1])]
 
         self._robot_class = robot_class
         self._number_of_teams = number_of_teams
@@ -29,13 +53,19 @@ class GameSimulator:
         self._size_of_field = size_of_field
         self._robots = [list() for _ in range(self._number_of_teams)]
         self.team_CS_rotations = [0, np.pi]
-        self.team_starting_points = starting_points_sample_two  
+        self.team_starting_points = starting_points_sample_three  
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
                 self._robots[team].append(
                     self._robot_class(*self.team_starting_points[player_id], cord_system_rot=self.team_CS_rotations[team]))
 
-        self.ball = ball_model(0, 0)
+        #Shreyansh The ball is instantiated in the positiion (0,0)
+        #self.ball = ball_model(0, 0)
+
+
+        self.ball = ball_model(ball_pos[0], ball_pos[1])
+        #self.ball = ball_model(8.95, -0.22)
+        #self.ball = ball_model(3.95, -0.22)
 
     def step(self, actions_per_team_per_player):
         """
