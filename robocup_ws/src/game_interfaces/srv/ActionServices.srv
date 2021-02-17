@@ -1,7 +1,9 @@
 int64 team_id
 int64 player_id
-int64 ball_x
-int64 ball_y
+float64 player_x
+float64 player_y
+float64 ball_x
+float64 ball_y
 ---
 float64 left_wheel
 float64 right_wheel

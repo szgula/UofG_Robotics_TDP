@@ -32,13 +32,13 @@ class GoalkeeperController(Robot):
         pass
 
 def handle_actions(req):
-    print(req)
-    robot_model = RobotBasicModel(req.team_id,req.player_id)
+    robot_model = RobotBasicModel(req.player_x,req.player_y)
     ball_model = BallBasicModel(req.ball_x,req.ball_y)
     team01_goalkeeper = GoalkeeperController(robot_model,ball_model)
     actions = team01_goalkeeper.get_action(Goal.ChaseBall)
-    print(actions)
+    # print(actions)
     return ActionServicesResponse(actions[1],actions[0])
+
 def actions_server():
     rospy.init_node("actions_server")
     s = rospy.Service("actions_return",ActionServices,handle_actions)

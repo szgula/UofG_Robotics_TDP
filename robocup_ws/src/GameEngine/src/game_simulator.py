@@ -259,7 +259,11 @@ class GameSimulationServer(GameSimulator):
         print(f" Get simulation request:  update = {simulation_request.update} reset = {simulation_request.reset}")
         if not simulation_request.reset and simulation_request.update:
             update_status, goal_status = self.step(simulation_request.teams_commands)
-        response = SimulationUpdateResponse(update_status, goal_status)
+            positions = self.get_positions()
+            x,y = self._robots[simulation_request.team_id][simulation_request.player_id].get_position_components_wcs()
+            ball = self.ball.get_position()
+            ball = np.array([ball[0], -ball[1]])
+        response = SimulationUpdateResponse(x,y,ball[0],ball[1],update_status, goal_status)
         if VISUALIZER:
             self.visualizer.send_game_state(*self.get_positions_for_visualizer())
             self.visualizer.display()

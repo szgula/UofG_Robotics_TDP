@@ -1,6 +1,13 @@
 bool update
 bool reset
+bool positions
+int64 team_id
+int64 player_id
 TeamCommand[2] teams_commands
 ---
+float64 player_x
+float64 player_y
+float64 ball_x
+float64 ball_y
 int8 status
 int8 goal_status

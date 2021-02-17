@@ -111,21 +111,21 @@ class GameMasterClient:
         except rospy.ServiceException as e:
             print("Service call failed: %s" % e)
             raise e
-    def action_request(self,ball):
+    def action_request(self,team_id,player_id,player_position,ball_position):
         rospy.wait_for_service("actions_return")
         try:
             self.action_service = rospy.ServiceProxy("actions_return", ActionServices)
-            actions = self.action_service(0,0,ball._x_pos,ball._y_pos)
+            actions = self.action_service(team_id,player_id,player_position[0],player_position[1],ball_position[0],ball_position[1])
             return actions.left_wheel, actions.right_wheel
         except rospy.ServiceException as e:
             print("Service call failed: %s " % e)
             raise e
 
-    def send_update_request(self, actions_list):
+    def send_update_request(self, actions_list,team_id,player_id):
         team_actions = self.convert_action_list_to_team_commands(actions_list)
-        rq = SimulationUpdateRequest(True, False, team_actions)
+        rq = SimulationUpdateRequest(True, False, True,team_id,player_id,team_actions)
         resp = self.server(rq)
-        return resp.status
+        return resp
 
     @staticmethod
     def convert_action_list_to_team_commands(action_list):
@@ -142,15 +142,18 @@ class GameMasterClient:
 
 
 if __name__ == "__main__" and ROS:
-    game_master = BaseGameMaster()
     GMC = GameMasterClient()
-    action = GMC.action_request(game_master.simulator.ball)
-    actions = [[(0,0), (0.0, 0.0), (0, 0), (0,0), (0, 0)],
+    actions = [[(0,0), (0, 0), (0, 0), (0,0), (0, 0)],
                [(0, 0), (0, 0), (0, 0), (0, 0), (0,0)]]
+    team_id = 0
+    player_id = 1
     for i in tqdm(range(5000)):
-        action = GMC.action_request(game_master.simulator.ball)
-        actions[0][1] = action
-        GMC.send_update_request(actions)
+        response = GMC.send_update_request(actions,team_id,player_id)
+        print(response)
+        player_position = [response.player_x,response.player_y]
+        ball_position = [response.ball_x,response.ball_y]
+        action = GMC.action_request(team_id,player_id,player_position,ball_position)
+        actions[team_id][player_id] = action
 
 
 

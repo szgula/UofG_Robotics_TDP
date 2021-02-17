@@ -190,6 +190,56 @@ class RobotBasicModel(RobotModel):
             else:
                 self.step(l_motor_speed - vel_simplified, r_motor_speed - vel_simplified)
 
+    def _get_velocity_components_wcs(self) -> (float, float):
+        """
+        Return the velocity vector (x, y components) in game coordinate system
+        :return: x velocity, y velocity
+        """
+        return self._convert_EFCS_to_field_CS(self.vel * np.cos(self.pointing_angle),
+                                              self.vel * np.sin(self.pointing_angle))
+
+    def _get_position_components_wcs(self) -> (float, float):
+        """
+        Return the velocity vector (x, y components) in game coordinate system
+        :return: x velocity, y velocity
+        """
+        return self._convert_EFCS_to_field_CS(self._x_pos_EFCS, self._y_pos_EFCS)
+
+    def _get_pointing_angle_wcs(self) -> float:
+        angle = self.pointing_angle + self._cord_system_rot
+        print(angle)
+        if angle > np.pi: angle -= 2*np.pi
+        if angle < -np.pi: angle += 2*np.pi
+        return angle
+
+    def _convert_field_CS_to_EFCS(self, pos_x: float, pos_y: float) -> (float, float):
+        """
+        Convert main game coordinate systems to team's coordinate system (EFCS)
+        :param pos_x:
+        :param pos_y:
+        :return:
+        """
+        if self._cord_system_rot == 0:
+            return pos_x, pos_y
+        elif self._cord_system_rot == np.pi:
+            return -pos_x, -pos_y
+        else:
+            raise ValueError("The coordinate system rotation not defined correctly")
+
+    def _convert_EFCS_to_field_CS(self, pos_x: float, pos_y: float) -> (float, float):
+        """
+        Convert coordinate systems
+        :param pos_x:
+        :param pos_y:
+        :return:
+        """
+        if self._cord_system_rot == 0:
+            return pos_x, pos_y
+        elif self._cord_system_rot == np.pi:
+            return -pos_x, -pos_y
+        else:
+            raise ValueError("The coordinate system rotation not defined correctly")
+
 
 class RobotModelTests:
 
