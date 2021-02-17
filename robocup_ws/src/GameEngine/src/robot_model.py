@@ -3,6 +3,7 @@ import numpy as np
 from src.ball_model import BallActions
 import matplotlib.pyplot as plt
 from src.collisions import CollisionTypes
+from game_interfaces.msg import Position
 
 
 class RobotModel(ABC):
@@ -101,6 +102,13 @@ class RobotModel(ABC):
         if angle < -np.pi: angle += 2*np.pi
         return angle
 
+    def get_position_for_ros_srv(self) -> Position:
+        wcs_pos = self.get_position_components_wcs()
+        wcs_heading = self.get_pointing_angle_wcs()
+        EFCS_pos = (self._x_pos_EFCS, self._y_pos_EFCS)
+        EFCS_heading = self.pointing_angle
+        return Position(*wcs_pos, wcs_heading, *EFCS_pos, EFCS_heading)
+
 
 class RobotBasicModel(RobotModel):
 
@@ -190,9 +198,3 @@ class RobotBasicModel(RobotModel):
             else:
                 self.step(l_motor_speed - vel_simplified, r_motor_speed - vel_simplified)
 
-
-if __name__ == "__main__":
-    #RobotModelTests.test_stationary()
-    #RobotModelTests.test_moving_forward(direction=-1)
-    RobotModelTests.test_moving_round(speed_l=-5, speed_r=-4)
-    #RobotModelTests.test_rotation()

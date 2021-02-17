@@ -242,6 +242,7 @@ VISUALIZER = True
 if ROS and __name__ == "__main__":
     import rospy
     from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
+    from game_interfaces.msg import TeamPosition, Position
     from src.visualizer import BasicVisualizer
     pass
 
@@ -265,6 +266,12 @@ class GameSimulationServer(GameSimulator):
             self.visualizer.display()
 
         return response
+
+    def _generate_response_message(self, update_status, goal_status) -> SimulationUpdateResponse:
+        team_1_pos, team_2_pos = TeamPosition(), TeamPosition()
+        ball_pos = Position()
+        response = SimulationUpdateResponse(update_status, goal_status)
+
 
 
 if ROS and __name__ == "__main__":

@@ -3,6 +3,7 @@ from enum import Enum
 from src.collisions import CollisionTypes
 import logging
 import numpy as np
+from game_interfaces.msg import Position
 
 class BallModel(ABC):
     @abstractmethod
@@ -43,6 +44,12 @@ class BallModel(ABC):
         :return:
         """
         pass
+
+    def get_position_for_ros_srv(self) -> Position:
+        wcs_pos = (self._x_pos, self._y_pos)
+        opponent_team_pos = (-self._x_pos, -self._y_pos)
+        heading = 0  # FIXME: probably this should be a vel heading (separate for wcs and opponent's CS)
+        return Position(*wcs_pos, heading, *opponent_team_pos, heading)
 
 
 class BallActions(Enum):
