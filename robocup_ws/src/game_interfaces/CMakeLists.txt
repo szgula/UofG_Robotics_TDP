@@ -51,6 +51,8 @@ add_message_files(
   FILES
   PlayerCommand.msg
   TeamCommand.msg
+  Position.msg
+  TeamPosition.msg
 )
 
 
