@@ -96,8 +96,8 @@ class BaseGameMaster:
 ROS = True
 if __name__ == "__main__" and ROS:
     import rospy
-    from game_interfaces.srv import *
-    from game_interfaces.msg import *
+    from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
+    from game_interfaces.msg import TeamCommand
     pass
 
 
@@ -137,34 +137,4 @@ if __name__ == "__main__" and ROS:
     actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (0.99, 1.0)], [(0,0), (0,0), (0,0), (0,0), (1.1, 1.1)]]
     for i in tqdm(range(5000)):
         GMC.send_update_request(actions)
-
-
-
-class TestGameMaster:
-    @staticmethod
-    def test_game_master_initialization():
-        pass
-
-    @staticmethod
-    def test_game_with_simple_actions():
-        pass
-
-
-if not ROS and __name__ == "__main__":
-    from goalkeeper_controller import GoalkeeperController
-    from robot_control import Goal
-
-    game_master = BaseGameMaster()
-    team01Attacker01 = GoalkeeperController(game_master.simulator.get_robot_model(0, 0), game_master.simulator.ball)
-    team01GoalkeeperGate = GoalkeeperController(game_master.simulator.get_robot_model(0, 4), game_master.simulator.ball)
-    team02Attacker01 = GoalkeeperController(game_master.simulator.get_robot_model(1, 4), game_master.simulator.ball)
-    actions = [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
-    kick_done = False
-
-    while True:
-        game_master.update_robot_actions(0, [team01Attacker01.get_action(Goal.ChaseBall), (0, 0), (0, 0), (0, 0), team01GoalkeeperGate.get_action(Goal.RotateToPoint)])
-        game_master.update_robot_actions(1, [(0,0), (0, 0), (0, 0), (0, 0), team02Attacker01.get_action(Goal.ChaseBall)])
-        # game_master.update_robot_actions(0, [(0,0), (0, 0), (0, 0), (0, 0), (0, 0)])
-        # game_master.update_robot_actions(1, [(0,0),  (0, 0), (0, 0), (0, 0), (0,0)])
-        game_master.step()
 

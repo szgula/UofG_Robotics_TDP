@@ -2,9 +2,6 @@ import numpy as np
 import pygame
 import logging
 
-
-# from GameEngine.game_master import BaseSimulator
-
 # TODO: add unittests, smoke test, and functional tests
 # TODO: Write documentation
 
@@ -13,7 +10,6 @@ class BasicVisualizer:
 
     def __init__(self, simulator: None, number_of_players: int = 5, field_size: tuple = (10, 6),
                  display_scale: int = 100):
-        # self._simulator = simsimulatorulator
         self._number_of_players = number_of_players
         self._position_dim = 3  # x, y, heading
         self._field_size = np.array(field_size)
@@ -37,6 +33,7 @@ class BasicVisualizer:
         self._goal_area_height = 3 * display_scale
         self._margin = 0.3 * display_scale
         self._gate_height = 0.5 * display_scale
+
     def __del__(self):
         pygame.quit()
 
@@ -61,7 +58,7 @@ class BasicVisualizer:
         """
         if not self.vis_running:
             logging.warning('The visualization was closed')
-        state_players_1, state_players_2, ball, score = self.accrue_data_from_simulatior()
+        state_players_1, state_players_2, ball, score = self.accrue_data_from_simulator()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._exit_display()
@@ -120,8 +117,7 @@ class BasicVisualizer:
         pygame.draw.line(self.screen, self._robo_dirc_color, (pos[:2] * self.scale).astype(int),
                          (start + change)[:, 0].astype(int), self._field_line_width)
 
-    def accrue_data_from_simulatior(self, team_1=None, team_2=None, ball=None) -> (
-    tuple, tuple, tuple):  # FIXME: rename to send data to visualizer
+    def accrue_data_from_simulator(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):
         """
         Accrue data from game simulation - players and ball positions, # of goals, game time etc
         :return:
@@ -135,32 +131,6 @@ class BasicVisualizer:
     def send_game_state(self, team_1, team_2, ball, score):
         self._data_provided = True
         self._data_provided_buffer = (team_1, team_2, ball, score)
-
-    def _temp_generate_random_data_from_simulation(self):
-        # generate random positions
-        if not self._temp_initialized_data:
-            random_position_team_1 = np.random.random((self._number_of_players, self._position_dim))
-            random_position_team_1 = random_position_team_1 * np.array([*self._display_size, 2 * np.pi])
-            random_position_team_1[:, 2] -= np.pi
-            ball_position = np.random.random(2) * self._display_size
-            self._last_pos = random_position_team_1, None, ball_position
-            self._temp_initialized_data = True
-            self._temp_vel_vector = (1, 1, 0)
-            self._temp_counter = 0
-        else:
-            self._temp_counter += 1
-            if self._temp_counter > 500:
-                self._temp_counter = 0
-                self._temp_vel_vector = (np.random.random((self._number_of_players, self._position_dim)) - 0.5) * 2
-
-            random_position_team_1, _, ball_position = self._last_pos
-            random_position_team_1 += (np.random.random((self._number_of_players, self._position_dim)) - 0.5) * [5, 5,
-                                                                                                                 0.1]
-            random_position_team_1 += self._temp_vel_vector
-            random_position_team_1[:, 0] = random_position_team_1[:, 0].clip(min=0, max=self._display_size[0])
-            random_position_team_1[:, 1] = random_position_team_1[:, 1].clip(min=0, max=self._display_size[1])
-
-        return random_position_team_1, None, ball_position, [0, 0]
 
 
 if __name__ == "__main__":
