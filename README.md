@@ -86,7 +86,7 @@ The step to finish the project.
 
 <!-- Getting Started -->
 ## Packages
-Cmake and OpenCv now.
+In ```requirement.txt```
 
 <!-- Usage -->
 ## Usage
