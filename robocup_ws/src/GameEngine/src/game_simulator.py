@@ -1,12 +1,14 @@
 #!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
-from robocup_ws.src.GameEngine.src.robot_model import RobotModel, RobotBasicModel
-from robocup_ws.src.GameEngine.src.ball_model import BallModel, BallActions, BallBasicModel
-from robocup_ws.src.GameEngine.src.collisions import CollisionTypes
+import sys, os
+sys.path.append(os.getcwd())
 import rospy
+from src.GameEngine.src.robot_model import RobotModel, RobotBasicModel
+from src.GameEngine.src.ball_model import BallModel, BallActions, BallBasicModel
+from src.GameEngine.src.collisions import CollisionTypes
 from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
 from game_interfaces.msg import TeamPosition
-from robocup_ws.src.GameEngine.src.visualizer import BasicVisualizer
+from src.GameEngine.src.visualizer import BasicVisualizer
 
 VISUALIZER = True
 

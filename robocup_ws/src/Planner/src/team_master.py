@@ -1,5 +1,5 @@
 from game_interfaces.msg import TeamPosition, PlayerCommand, TeamCommand
-from robocup_ws.src.Planner.src.goalkeeper_controller import TempGoalkeeperController
+from src.Planner.src.goalkeeper_controller import TempGoalkeeperController
 import logging
 
 

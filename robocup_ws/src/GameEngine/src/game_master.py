@@ -2,6 +2,9 @@ from tqdm import tqdm
 import logging
 import rospy
 from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
+import sys, os
+sys.path.append(os.getcwd())
+from src.Planner.src.team_master import TeamMaster
 
 
 class BaseGameMaster:
@@ -89,7 +92,6 @@ class GameMasterClient:
 
 
 if __name__ == "__main__":
-    from robocup_ws.src.Planner.src.team_master import TeamMaster
     team0_master, team1_master = TeamMaster(0), TeamMaster(1)
     GMC = GameMasterClient()
 

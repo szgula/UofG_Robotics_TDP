@@ -5,7 +5,7 @@ from src.BasicCommonActions.BasicCommonActionsHandler import BasicCommonActionsH
 from src.BasicCommonActions.ChaseBallAction import ChaseBallAction
 from src.BasicCommonActions.DoNothingAction import DoNothingAction
 from src.BasicCommonActions.RotateToPointAction import RotateToPointAction"""
-from robocup_ws.src.Planner.src.robot_control import Robot, Goal
+from src.Planner.src.robot_control import Robot, Goal
 from game_interfaces.msg import PlayerCommand
 
 """
