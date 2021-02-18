@@ -5,6 +5,7 @@ import logging
 import numpy as np
 from game_interfaces.msg import Position
 
+
 class BallModel(ABC):
     @abstractmethod
     def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1):
@@ -45,11 +46,15 @@ class BallModel(ABC):
         """
         pass
 
-    def get_position_for_ros_srv(self) -> Position:
-        wcs_pos = (self._x_pos, self._y_pos)
-        opponent_team_pos = (-self._x_pos, -self._y_pos)
-        heading = 0  # FIXME: probably this should be a vel heading (separate for wcs and opponent's CS)
-        return Position(*wcs_pos, heading, *opponent_team_pos, heading)
+    def get_position_for_ros_srv(self) -> (Position, Position):
+        """
+        :return: Position message with pos in wcs (same as efcs0 - ego filed coordinate system for team 0)
+        :return: Position message with pos in efcs1 (ego filed coordinate system for team 1)
+        """
+        wcs_pos = (self._x_pos, self._y_pos)  # same as efcs0
+        efcs1_pos = (-self._x_pos, -self._y_pos)
+        heading = 0
+        return Position(*wcs_pos, heading), Position(*efcs1_pos, heading)
 
 
 class BallActions(Enum):

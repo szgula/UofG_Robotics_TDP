@@ -1,19 +1,18 @@
 #!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
 import sys, os
+import inspect
+#FIXME: this is awful! @Omar - I think it is not needed, find better way
 sys.path.append('../../')
 cwd = os.getcwd()
 sys.path.append(cwd)
-import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-print('Dupa' + str(sys.version))
+
 from src.robot_model import RobotModel, RobotBasicModel
 from src.ball_model import BallModel, BallActions, BallBasicModel
 from src.collisions import CollisionTypes
-
-
 
 
 class GameSimulator:
@@ -253,24 +252,34 @@ class GameSimulationServer(GameSimulator):
         super().__init__(RobotBasicModel, BallBasicModel)
         rospy.init_node('game_simulation_server')
         s = rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
-        print("Ready to add two ints.")
+        print("Ready to simulate the game.")
         rospy.spin()
 
     def handle_simulation_call(self, simulation_request):
-        print(f" Get simulation request:  update = {simulation_request.update} reset = {simulation_request.reset}")
+        update_status, goal_status = False, False
         if not simulation_request.reset and simulation_request.update:
             update_status, goal_status = self.step(simulation_request.teams_commands)
-        response = SimulationUpdateResponse(update_status, goal_status)
+        response = self._generate_response_message(update_status, goal_status)
         if VISUALIZER:
             self.visualizer.send_game_state(*self.get_positions_for_visualizer())
             self.visualizer.display()
 
         return response
 
-    def _generate_response_message(self, update_status, goal_status) -> SimulationUpdateResponse:
-        team_1_pos, team_2_pos = TeamPosition(), TeamPosition()
-        ball_pos = Position()
-        response = SimulationUpdateResponse(update_status, goal_status)
+    def _generate_response_message(self, update_status=False, goal_status=False) -> SimulationUpdateResponse:
+        team_pos = [TeamPosition(), TeamPosition()]
+
+        ball_pos_wcs, ball_pos_efcs1 = self.ball.get_position_for_ros_srv()
+        team_pos[0].ball_pos_efcs, team_pos[1].ball_pos_efcs = ball_pos_wcs, ball_pos_efcs1
+
+        for team_idx in range(self._number_of_teams):
+            team_pos[team_idx].team_id = team_idx
+            for player_idx in range(self._number_of_robots):
+                team_pos_wcs, team_pos_efcs0 = self._robots[team_idx][player_idx].get_position_for_ros_srv()
+                team_pos[team_idx].players_positions_wcs[player_idx] = team_pos_wcs
+                team_pos[team_idx].players_positions_efcs[player_idx] = team_pos_efcs0
+
+        return SimulationUpdateResponse(update_status, goal_status, team_pos, ball_pos_wcs)
 
 
 

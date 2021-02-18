@@ -1,22 +1,18 @@
 import sys, os
+import inspect
+#FIXME: this is awful! @Omar - I think it is not needed, find better way
 sys.path.append('../../')
 cwd = os.getcwd()
 sys.path.append(cwd)
-import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 
-print(f'cwd = {cwd}')
-print(f'path = {sys.path}')
-
 from tqdm import tqdm
-from src.robot_model import RobotBasicModel
-from src.ball_model import BallBasicModel, BallActions
-# import matplotlib.pyplot as plt
-from src.visualizer import BasicVisualizer
-from src.game_simulator import GameSimulator
 import logging
+import rospy
+from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
+from game_interfaces.msg import TeamCommand
 
 
 class BaseGameMaster:
@@ -32,9 +28,7 @@ class BaseGameMaster:
         # positive Y 90deg rotated counterclockwise from X axis
         self.number_of_robots = 5
         self.number_of_teams = 2
-        self.visualizer = BasicVisualizer(None, number_of_players=self.number_of_robots)
         self.simulator = None
-        self.reset()
 
         self.full_game_length = 30000
         self.game_current_step = 0
@@ -48,10 +42,7 @@ class BaseGameMaster:
         Reset the play
         :return:
         """
-        self.simulator = GameSimulator(RobotBasicModel, BallBasicModel,
-                                       number_of_robots=self.number_of_robots,
-                                       number_of_teams=self.number_of_teams)
-        pass
+        raise NotImplementedError
 
     def update_robot_actions(self, team_id: int, actions: tuple):
         """
@@ -71,8 +62,6 @@ class BaseGameMaster:
         if not all(self.action_updated):
             logging.warning("Some team have not updated the action")
         self.simulator.step(self.action_buffer)
-        self.visualizer.send_game_state(*self.simulator.get_positions_for_visualizer())
-        self.visualizer.display()
 
         if self.game_current_step >= self.full_game_length:
             self.end_game()
@@ -91,14 +80,6 @@ class BaseGameMaster:
         if goal_status != 0:
             team_id = goal_status - 1
             self.goals[team_id] += 1
-
-
-ROS = True
-if __name__ == "__main__" and ROS:
-    import rospy
-    from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
-    from game_interfaces.msg import TeamCommand
-    pass
 
 
 class GameMasterClient:
@@ -131,10 +112,9 @@ class GameMasterClient:
         return out
 
 
-if __name__ == "__main__" and ROS:
+if __name__ == "__main__":
     GMC = GameMasterClient()
 
     actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (0.99, 1.0)], [(0,0), (0,0), (0,0), (0,0), (1.1, 1.1)]]
     for i in tqdm(range(5000)):
         GMC.send_update_request(actions)
-
