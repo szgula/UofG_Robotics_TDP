@@ -93,7 +93,7 @@ class BaseGameMaster:
             self.goals[team_id] += 1
 
 
-ROS = True
+ROS = False
 if __name__ == "__main__" and ROS:
     import rospy
     from game_interfaces.srv import *
