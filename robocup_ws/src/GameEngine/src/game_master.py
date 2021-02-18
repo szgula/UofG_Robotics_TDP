@@ -92,29 +92,29 @@ class GameMasterClient:
             print("Service call failed: %s" % e)
             raise e
 
-    def send_update_request(self, actions_list):
-        team_actions = self.convert_action_list_to_team_commands(actions_list)
+    def send_update_request(self, team_actions):
         rq = SimulationUpdateRequest(True, False, team_actions)
         resp = self.server(rq)
-        return resp.status
+        return resp.status, resp
 
-    @staticmethod
-    def convert_action_list_to_team_commands(action_list):
-        out = []
-        for team_id, team_actions in enumerate(action_list):
-            tc = TeamCommand()
-            tc.team_id = team_id
-            for player_idx, (lw, rw) in enumerate(team_actions):
-                tc.players_commands[player_idx].left_rpm = lw
-                tc.players_commands[player_idx].right_rpm = rw
-                tc.players_commands[player_idx].extra_action = 0
-            out.append(tc)
-        return out
 
 
 if __name__ == "__main__":
+    from robocup_ws.src.Planner.src.team_master import TeamMaster
+    team0_master, team1_master = TeamMaster(0), TeamMaster(1)
     GMC = GameMasterClient()
 
-    actions = [[(0.97, 1.0), (1.0, 0.97), (-0.7, -1.0), (1.3, 1.05), (0.99, 1.0)], [(0,0), (0,0), (0,0), (0,0), (1.1, 1.1)]]
+    actions = [team0_master.distribute_goals_to_players(), team1_master.distribute_goals_to_players()]
     for i in tqdm(range(5000)):
-        GMC.send_update_request(actions)
+        status, message = GMC.send_update_request(actions)
+
+        # TODO: all 3 methods can be replace with a single function
+        team0_master.update_game_state(message.teams_position[0])
+        team0_master.plan()
+        team0_actions = team0_master.distribute_goals_to_players()
+
+        team1_master.update_game_state(message.teams_position[1])
+        team1_master.plan()
+        team1_actions = team0_master.distribute_goals_to_players()
+
+        actions = [team0_actions, team1_actions]
