@@ -1,19 +1,14 @@
 #!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
-import sys, os
-import inspect
-#FIXME: this is awful! @Omar - I think it is not needed, find better way
-sys.path.append('../../')
-cwd = os.getcwd()
-sys.path.append(cwd)
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+from robocup_ws.src.GameEngine.src.robot_model import RobotModel, RobotBasicModel
+from robocup_ws.src.GameEngine.src.ball_model import BallModel, BallActions, BallBasicModel
+from robocup_ws.src.GameEngine.src.collisions import CollisionTypes
+import rospy
+from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
+from game_interfaces.msg import TeamPosition
+from robocup_ws.src.GameEngine.src.visualizer import BasicVisualizer
 
-from src.robot_model import RobotModel, RobotBasicModel
-from src.ball_model import BallModel, BallActions, BallBasicModel
-from src.collisions import CollisionTypes
-
+VISUALIZER = True
 
 class GameSimulator:
     def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 2, number_of_robots: int = 5,
@@ -66,11 +61,8 @@ class GameSimulator:
         other_players_actions = []
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
-                if ROS:
-                    action = actions_per_team_per_player[team].players_commands[player_id]
-                    action = [action.left_rpm, action.right_rpm, BallActions(action.extra_action)]
-                else:
-                    action = actions_per_team_per_player[team][player_id]
+                action = actions_per_team_per_player[team].players_commands[player_id]
+                action = [action.left_rpm, action.right_rpm, BallActions(action.extra_action)]
                 any_collision, *collisions = self.check_for_player_collisions(team, player_id)
 
                 if not any_collision:
@@ -235,16 +227,6 @@ class GameSimulator:
                 self.reset()
         return goal_state
 
-ROS = True
-VISUALIZER = True
-
-if ROS and __name__ == "__main__":
-    import rospy
-    from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
-    from game_interfaces.msg import TeamPosition, Position
-    from src.visualizer import BasicVisualizer
-    pass
-
 
 class GameSimulationServer(GameSimulator):
     def __init__(self):
@@ -282,13 +264,5 @@ class GameSimulationServer(GameSimulator):
         return SimulationUpdateResponse(update_status, goal_status, team_pos, ball_pos_wcs)
 
 
-
-if ROS and __name__ == "__main__":
+if __name__ == "__main__":
     GSS = GameSimulationServer()
-
-
-
-
-
-
-

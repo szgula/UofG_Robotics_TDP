@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from src.ball_model import BallActions
-from src.collisions import CollisionTypes
+from robocup_ws.src.GameEngine.src.ball_model import BallActions
+from robocup_ws.src.GameEngine.src.collisions import CollisionTypes
 from game_interfaces.msg import Position
 
 
