@@ -1,5 +1,6 @@
 import sys, os
 sys.path.append('../../')
+sys.path.append('../../Planner')
 cwd = os.getcwd()
 sys.path.append(cwd)
 import inspect
