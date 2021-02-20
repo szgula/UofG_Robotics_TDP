@@ -1,0 +1,10 @@
+bool update
+TeamPosition players_positions
+TeamPosition opponents_positions
+int8 team_goals
+int8 opponents_goals
+float32 time
+float32 time_percentage
+---
+int8 status
+TeamCommand team_commands

@@ -132,9 +132,3 @@ class BasicVisualizer:
         self._data_provided = True
         self._data_provided_buffer = (team_1, team_2, ball, score)
 
-
-if __name__ == "__main__":
-    my_vis = BasicVisualizer(None)
-    while my_vis.vis_running:
-        my_vis.display()
-    pass

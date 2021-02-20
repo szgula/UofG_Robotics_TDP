@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from src.GameEngine.src.ball_model import BallActions
-from src.GameEngine.src.collisions import CollisionTypes
+from ball_model import BallActions
+from collisions import CollisionTypes
 from game_interfaces.msg import Position
 
 
@@ -22,7 +22,6 @@ class RobotModel(ABC):
         # positive Y 90deg rotated counterclockwise from X axis
         # pointing angle [rad], 0rad with X axis, positive towards the Y axis (counterclockwise)
         self._cord_system_rot = cord_system_rot  # team coordinate system (EFCS) rotation in respect to game CS
-        #x_init, y_init = self._convert_field_CS_to_EFCS(init_x_pos, init_y_pos)
         self._init_pos = [init_x_pos, init_y_pos]
         self._x_pos_EFCS = init_x_pos                           # robot x coordinate in field coordinate system
         self._y_pos_EFCS = init_y_pos                           # robot x coordinate in field coordinate system

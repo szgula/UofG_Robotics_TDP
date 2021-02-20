@@ -1,10 +1,8 @@
 from tqdm import tqdm
 import logging
 import rospy
-from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest
-import sys, os
-sys.path.append(os.getcwd())
-from src.Planner.src.team_master import TeamMaster
+from game_interfaces.srv import SimulationUpdate, SimulationUpdateRequest, TeamUpdate, TeamUpdateRequest
+from game_interfaces.msg import PlayerCommand, TeamCommand
 
 
 class BaseGameMaster:
@@ -74,38 +72,48 @@ class BaseGameMaster:
             self.goals[team_id] += 1
 
 
-class GameMasterClient:
+class GameMasterClient(BaseGameMaster):
     def __init__(self):
+        super().__init__()
         rospy.init_node('game_master_client')
         rospy.wait_for_service(r'game_engine/game_simulation')
+        rospy.wait_for_service(r'agents/team_master_0')
+        rospy.wait_for_service(r'agents/team_master_1')
         try:
-            self.server = rospy.ServiceProxy(r'game_engine/game_simulation', SimulationUpdate)
+            self.sim_server = rospy.ServiceProxy(r'game_engine/game_simulation', SimulationUpdate)
+            self.team0_server = rospy.ServiceProxy(r'agents/team_master_0', TeamUpdate)
+            self.team1_server = rospy.ServiceProxy(r'agents/team_master_1', TeamUpdate)
         except rospy.ServiceException as e:
             print("Service call failed: %s" % e)
             raise e
 
-    def send_update_request(self, team_actions):
+    def send_sim_update_request(self, team_actions):
         rq = SimulationUpdateRequest(True, False, team_actions)
-        resp = self.server(rq)
+        resp = self.sim_server(rq)
         return resp.status, resp
 
+    def send_teams_update_request(self, sim_response):
+        team0_message = TeamUpdateRequest(True,
+                                          sim_response.teams_position[0],
+                                          sim_response.teams_position[1],
+                                          self.goals[0], self.goals[1],
+                                          self.game_current_step, self.game_current_step / self.full_game_length)
+        team1_message = TeamUpdateRequest(True,
+                                          sim_response.teams_position[1],
+                                          sim_response.teams_position[0],
+                                          self.goals[1], self.goals[0],
+                                          self.game_current_step, self.game_current_step / self.full_game_length)
+
+        resp_team0 = self.team0_server(team0_message)
+        resp_team1 = self.team1_server(team1_message)
+        return resp_team0.status and resp_team1.status, resp_team0, resp_team1
 
 
 if __name__ == "__main__":
-    team0_master, team1_master = TeamMaster(0), TeamMaster(1)
     GMC = GameMasterClient()
 
-    actions = [team0_master.distribute_goals_to_players(), team1_master.distribute_goals_to_players()]
-    for i in tqdm(range(5000)):
-        status, message = GMC.send_update_request(actions)
-
-        # TODO: all 3 methods can be replace with a single function
-        team0_master.update_game_state(message.teams_position[0])
-        team0_master.plan()
-        team0_actions = team0_master.distribute_goals_to_players()
-
-        team1_master.update_game_state(message.teams_position[1])
-        team1_master.plan()
-        team1_actions = team0_master.distribute_goals_to_players()
-
-        actions = [team0_actions, team1_actions]
+    actions = [TeamCommand(i, [PlayerCommand(0, 0, 0) for _ in range(5)]) for i in range(2)]
+    for i in tqdm(range(GMC.full_game_length)):
+        status, sim_output = GMC.send_sim_update_request(actions)
+        status, m_team_0, m_team_1 = GMC.send_teams_update_request(sim_output)
+        actions = [m_team_0.team_commands, m_team_1.team_commands]
