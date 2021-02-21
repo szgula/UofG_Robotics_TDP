@@ -5,6 +5,7 @@ from enum import Enum
 class Goal(Enum):
     NO = 0
     ChaseBall = 1
+    RotateToPoint = 2
 
 
 class Robot(ABC):

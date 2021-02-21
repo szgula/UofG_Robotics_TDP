@@ -4,6 +4,7 @@ import math
 from BasicCommonActions.BasicCommonActionsHandler import BasicCommonActionsHandler
 from BasicCommonActions.ChaseBallAction import ChaseBallAction
 from BasicCommonActions.DoNothingAction import DoNothingAction
+from BasicCommonActions.RotateToPointAction import RotateToPointAction
 from ball_model import BallModel
 from robot_model import RobotModel
 from robot_control import Robot, Goal
@@ -20,6 +21,8 @@ class GoalkeeperController(Robot):
     def get_action(self, goal) -> tuple:
         if goal == Goal.ChaseBall:
             self._bscActHander.action = ChaseBallAction([self._goalkeeper, self._ball])
+        elif goal == Goal.RotateToPoint:
+            self._bscActHander.action = RotateToPointAction([self._goalkeeper, self._ball])
         return self._bscActHander.handle()
 
     def accrue_sensors_data(self):
