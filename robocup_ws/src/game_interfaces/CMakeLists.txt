@@ -51,6 +51,8 @@ add_message_files(
   FILES
   PlayerCommand.msg
   TeamCommand.msg
+  Position.msg
+  TeamPosition.msg
 )
 
 
@@ -58,6 +60,7 @@ add_message_files(
 add_service_files(
   FILES
   SimulationUpdate.srv
+  TeamUpdate.srv
 )
 
 ## Generate actions in the 'action' folder

@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CollisionTypes(Enum):
     NO = 0
     WALL_VERTICAL = 1

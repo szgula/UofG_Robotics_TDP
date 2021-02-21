@@ -56,6 +56,15 @@
 
 ## Configure the PyCharm development environment
 
+### Add alias 
+1.For ROS
+2. For PyCharm
+
+### PyCharm - setting the project
+1. In Pycharm open project with UofG_Robotics_TDP as a source folder
+2. ``file -> Settings -> Project: UofG_Robotics_TDP -> Project Structure``
+3. Right click on ```robotcap_ws``` folder and click on ```source```
+
 ### Pre-requirements 
 1. Install PyCharm
 2. Create an alias to Pycharm 

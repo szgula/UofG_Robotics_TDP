@@ -1,20 +1,17 @@
 #!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
 import sys, os
-sys.path.append('../../')
-cwd = os.getcwd()
-sys.path.append(cwd)
-import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-print('Dupa' + str(sys.version))
-from src.robot_model import RobotModel, RobotBasicModel
-from src.ball_model import BallModel, BallActions, BallBasicModel
-from src.collisions import CollisionTypes
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+import rospy
+from robot_model import RobotModel, RobotBasicModel
+from ball_model import BallModel, BallActions, BallBasicModel
+from collisions import CollisionTypes
+from visualizer import BasicVisualizer
+from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
+from game_interfaces.msg import TeamPosition
 
-
+VISUALIZER = True
 
 class GameSimulator:
     def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 2, number_of_robots: int = 5,
@@ -67,11 +64,8 @@ class GameSimulator:
         other_players_actions = []
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
-                if ROS:
-                    action = actions_per_team_per_player[team].players_commands[player_id]
-                    action = [action.left_rpm, action.right_rpm, BallActions(action.extra_action)]
-                else:
-                    action = actions_per_team_per_player[team][player_id]
+                action = actions_per_team_per_player[team].players_commands[player_id]
+                action = [action.left_rpm, action.right_rpm, BallActions(action.extra_action)]
                 any_collision, *collisions = self.check_for_player_collisions(team, player_id)
 
                 if not any_collision:
@@ -236,15 +230,6 @@ class GameSimulator:
                 self.reset()
         return goal_state
 
-ROS = True
-VISUALIZER = True
-
-if ROS and __name__ == "__main__":
-    import rospy
-    from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
-    from src.visualizer import BasicVisualizer
-    pass
-
 
 class GameSimulationServer(GameSimulator):
     def __init__(self):
@@ -252,117 +237,35 @@ class GameSimulationServer(GameSimulator):
         super().__init__(RobotBasicModel, BallBasicModel)
         rospy.init_node('game_simulation_server')
         s = rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
-        print("Ready to add two ints.")
+        print("Ready to simulate the game.")
         rospy.spin()
 
     def handle_simulation_call(self, simulation_request):
-        print(f" Get simulation request:  update = {simulation_request.update} reset = {simulation_request.reset}")
+        update_status, goal_status = False, False
         if not simulation_request.reset and simulation_request.update:
             update_status, goal_status = self.step(simulation_request.teams_commands)
-        response = SimulationUpdateResponse(update_status, goal_status)
+        response = self._generate_response_message(update_status, goal_status)
         if VISUALIZER:
             self.visualizer.send_game_state(*self.get_positions_for_visualizer())
             self.visualizer.display()
 
         return response
 
+    def _generate_response_message(self, update_status=False, goal_status=False) -> SimulationUpdateResponse:
+        team_pos = [TeamPosition(), TeamPosition()]
 
-if ROS and __name__ == "__main__":
+        ball_pos_wcs, ball_pos_efcs1 = self.ball.get_position_for_ros_srv()
+        team_pos[0].ball_pos_efcs, team_pos[1].ball_pos_efcs = ball_pos_wcs, ball_pos_efcs1
+
+        for team_idx in range(self._number_of_teams):
+            team_pos[team_idx].team_id = team_idx
+            for player_idx in range(self._number_of_robots):
+                team_pos_wcs, team_pos_efcs0 = self._robots[team_idx][player_idx].get_position_for_ros_srv()
+                team_pos[team_idx].players_positions_wcs[player_idx] = team_pos_wcs
+                team_pos[team_idx].players_positions_efcs[player_idx] = team_pos_efcs0
+
+        return SimulationUpdateResponse(update_status, goal_status, team_pos, ball_pos_wcs)
+
+
+if __name__ == "__main__":
     GSS = GameSimulationServer()
-
-
-class TestGameSimulation:
-    @staticmethod
-    def test_game_initialization():
-        from GameEngine.robot_model import RobotBasicModel
-        from GameEngine.ball_model import BallBasicModel
-        game = GameSimulator(RobotBasicModel, BallBasicModel, number_of_robots=5)
-        pass
-
-    @staticmethod
-    def test_non_collision_step():
-        from GameEngine.robot_model import RobotBasicModel
-        from GameEngine.ball_model import BallBasicModel
-        import matplotlib.pyplot as plt
-        number_of_robots = 5
-        game = GameSimulator(RobotBasicModel, BallBasicModel, number_of_robots=number_of_robots)
-
-        def get_robots_positions(game_):
-            x_pos = []
-            y_pos = []
-            for player in game_._robots[0]:
-                x, y = player.get_position_components_wcs()
-                x_pos.append(x), y_pos.append(y)
-            return x_pos, y_pos
-
-        simulation_steps = 1000
-        history = {'players_x': [], 'players_y': [], 'ball_x': [], 'ball_y': []}
-        actions = [[(0.3, 0.35) for _ in range(number_of_robots)]]
-        for i in range(simulation_steps):
-            game.step(actions)
-            xx, yy = get_robots_positions(game)
-            history['players_x'].append(xx)
-            history['players_y'].append(yy)
-            bx, by = game.ball.get_position()
-            history['ball_x'].append(bx)
-            history['ball_x'].append(by)
-
-        pos_x = np.array(history['players_x'])
-        pos_y = np.array(history['players_y'])
-        plt.plot(pos_x, pos_y)
-        plt.gca().set_aspect('equal')
-        pass
-
-    @staticmethod
-    def test_game_collision_steps_with_visualizer():
-        from GameEngine.robot_model import RobotBasicModel
-        from GameEngine.ball_model import BallBasicModel
-        import matplotlib.pyplot as plt
-        from GameEngine.visualizer import BasicVisualizer
-
-        number_of_robots = 5
-        visualizer = BasicVisualizer(None, number_of_players=number_of_robots)
-        game = GameSimulator(RobotBasicModel, BallBasicModel, number_of_robots=number_of_robots)
-
-        def get_robots_positions(game_):
-            x_pos = []
-            y_pos = []
-            for player in game_._robots[0]:
-                x, y = player.get_position_components_wcs()
-                x_pos.append(x), y_pos.append(y)
-            return x_pos, y_pos
-
-        simulation_steps = 3000
-        history = {'players_x': [], 'players_y': [], 'ball_x': [], 'ball_y': []}
-        actions = [[(0.3, 0.35) for _ in range(number_of_robots)]]
-        game.ball._x_vel, game.ball._y_vel = 0.01, 0.005
-        for i in range(simulation_steps):
-            game.step(actions)
-            visualizer.send_game_state(*game.get_positions_for_visualizer())
-            visualizer.display()
-
-            xx, yy = get_robots_positions(game)
-            history['players_x'].append(xx)
-            history['players_y'].append(yy)
-            bx, by = game.ball.get_position()
-            history['ball_x'].append(bx)
-            history['ball_y'].append(by)
-
-        pos_x = np.array(history['players_x'])
-        pos_y = np.array(history['players_y'])
-        plt.plot(pos_x, pos_y)
-        plt.plot(history['ball_x'], history['ball_y'])
-        plt.gca().set_aspect('equal')
-        pass
-
-if not ROS and __name__ == "__main__":
-    #TestGameSimulation.test_game_initialization()
-    #TestGameSimulation.test_game_collision_steps_with_visualizer()
-    TestGameSimulation.test_game_collision_steps_with_visualizer()
-
-
-
-
-
-
-

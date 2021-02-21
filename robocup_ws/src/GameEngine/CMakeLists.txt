@@ -163,6 +163,10 @@ catkin_install_python(PROGRAMS
 #   scripts/my_python_script
   src/game_master.py
   src/game_simulator.py
+  #src/ball_model.py
+  #src/collisions.py
+  #src/robot_model.py
+  #src/visualizer.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

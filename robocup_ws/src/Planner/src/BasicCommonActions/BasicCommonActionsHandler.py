@@ -1,4 +1,4 @@
-from BasicCommonActions.Action import Action
+from src.BasicCommonActions.Action import Action
 
 
 class BasicCommonActionsHandler:
@@ -11,7 +11,7 @@ class BasicCommonActionsHandler:
         return self._action
 
     @action.setter
-    def action(self, action: Action) -> None:
+    def action(self, action: Action):
         self._action = action
 
     def handle(self):

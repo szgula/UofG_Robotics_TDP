@@ -4,3 +4,5 @@ TeamCommand[2] teams_commands
 ---
 int8 status
 int8 goal_status
+TeamPosition[2] teams_position
+Position ball_position_wcs
