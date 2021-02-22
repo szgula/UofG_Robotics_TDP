@@ -107,11 +107,14 @@ class BallBasicModel(BallModel):
             logging.warning("Thy multiple actions are not supported yet - executing first action")
         object = actions[0][0]
         action_type = actions[0][1]
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         if action_type == BallActions.KICK:
             self._kick_collision(object)
         elif action_type == BallActions.RECEIVE:
             self._receive_collision(object)
+        elif action_type.value == BallActions.KICK.value:
+            self._kick_collision(object)
+
 
     def collision_step(self,  wall_collision:CollisionTypes, players_collision:CollisionTypes, collisions_with:list):
         """
