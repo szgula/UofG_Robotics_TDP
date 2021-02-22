@@ -27,7 +27,6 @@ class ScoreGoalAction(Action):
         shoot_direction = self.get_shoot_direction(pos_ball, goal_post_positions)
         vantage_point = self.get_vantage_point(pos_ball, shoot_direction)
         if np.linalg.norm(vantage_point - pos_robot) < 0.04:
-            print("The dis from ball to player is " + str(np.linalg.norm(pos_ball - pos_robot)))
             return self.shoot()
         else:
             return self.go_to_point(goalkeeper_model, vantage_point)
