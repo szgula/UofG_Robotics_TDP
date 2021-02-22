@@ -1,5 +1,6 @@
 from BasicCommonActions.Action import Action
 from ball_model import BallModel
+from ball_model import BallActions
 from robot_model import RobotModel
 import numpy as np
 import math
@@ -25,7 +26,8 @@ class ScoreGoalAction(Action):
         goal_post_positions = [goal_post_of_team_2_top, goal_post_of_team_2_bottom] #Fixme
         shoot_direction = self.get_shoot_direction(pos_ball, goal_post_positions)
         vantage_point = self.get_vantage_point(pos_ball, shoot_direction)
-        if np.linalg.norm(vantage_point - pos_robot) < 0.1:
+        if np.linalg.norm(vantage_point - pos_robot) < 0.04:
+            print("The dis from ball to player is " + str(np.linalg.norm(pos_ball - pos_robot)))
             return self.shoot()
         else:
             return self.go_to_point(goalkeeper_model, vantage_point)
@@ -78,4 +80,4 @@ class ScoreGoalAction(Action):
         return direction_of_shoot
 
     def shoot(self):
-        return 0, 0, 1
+        return 0, 0, BallActions.KICK
