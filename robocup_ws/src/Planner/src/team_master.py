@@ -3,6 +3,7 @@ from game_interfaces.srv import TeamUpdate, TeamUpdateRequest, TeamUpdateRespons
 import sys, os
 #sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from goalkeeper_controller import TempGoalkeeperController
+from player_controller import PlayerController
 import logging
 import rospy
 
@@ -27,7 +28,7 @@ class TeamMaster:
         self.defence_left_idx = 2
         self.defence_righr_idx = 3
         self.goalkeeper_idx = 4
-
+        self.player_logic = PlayerController()
         self.goalkeeper_logic = TempGoalkeeperController()
 
     def update_game_state(self, team_update_request: TeamUpdateRequest):
@@ -53,7 +54,10 @@ class TeamMaster:
             return
 
         self.actions = [PlayerCommand(0, 0, 0) for _ in range(5)]
-
+        self.actions[self.striker_left_idx] = self.player_logic.get_action(
+            self.team_position.players_positions_efcs[self.player_logic],
+            self.team_position.ball_pos_efcs)
+        print(self.actions[self.striker_left_idx])
         self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
             self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs
         )
