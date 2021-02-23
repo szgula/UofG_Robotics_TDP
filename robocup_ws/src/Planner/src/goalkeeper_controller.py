@@ -33,7 +33,7 @@ class TempGoalkeeperController(Robot):
         pass
 
     def get_action(self, my_pos_efcs, ball_pos_efcs):
-        l_rpm = -1
-        r_rpm = 1
+        l_rpm = 3
+        r_rpm = -3
         action = 0
         return PlayerCommand(l_rpm, r_rpm, action)
