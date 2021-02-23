@@ -8,7 +8,7 @@ from game_interfaces.msg import Position
 class RobotModel(ABC):
     @abstractmethod
     def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, robot_radius: float = 0.1,
-                 wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05):
+                 wheel_radius: float = 0.02, cord_system_rot: float = 0, axis_len: float = 0.05, max_rpm:float = 3):
         """
         :param dt: simulation time step
         """
@@ -28,6 +28,7 @@ class RobotModel(ABC):
         self.radius = robot_radius                          # assuming round robot
         self._wheel_radius = wheel_radius                   # wheel_radius
         self.axis_len = axis_len                           # distance between wheels
+        self.max_rpm = max_rpm                              # maximal wheel speed (in rotation per minute)
 
     def reset(self):
         self._x_pos_EFCS, self._y_pos_EFCS = self._init_pos[0], self._init_pos[1]
@@ -121,7 +122,8 @@ class RobotBasicModel(RobotModel):
         :param extra_action: <None, kick, receive>
         :return:
         """
-
+        l_motor_speed = np.clip(l_motor_speed, -self.max_rpm, self.max_rpm)
+        r_motor_speed = np.clip(r_motor_speed, -self.max_rpm, self.max_rpm)
         # http://roboscience.org/book/html/Simulation/MovingDifferential.html
         self.vel = (self._wheel_radius / 2.0) * (l_motor_speed + r_motor_speed)
         xn = self._x_pos_EFCS + (self._wheel_radius * self._dt / 2.0) * (l_motor_speed + r_motor_speed) * np.cos(self.pointing_angle)
