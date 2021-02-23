@@ -255,7 +255,9 @@ class GameSimulationServer(GameSimulator):
         team_pos = [TeamPosition(), TeamPosition()]
 
         ball_pos_wcs, ball_pos_efcs1 = self.ball.get_position_for_ros_srv()
+        ball_vel_wcs, ball_vel_efcs1 = self.ball.get_velocity_for_ros_srv()
         team_pos[0].ball_pos_efcs, team_pos[1].ball_pos_efcs = ball_pos_wcs, ball_pos_efcs1
+        team_pos[0].ball_vel_efcs, team_pos[1].ball_vel_efcs = ball_vel_wcs, ball_vel_efcs1
 
         for team_idx in range(self._number_of_teams):
             team_pos[team_idx].team_id = team_idx

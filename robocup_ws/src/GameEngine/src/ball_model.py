@@ -56,6 +56,16 @@ class BallModel(ABC):
         heading = 0
         return Position(*wcs_pos, heading), Position(*efcs1_pos, heading)
 
+    def get_velocity_for_ros_srv(self) -> (Position, Position):
+        """
+        :return: Velocity message with vel in wcs (same as efcs0 - ego filed coordinate system for team 0)
+        :return: Velocity message with vel in efcs1 (ego filed coordinate system for team 1)
+        """
+        wcs_pos = (self._x_vel, self._y_vel)  # same as efcs0
+        efcs1_pos = (-self._x_vel, -self._y_vel)
+        heading = 0
+        return Position(*wcs_pos, heading), Position(*efcs1_pos, heading)
+
 
 class BallActions(Enum):
     NO = 0
