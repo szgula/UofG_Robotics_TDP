@@ -24,10 +24,10 @@ class TeamMaster(ABC):
 
         self.actions = [PlayerCommand(0, 0, 0) for _ in range(5)]
 
-        self.striker_left_idx = 0
-        self.striker_right_idx = 1
-        self.defence_left_idx = 2
-        self.defence_right_idx = 3
+        self.striker_left_idx = 2
+        self.striker_right_idx = 3
+        self.defence_left_idx = 0
+        self.defence_right_idx = 1
         self.goalkeeper_idx = 4
         self.goalkeeper_logic = None
         self.striker_left_logic = None
@@ -76,14 +76,15 @@ class TeamMaster(ABC):
 
         self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
             self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+
         self.actions[self.striker_left_idx] = self.striker_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.striker_left_idx], self.team_position.ball_pos_efcs)
         self.actions[self.striker_right_idx] = self.striker_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.striker_right_idx], self.team_position.ball_pos_efcs)
         self.actions[self.defence_left_idx] = self.defence_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.defence_left_idx], self.team_position.ball_pos_efcs)
         self.actions[self.defence_right_idx] = self.defence_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.defence_right_idx], self.team_position.ball_pos_efcs)
         self.actions_planned = True
 
     def distribute_goals_to_players(self):   # TODO: how about to rename 'goals -> commends'
