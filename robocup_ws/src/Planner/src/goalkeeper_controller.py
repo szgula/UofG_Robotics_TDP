@@ -48,8 +48,8 @@ class Team1GoalkeeperController:  #(Robot)
         self.team_id = team_id
         self.vel_scalar = -1
         self.neutral_heading = np.pi / 2
-        self.center_of_net = {'x': -6, 'y': 0}
-        self.move_radius = 2
+        self.center_of_net = {'x': -5+0.15, 'y': 0.0}
+        self.move_radius = 1.2
         self.safe_ball_distance = 4
         self.kick_distance = 0.15
 
@@ -65,6 +65,7 @@ class Team1GoalkeeperController:  #(Robot)
         else:
             scalar = 0.1
         x = self.center_of_net['x'] + ball_from_net_x * scalar
+        x = max(x, self.center_of_net['x'])
         y = self.center_of_net['y'] + ball_from_net_y * scalar
         l_v, r_v = go_to_fast(my_pos_efcs, Position(x, y, 0))
         action = 0 if d_player2ball > self.kick_distance else 1
