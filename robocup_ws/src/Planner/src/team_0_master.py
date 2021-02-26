@@ -3,6 +3,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from team_master import TeamMasterServer, TeamMaster
 from goalkeeper_controller import Team1GoalkeeperController
 from stay_in_place_controller import NullController
+from player_controller import PlayerController
+from striker_controller import Team1StrikerController
 
 
 class TeamMaster0(TeamMaster):
@@ -10,11 +12,20 @@ class TeamMaster0(TeamMaster):
         team_id = 0
         super().__init__(team_id)
         self.goalkeeper_logic = Team1GoalkeeperController(0)
-        self.striker_left_logic = NullController()
-        self.striker_right_logic = NullController()
+        self.striker_left_logic = PlayerController()
+        self.striker_right_logic = Team1StrikerController()
         self.defence_left_logic = NullController()
         self.defence_right_logic = NullController()
         self.players_logic_was_updated = True
+
+    def plan(self):
+        self.striker_left_logic.get_coordinates(self.team_position.players_positions_efcs[3],
+                                                                         self.team_position.ball_pos_efcs)
+        self.actions[3] = self.striker_left_logic.get_action(self.team_position.players_positions_efcs[3])
+        # self.actions[2] = self.striker_right_logic.get_action(
+        #     self.team_position.players_positions_efcs[3],
+        #     self.team_position.ball_pos_efcs)
+
 
 
 if __name__ == "__main__":

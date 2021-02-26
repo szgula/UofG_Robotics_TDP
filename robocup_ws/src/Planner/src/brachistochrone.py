@@ -13,11 +13,27 @@ logging.basicConfig(filename="log_paths.txt",
                             datefmt='%H:%M:%S',
                             level=logging.INFO)
 
-def cycloid(x0, y0, x_t, y_t, V, N = 6):
-    wheel_radius = 0.02
+# def cycloid(x0, y0, x_t, y_t, N = 10):
+#     def f(theta):
+#         return y_t / x_t - (1 - np.cos(theta)) / (theta - np.sin(theta))
+#     # circle_theta = newton(f,np.pi/2,tol=1e-13,maxiter=1000)
+#     circle_theta = fsolve(f,np.pi/2)
+#
+#     R = y_t / (1 - np.cos(circle_theta))
+#
+#     theta = np.linspace(0, circle_theta, N)
+#     x = R * (theta - np.sin(theta)) + x0
+#     y = R * (1 - np.cos(theta)) + y0
+#
+#     T = circle_theta * np.sqrt(R)
+#     x-=5
+#     y-=3
+#     return x, y, T, theta
+
+def cycloid(x0, y0, x_t, y_t, N = 3):
     def f(theta):
         return y_t / x_t - (1 - np.cos(theta)) / (theta - np.sin(theta))
-    circle_theta = newton(f,np.pi/2,maxiter=1000)
+    circle_theta = newton(f,np.pi/2)
     R = y_t / (1 - np.cos(circle_theta))
     angle = Symbol('angle')
     eq_x = lambdify(angle,R * (angle - sympy.sin(angle)) - x0)

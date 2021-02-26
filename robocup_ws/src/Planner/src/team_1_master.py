@@ -15,7 +15,7 @@ class TeamMaster1(TeamMaster):
         team_id = 1
         super().__init__(team_id)
         self.goalkeeper_logic = Team1GoalkeeperController(1)
-        self.striker_left_logic = NullController()
+        self.striker_left_logic = Team1StrikerController()
         self.striker_right_logic = NullController()
         self.defence_left_logic = NullController()
         self.defence_right_logic = NullController()
@@ -38,8 +38,10 @@ class TeamMaster1(TeamMaster):
         player_id = 3
         super(TeamMaster1, self).plan()
         if mode == "ATTACK" or True:
-            self.actions[player_id] = self.simple_go_to_point(self.team_position.players_positions_efcs[player_id],
+            self.actions[1] = self.simple_go_to_point(self.team_position.players_positions_efcs[1],
                                                               capture_pos, self.team_position.ball_pos_efcs)
+            self.actions[player_id] = self.striker_left_logic.chase_ball(self.team_position.players_positions_efcs[player_id],
+                                                                         self.team_position.ball_pos_efcs)
 
     def calculate_time_to_wall_collision(self, ball_pos, ball_vel):
         if ball_vel.x >= 0:

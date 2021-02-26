@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 from game_interfaces.msg import PlayerCommand, TeamCommand
 from game_interfaces.srv import TeamUpdate, TeamUpdateRequest, TeamUpdateResponse
-#import sys, os
-#sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# import sys, os
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from goalkeeper_controller import TempGoalkeeperController
-from player_controller import PlayerController
 import logging
 import rospy
 
@@ -30,6 +29,17 @@ class TeamMaster(ABC):
         self.defence_left_idx = 0
         self.defence_right_idx = 1
         self.goalkeeper_idx = 4
+        self.goalkeeper_logic = None
+        self.striker_left_logic = None
+        self.striker_right_logic = None
+        self.defence_left_logic = None
+        self.defence_right_logic = None
+        self.players_logic_was_updated = False
+
+    """
+        ADD FOLLOWING TO YOUR init method:
+
+        super().__init__(team_id)
         self.goalkeeper_logic = TempGoalkeeperController()
         self.striker_left_logic = 
         self.striker_right_logic = 
@@ -57,31 +67,29 @@ class TeamMaster(ABC):
         :return:
         """
         if not self.position_updated:
-            raise logging.waringn("The simulation state has not beer updated, please run the update_game_state() method before")
+            raise logging.waringn(
+                "The simulation state has not beer updated, please run the update_game_state() method before")
             return
         if not self.players_logic_was_updated:
             raise logging.waringn("The players logic was not updated - please do so before planning")
             return
 
         self.actions = [PlayerCommand(0, 0, 0) for _ in range(5)]
-        self.actions[self.striker_left_idx] = self.player_logic.get_action(
-            self.team_position.players_positions_efcs[self.player_logic],
-            self.team_position.ball_pos_efcs)
-        print(self.actions[self.striker_left_idx])
-        self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
-            self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
 
-        self.actions[self.striker_left_idx] = self.striker_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.striker_left_idx], self.team_position.ball_pos_efcs)
-        self.actions[self.striker_right_idx] = self.striker_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.striker_right_idx], self.team_position.ball_pos_efcs)
-        self.actions[self.defence_left_idx] = self.defence_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.defence_left_idx], self.team_position.ball_pos_efcs)
-        self.actions[self.defence_right_idx] = self.defence_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.defence_right_idx], self.team_position.ball_pos_efcs)
+        # self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+        #
+        # self.actions[self.striker_left_idx] = self.striker_left_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.striker_left_idx], self.team_position.ball_pos_efcs)
+        # self.actions[self.striker_right_idx] = self.striker_right_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.striker_right_idx], self.team_position.ball_pos_efcs)
+        # self.actions[self.defence_left_idx] = self.defence_left_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.defence_left_idx], self.team_position.ball_pos_efcs)
+        # self.actions[self.defence_right_idx] = self.defence_right_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.defence_right_idx], self.team_position.ball_pos_efcs)
         self.actions_planned = True
 
-    def distribute_goals_to_players(self):   # TODO: how about to rename 'goals -> commends'
+    def distribute_goals_to_players(self):  # TODO: how about to rename 'goals -> commends'
         """
         Send action goals to players
         :return:
