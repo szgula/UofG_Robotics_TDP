@@ -34,7 +34,7 @@ class GameSimulator:
         self._robots = [list() for _ in range(self._number_of_teams)]
         self.size_of_net = 2
         self.team_CS_rotations = [0, np.pi]
-        self.team_starting_points = [(-4,2), (-4,-2), (-2,2), (-2, -2), (-4, 0)]
+        self.team_starting_points = [(-3,2), (-3,-2), (-1,2), (-1, -2), (-4, 0)]
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
                 self._robots[team].append(

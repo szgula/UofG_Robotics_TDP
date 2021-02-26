@@ -6,6 +6,7 @@ from striker_controller import Team1StrikerController
 from stay_in_place_controller import NullController
 from game_interfaces.msg import Position, PlayerCommand
 from BasicCommonActions.go_to_action import go_to_fast
+from defence_controller import Team1DefenceController
 import numpy as np
 import logging
 from BasicCommonActions.plan_supporting_functions import TeamMasterSupporting
@@ -18,8 +19,8 @@ class TeamMaster1(TeamMaster):
         self.goalkeeper_logic = Team1GoalkeeperController(1)
         self.striker_left_logic = NullController()
         self.striker_right_logic = NullController()
-        self.defence_left_logic = NullController()
-        self.defence_right_logic = NullController()
+        self.defence_left_logic = Team1DefenceController(2)
+        self.defence_right_logic = Team1DefenceController(-2)
         self.players_logic_was_updated = True
 
     def plan(self):
@@ -32,22 +33,38 @@ class TeamMaster1(TeamMaster):
         player_id_min_time = int(np.argmin(players_capture_time))
         opponent_id_min_time = int(np.argmin(opponents_capture_time))
 
-        if team_can_get_to_ball and (player_id_min_time == 3 or player_id_min_time == 2):
+        if team_can_get_to_ball and (player_id_min_time == self.striker_right_idx or
+                                     player_id_min_time == self.striker_left_idx):
             capture_pos = TeamMasterSupporting.get_ball_pos_at_time(players_capture_time[player_id_min_time],
                                                                     self.team_position.ball_pos_efcs,
                                                                     self.team_position.ball_vel_efcs)
 
-            self.actions[player_id_min_time] = self.simple_go_to_point(self.team_position.players_positions_efcs[player_id_min_time],
-                                                                       capture_pos, self.team_position.ball_pos_efcs)
+            self.actions[player_id_min_time] = self.simple_go_to_point_and_kick(self.team_position.players_positions_efcs[player_id_min_time],
+                                                                                capture_pos, self.team_position.ball_pos_efcs)
+        if team_can_get_to_ball and (player_id_min_time == self.defence_right_idx or
+                                     player_id_min_time == self.defence_left_idx):
+            capture_pos = TeamMasterSupporting.get_ball_pos_at_time(players_capture_time[player_id_min_time],
+                                                                    self.team_position.ball_pos_efcs,
+                                                                    self.team_position.ball_vel_efcs)
+            self.actions[player_id_min_time] = self.simple_go_to_point_and_receive(self.team_position.players_positions_efcs[player_id_min_time],
+                                                                                   capture_pos, self.team_position.ball_pos_efcs)
+
 
         # TODO: move other striker to line of opponent defence
         # TODO: receive the ball, rotate towards opponent's net or other striker and kick/pass
 
-    def simple_go_to_point(self, robot_state: Position, target: Position, ball_position: Position):
+    def simple_go_to_point_and_kick(self, robot_state: Position, target: Position, ball_position: Position):
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
         if d < 0.15:
             action = 1
+        return PlayerCommand(*go_to_fast(robot_state, target), action)
+
+    def simple_go_to_point_and_receive(self, robot_state: Position, target: Position, ball_position: Position):
+        d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
+        action = 0
+        if d < 0.15:
+            action = 2
         return PlayerCommand(*go_to_fast(robot_state, target), action)
 
 

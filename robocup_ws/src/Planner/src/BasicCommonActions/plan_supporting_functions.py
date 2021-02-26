@@ -7,7 +7,9 @@ class TeamMasterSupporting:
     field_size_y = 6
     simulation_dt = 0.1
     max_robot_speed = 0.05
+    max_robot_speed_optimistic = 0.07
     not_reachable = 1000
+    kick_speed = 0.4
 
     @staticmethod
     def calculate_time_to_wall_collision(ball_pos, ball_vel):
@@ -129,3 +131,81 @@ class TeamMasterSupporting:
                 team_can_get_to_ball = players_capture_time[player_id_min_time] < coll_time
                 if team_can_get_to_ball: break
         return team_can_get_to_ball, players_capture_time, opponent_can_get_to_ball, opponents_capture_time
+
+    @staticmethod
+    def is_safe_to_pass_anywhere(opponent_can_get_to_ball, opponents_capture_time):
+        min_rotation_time = 2
+        all_safe = all(np.arrya(opponents_capture_time) > min_rotation_time)
+        return all_safe or (not opponent_can_get_to_ball)
+
+    @staticmethod
+    def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id):
+        players_pos_wcs = np.array([[pos.x, pos.y] for pos in team_position.players_positions_wcs])
+        opponents_pos_wcs = np.array([[pos.x, pos.y] for pos in opponents_position.players_positions_wcs])
+        ball_pos_wcs = team_position.ball_pos_efcs if team_id == 0 else opponents_position.ball_pos_efcs
+        ball_pos_wcs = np.array([ball_pos_wcs.x, ball_pos_wcs.y])
+
+        d = ball_pos_wcs - players_pos_wcs
+        slope = d[:, 1] / d[:, 0]
+        slope_perpendicular = -1 / slope
+
+        s = slope_perpendicular[0]
+        p = players_pos_wcs[0]
+        d = 0.1
+        n = get_point_on_vector(p, s, d)
+        a = np.array([ball_pos_wcs, p, n])
+        plt.plot(a[:, 0], a[:, 1])
+
+
+    @staticmethod
+    def get_point_on_vector(initial_pt, slope, distance):
+        dx = 1
+        dy = slope * dx
+        terminal_pt = [initial_pt[0] + dx, initial_pt[1] + dy]
+        v = np.array(initial_pt, dtype=float)
+        u = np.array(terminal_pt, dtype=float)
+        n = v - u
+        n /= np.linalg.norm(n, 2)
+        point = v - distance * n
+
+        return tuple(point)
+
+    @staticmethod
+    def test_generate_new_point():
+        pass
+
+
+
+    @staticmethod
+    def lineseg_dists(p, a, b):
+        """
+        https://stackoverflow.com/a/58781995
+        Cartesian distance from point to line segment
+
+        Edited to support arguments as series, from:
+        https://stackoverflow.com/a/54442561/11208892
+
+        Args:
+            - p: np.array of single point, shape (2,) or 2D array, shape (x, 2)
+            - a: np.array of shape (x, 2)
+            - b: np.array of shape (x, 2)
+        """
+        # normalized tangent vectors
+        d_ba = b - a
+        d = np.divide(d_ba, (np.hypot(d_ba[:, 0], d_ba[:, 1])
+                             .reshape(-1, 1)))
+
+        # signed parallel distance components
+        # rowwise dot products of 2D vectors
+        s = np.multiply(a - p, d).sum(axis=1)
+        t = np.multiply(p - b, d).sum(axis=1)
+
+        # clamped parallel distance
+        h = np.maximum.reduce([s, t, np.zeros(len(s))])
+
+        # perpendicular distance component
+        # rowwise cross products of 2D vectors
+        d_pa = p - a
+        c = d_pa[:, 0] * d[:, 1] - d_pa[:, 1] * d[:, 0]
+
+        return np.hypot(h, c)
