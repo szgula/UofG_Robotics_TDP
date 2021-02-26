@@ -56,6 +56,16 @@ class BallModel(ABC):
         heading = 0
         return Position(*wcs_pos, heading), Position(*efcs1_pos, heading)
 
+    def get_velocity_for_ros_srv(self) -> (Position, Position):
+        """
+        :return: Velocity message with vel in wcs (same as efcs0 - ego filed coordinate system for team 0)
+        :return: Velocity message with vel in efcs1 (ego filed coordinate system for team 1)
+        """
+        wcs_pos = (self._x_vel, self._y_vel)  # same as efcs0
+        efcs1_pos = (-self._x_vel, -self._y_vel)
+        heading = 0
+        return Position(*wcs_pos, heading), Position(*efcs1_pos, heading)
+
 
 class BallActions(Enum):
     NO = 0
@@ -276,14 +286,14 @@ class BallBasicModel(BallModel):
         :param kwargs:
         :return:
         """
-        # TODO: check if in 'kick' range
         # TODO: take into consideration the ball incoming speed
         player_pos_x, player_pos_y = collision_object.get_position_components_wcs()
         dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
-        diff = (dx**2 + dy**2)**0.5
-        kick_vel = min(kick_vel, self._max_vel)
-        self._x_vel = kick_vel * dx / diff
-        self._y_vel = kick_vel * dy / diff
+        diff = np.hypot(dx, dy)
+        if diff < 0.20:
+            kick_vel = min(kick_vel, self._max_vel)
+            self._x_vel = kick_vel * dx / diff
+            self._y_vel = kick_vel * dy / diff
 
     def _receive_collision(self, collision_object):
         """
@@ -291,8 +301,11 @@ class BallBasicModel(BallModel):
         :param collision_object:
         :return:
         """
-        # TODO: check if in range to receive
-        self._x_vel, self._y_vel = collision_object.get_velocity_components_wcs()
+        player_pos_x, player_pos_y = collision_object.get_position_components_wcs()
+        dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
+        diff = np.hypot(dx, dy)
+        if diff < 0.20:
+            self._x_vel, self._y_vel = collision_object.get_velocity_components_wcs()
 
     def get_position(self):
         return self._x_pos, self._y_pos

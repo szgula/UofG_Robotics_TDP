@@ -1,4 +1,3 @@
-#!/home/szymon/UofG/TDP/UofG_Robotics_TDP/.venv/bin/python
 import numpy as np
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -13,9 +12,10 @@ from game_interfaces.msg import TeamPosition
 
 VISUALIZER = True
 
+
 class GameSimulator:
     def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 2, number_of_robots: int = 5,
-                 size_of_field: tuple = (10, 6)):
+                 size_of_field: tuple = (10, 6), dt: float = 0.1):
         """
 
         Ego field coordinate system: located in the middle of the field, positive X towards opponent's goal
@@ -26,6 +26,7 @@ class GameSimulator:
         :param number_of_robots:
         :param size_of_field:
         """
+        self.dt = dt
         self._robot_class = robot_class
         self._number_of_teams = number_of_teams
         self._number_of_robots = number_of_robots
@@ -37,9 +38,9 @@ class GameSimulator:
         for team in range(self._number_of_teams):
             for player_id in range(self._number_of_robots):
                 self._robots[team].append(
-                    self._robot_class(*self.team_starting_points[player_id], cord_system_rot=self.team_CS_rotations[team]))
+                    self._robot_class(*self.team_starting_points[player_id], cord_system_rot=self.team_CS_rotations[team], dt=self.dt))
 
-        self.ball = ball_model(0, 0)
+        self.ball = ball_model(0, 0, dt=self.dt )
         self._internal_goal_counter = [0, 0]
 
     def reset(self):
@@ -255,7 +256,9 @@ class GameSimulationServer(GameSimulator):
         team_pos = [TeamPosition(), TeamPosition()]
 
         ball_pos_wcs, ball_pos_efcs1 = self.ball.get_position_for_ros_srv()
+        ball_vel_wcs, ball_vel_efcs1 = self.ball.get_velocity_for_ros_srv()
         team_pos[0].ball_pos_efcs, team_pos[1].ball_pos_efcs = ball_pos_wcs, ball_pos_efcs1
+        team_pos[0].ball_vel_efcs, team_pos[1].ball_vel_efcs = ball_vel_wcs, ball_vel_efcs1
 
         for team_idx in range(self._number_of_teams):
             team_pos[team_idx].team_id = team_idx
