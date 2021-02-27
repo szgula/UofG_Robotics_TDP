@@ -29,19 +29,29 @@ class Team1StrikerController:  #(Robot)
         print(f"({l_rpm}, {r_rpm})")
         return PlayerCommand(l_rpm, r_rpm, 0)
 
-    def chase_ball(self, my_pos_efcs:Position, ball_pos_efcs: Position):
-        lookahead = [ball_pos_efcs.x,ball_pos_efcs.y]
-        pos = [my_pos_efcs.x,my_pos_efcs.y]
-        angle = my_pos_efcs.theta
-        curv = self.curvature(lookahead, pos, angle)
-        width = 0.2
-        wheels = [(2 + curv * width) / 2, (2 - curv * width) / 2]
+    def go_to_point(self, my_pos_efcs:Position, ball_pos_efcs: Position):
+        start_x_pos = my_pos_efcs.x
+        start_y_pos = my_pos_efcs.y
+        heading_angle = my_pos_efcs.theta
+        target_x_pos = ball_pos_efcs.x
+        target_y_pos = ball_pos_efcs.y
+        axis_len = 0.1
+        distance = 0.1
+        ball_radius = 0.05
+        target = [target_x_pos, target_y_pos]
+        start = [start_x_pos, start_y_pos]
+        wheels = [0, 0]
+        start_to_target_distance = ((target[0] - start[0]) ** 2 + (target[0] - start[0]) ** 2) ** 0.5
+        if start_to_target_distance > (axis_len + ball_radius + distance):
+            curv = self.curvature(start, target, heading_angle)
+            wheels = [(2 + curv * axis_len) / 2, (2 - curv * axis_len) / 2]
+
         print(f"({wheels[1]}, {wheels[0]})")
         return PlayerCommand(wheels[1], wheels[0], 0)
 
-    def curvature(self, lookahead, pos, angle):
-        side = np.sign(math.sin(angle) * (lookahead[0] - pos[0]) - math.cos(angle) * (lookahead[1] - pos[1]))
+    def curvature(self, start, target, angle):
+        side = np.sign(math.sin(angle) * (target[0] - start[0]) - math.cos(angle) * (target[1] - start[1]))
         a = -math.tan(angle)
-        c = math.tan(angle) * pos[0] - pos[1]
-        x = abs(a * lookahead[0] + lookahead[1] + c) / math.sqrt(a ** 2 + 1)
+        c = math.tan(angle) * start[0] - start[1]
+        x = abs(a * target[0] + target[1] + c) / math.sqrt(a ** 2 + 1)
         return side * (2 * x / (float(1) ** 2))

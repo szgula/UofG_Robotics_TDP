@@ -38,9 +38,9 @@ class TeamMaster1(TeamMaster):
         player_id = 3
         super(TeamMaster1, self).plan()
         if mode == "ATTACK" or True:
-            self.actions[1] = self.simple_go_to_point(self.team_position.players_positions_efcs[1],
-                                                              capture_pos, self.team_position.ball_pos_efcs)
-            self.actions[player_id] = self.striker_left_logic.chase_ball(self.team_position.players_positions_efcs[player_id],
+            # self.actions[1] = self.simple_go_to_point(self.team_position.players_positions_efcs[1],
+            #                                                   capture_pos, self.team_position.ball_pos_efcs)
+            self.actions[player_id] = self.striker_left_logic.go_to_point(self.team_position.players_positions_efcs[player_id],
                                                                          self.team_position.ball_pos_efcs)
 
     def calculate_time_to_wall_collision(self, ball_pos, ball_vel):
