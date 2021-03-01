@@ -25,3 +25,18 @@ class Team1StrikerController:  #(Robot)
         l_rpm, r_rpm, = simple_go_to_action(my_pos_efcs, goal_pos)
 
         return PlayerCommand(l_rpm, r_rpm, 0)
+
+
+
+class RotateController:  #(Robot)
+    def __init__(self):
+        pass
+
+    def get_action(self, my_pos_efcs:Position, ball_pos_efcs: Position):
+        # l = 1, r = 2: d = 0.15, r = 0.075
+        # l = 1, r = 3, d = 0.1, r = 0.05
+
+        l_rpm = 1
+        r_rpm = 3
+        print("[", my_pos_efcs.x, ",", my_pos_efcs.y, "],")
+        return PlayerCommand(l_rpm, r_rpm, 0)

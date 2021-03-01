@@ -1,5 +1,6 @@
 import numpy as np
 from game_interfaces.msg import Position, PlayerCommand, TeamPosition
+import matplotlib.pyplot as plt
 
 
 class TeamMasterSupporting:
@@ -139,7 +140,7 @@ class TeamMasterSupporting:
         return all_safe or (not opponent_can_get_to_ball)
 
     @staticmethod
-    def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id):
+    def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id, vis=False):
         players_pos_wcs = np.array([[pos.x, pos.y] for pos in team_position.players_positions_wcs])
         opponents_pos_wcs = np.array([[pos.x, pos.y] for pos in opponents_position.players_positions_wcs])
         ball_pos_wcs = team_position.ball_pos_efcs if team_id == 0 else opponents_position.ball_pos_efcs
@@ -147,15 +148,36 @@ class TeamMasterSupporting:
 
         d = ball_pos_wcs - players_pos_wcs
         slope = d[:, 1] / d[:, 0]
+        # FIXME: slope = 0
         slope_perpendicular = -1 / slope
 
-        s = slope_perpendicular[0]
-        p = players_pos_wcs[0]
-        d = 0.1
-        n = get_point_on_vector(p, s, d)
-        a = np.array([ball_pos_wcs, p, n])
-        plt.plot(a[:, 0], a[:, 1])
+        points, points_vis = [], []
+        for i in range(5):
+            s = slope_perpendicular[i]
+            p = players_pos_wcs[i]
+            a, a_vis = TeamMasterSupporting.get_intersection_region(ball_pos_wcs, p, s)
+            points.append(a)
+            points_vis.append(a_vis)
+        if vis:
+            for a in points_vis:
+                plt.plot(a[:, 0], a[:, 1])
+            pos_opponent = [
+                (opponents_position.players_positions_wcs[i].x, opponents_position.players_positions_wcs[i].y)
+                for i in range(5)]
+            pos_opponent = np.array(pos_opponent)
+            plt.scatter(pos_opponent[:, 0], pos_opponent[:, 1], s=100)
+        best_player_to_pass = 2
+        return points, best_player_to_pass
 
+    @staticmethod
+    def get_intersection_region(ball_position, player_position, kick_slope):
+        d = np.hypot(*(ball_position-player_position)) * TeamMasterSupporting.max_robot_speed_optimistic
+        d /= TeamMasterSupporting.kick_speed
+        n = TeamMasterSupporting.get_point_on_vector(player_position, kick_slope, d)
+        n_ = TeamMasterSupporting.get_point_on_vector(player_position, kick_slope, -d)
+        a = np.array([ball_position, player_position, n, n_])
+        a_vis = np.array([ball_position, n, n_, ball_position, player_position])  # a[:, 0] - x coord, a[:, 1] - y coord
+        return a, a_vis
 
     @staticmethod
     def get_point_on_vector(initial_pt, slope, distance):

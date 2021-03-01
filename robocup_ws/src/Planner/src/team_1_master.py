@@ -2,10 +2,10 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from team_master import TeamMasterServer, TeamMaster
 from goalkeeper_controller import Team1GoalkeeperController
-from striker_controller import Team1StrikerController
+from striker_controller import Team1StrikerController, RotateController
 from stay_in_place_controller import NullController
 from game_interfaces.msg import Position, PlayerCommand
-from BasicCommonActions.go_to_action import go_to_fast
+from BasicCommonActions.go_to_action import go_to_fast, receive_and_pass_action
 from defence_controller import Team1DefenceController
 import numpy as np
 import logging
@@ -64,8 +64,13 @@ class TeamMaster1(TeamMaster):
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
         if d < 0.15:
-            action = 2
-        return PlayerCommand(*go_to_fast(robot_state, target), action)
+            _, player_to_pass = TeamMasterSupporting.find_safe_players_to_pass(self.team_position, self.opponents_position, self.team_id)
+            temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
+            raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position)
+            command = PlayerCommand(*raw_command)
+        else:
+            command = PlayerCommand(*go_to_fast(robot_state, target), action)
+        return command
 
 
 if __name__ == "__main__":
