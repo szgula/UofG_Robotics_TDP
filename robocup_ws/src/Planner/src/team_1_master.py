@@ -40,34 +40,62 @@ class TeamMaster1(TeamMaster):
                                                                     self.team_position.ball_vel_efcs)
 
             self.actions[player_id_min_time] = self.simple_go_to_point_and_kick(self.team_position.players_positions_efcs[player_id_min_time],
-                                                                                capture_pos, self.team_position.ball_pos_efcs)
+                                                                                capture_pos, self.team_position.ball_pos_efcs,
+                                                                                self.team_position.ball_vel_efcs, player_id_min_time)
         if team_can_get_to_ball and (player_id_min_time == self.defence_right_idx or
                                      player_id_min_time == self.defence_left_idx):
             capture_pos = TeamMasterSupporting.get_ball_pos_at_time(players_capture_time[player_id_min_time],
                                                                     self.team_position.ball_pos_efcs,
                                                                     self.team_position.ball_vel_efcs)
             self.actions[player_id_min_time] = self.simple_go_to_point_and_receive(self.team_position.players_positions_efcs[player_id_min_time],
-                                                                                   capture_pos, self.team_position.ball_pos_efcs)
+                                                                                   capture_pos, self.team_position.ball_pos_efcs,
+                                                                                   self.team_position.ball_vel_efcs, player_id_min_time)
 
 
         # TODO: move other striker to line of opponent defence
         # TODO: receive the ball, rotate towards opponent's net or other striker and kick/pass
 
-    def simple_go_to_point_and_kick(self, robot_state: Position, target: Position, ball_position: Position):
+    def simple_go_to_point_and_kick(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id):
+        if my_robot_id == 2:
+            player_to_pass = 0
+        elif my_robot_id == 3:
+            player_to_pass = 1
+        elif my_robot_id == 0:
+            player_to_pass = 3
+        else:
+            player_to_pass = 2
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
-        if d < 0.15:
-            action = 1
+        if d < 0.17:
+            if np.hypot(ball_vel.x, ball_vel.y) > TeamMasterSupporting.max_robot_speed:
+                command = PlayerCommand(0, 0, 2)  # Stop the ball
+            else:
+                temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
+                raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position)
+                command = PlayerCommand(*raw_command)
+            return command
         return PlayerCommand(*go_to_fast(robot_state, target), action)
 
-    def simple_go_to_point_and_receive(self, robot_state: Position, target: Position, ball_position: Position):
+    def simple_go_to_point_and_receive(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id):
+        if my_robot_id == 2:
+            player_to_pass = 0
+        elif my_robot_id == 3:
+            player_to_pass = 1
+        elif my_robot_id == 0:
+            player_to_pass = 3
+        else:
+            player_to_pass = 2
+
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
-        if d < 0.15:
-            _, player_to_pass = TeamMasterSupporting.find_safe_players_to_pass(self.team_position, self.opponents_position, self.team_id)
-            temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
-            raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position)
-            command = PlayerCommand(*raw_command)
+        if d < 0.17:
+            if np.hypot(ball_vel.x, ball_vel.y) > TeamMasterSupporting.max_robot_speed:
+                command = PlayerCommand(0, 0, 2)  # Stop the ball
+            else:
+                _, player_to_pass_ = TeamMasterSupporting.find_safe_players_to_pass(self.team_position, self.opponents_position, self.team_id)
+                temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
+                raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position)
+                command = PlayerCommand(*raw_command)
         else:
             command = PlayerCommand(*go_to_fast(robot_state, target), action)
         return command

@@ -17,7 +17,6 @@ def clip_angle(angle):
     return angle
 
 
-
 def simple_go_to_action(robot_state: Position, target: Position):
     MIN_PURE_ROTATION_ANGLE = np.pi / 6  # 30 deg
     K_P_PURE_ROTATION = 3
@@ -86,17 +85,17 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
     angle_diff = calculate_angle_difference(ball_target_angle, ball_player_angle)
     if abs(angle_diff) < np.deg2rad(177):
         if angle_diff > 0:
-            new_heading = clip_angle(ball_player_angle - np.pi/2)
-            new_heading = clip_angle(new_heading + np.pi)
+            new_heading = clip_angle(ball_player_angle + np.pi/2)
+            #new_heading = clip_angle(new_heading + np.pi)
         else:
-            new_heading = clip_angle(3*np.pi / 4 - ball_player_angle)
-            new_heading = clip_angle(new_heading + np.pi)
+            new_heading = clip_angle(ball_player_angle - np.pi/2)
+            #new_heading = clip_angle(new_heading)
         robot_heading_diff = calculate_angle_difference(robot_state.theta, new_heading)
         if abs(robot_heading_diff) > np.deg2rad(3):
             vel_l, vel_r, action, _ = rotate_towards(robot_state, new_heading)
         else:
-            vel_l, vel_r = go_around_the_point(robot_state, None, 0.15)
-            action = 2
+            vel_l, vel_r = go_around_the_point(robot_state, None, 0.05)
+            action = 0
     else:
         vel_l = 0
         vel_r = 0
@@ -109,8 +108,10 @@ def go_around_the_point(robot_state: Position, go_around_point: Position, radius
     """
     l = 0.05  # distance between wheels
     K = 2 * radius / l
-    C = (K+1) / (K-1)
+    C = (K-1) / (K+1)
     L_vel = R_vel * C
+    #L_vel *= -1
+    #R_vel *= -1
     if direction == 1:
         return L_vel, R_vel
     elif direction == -1:
@@ -130,7 +131,8 @@ def rotate_towards(robot_state: Position, target_heading):
         vel_r = 0
         action = 2
         done = True
-
-    vel_l, vel_r = 1, 1.4
     return vel_l, vel_r, action, done
+
+def stop_the_ball():
+    return 0, 0, 2
 
