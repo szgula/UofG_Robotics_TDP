@@ -20,7 +20,7 @@ class TeamMaster1:
     def calculate_ball_distance_grid(self):
 
         ball_pos = Position(0, 0, 0)
-        ball_vel = Position(0.02, 0., 0)
+        ball_vel = Position(0.02, 0.1, 0)
 
         for ix in range(self.x_field_resolution):
             for iy in range(self.y_field_resolution):

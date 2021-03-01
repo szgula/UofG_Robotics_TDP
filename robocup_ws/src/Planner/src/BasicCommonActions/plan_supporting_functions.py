@@ -49,7 +49,6 @@ class TeamMasterSupporting:
             new_vel.y *= -1
         return bounce_pos, new_vel
 
-
     @staticmethod
     def get_ball_pos_at_time(t, ball_pos: Position, ball_vel: Position) -> Position:
         x = ball_pos.x + ball_vel.x * t
@@ -135,12 +134,15 @@ class TeamMasterSupporting:
 
     @staticmethod
     def is_safe_to_pass_anywhere(opponent_can_get_to_ball, opponents_capture_time):
-        min_rotation_time = 2
+        """
+        Returns true if robot has enough time to go around ball and prepare to kick in any direction
+        """
+        min_rotation_time = 2  # TODO: experiment needed to find the value
         all_safe = all(np.arrya(opponents_capture_time) > min_rotation_time)
         return all_safe or (not opponent_can_get_to_ball)
 
     @staticmethod
-    def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id, vis=False):
+    def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id, player_with_ball_id, vis=False):
         players_pos_wcs = np.array([[pos.x, pos.y] for pos in team_position.players_positions_wcs])
         opponents_pos_wcs = np.array([[pos.x, pos.y] for pos in opponents_position.players_positions_wcs])
         ball_pos_wcs = team_position.ball_pos_efcs if team_id == 0 else opponents_position.ball_pos_efcs
@@ -148,7 +150,7 @@ class TeamMasterSupporting:
 
         d = ball_pos_wcs - players_pos_wcs
         slope = d[:, 1] / d[:, 0]
-        # FIXME: slope = 0
+        # FIXME: slope = 0, prevent 0 division
         slope_perpendicular = -1 / slope
 
         points, points_vis = [], []
@@ -158,19 +160,35 @@ class TeamMasterSupporting:
             a, a_vis = TeamMasterSupporting.get_intersection_region(ball_pos_wcs, p, s)
             points.append(a)
             points_vis.append(a_vis)
-        if vis:
-            for a in points_vis:
-                plt.plot(a[:, 0], a[:, 1])
-            pos_opponent = [
-                (opponents_position.players_positions_wcs[i].x, opponents_position.players_positions_wcs[i].y)
-                for i in range(5)]
-            pos_opponent = np.array(pos_opponent)
-            plt.scatter(pos_opponent[:, 0], pos_opponent[:, 1], s=100)
+
+        if vis:  # This is just for debug visualisation
+            TeamMasterSupporting.debug_visualize_pass_danger_zones(points_vis, opponents_position)
+
+        # TODO: check if any opponent in "pass danger zone" - opponent able to capture the ball
+        # TODO: if opponent in "danger zone" - find alternative kick angles (not direct ones) to safely pass the ball
+        # TODO: select the best player to pass ball to
         best_player_to_pass = 2
         return points, best_player_to_pass
 
     @staticmethod
+    def debug_visualize_pass_danger_zones(points_vis, opponents_position):
+        for a in points_vis:
+            plt.plot(a[:, 0], a[:, 1])
+        pos_opponent = [
+            (opponents_position.players_positions_wcs[i].x, opponents_position.players_positions_wcs[i].y)
+            for i in range(5)]
+        pos_opponent = np.array(pos_opponent)
+        plt.scatter(pos_opponent[:, 0], pos_opponent[:, 1], s=100)
+
+    @staticmethod
     def get_intersection_region(ball_position, player_position, kick_slope):
+        """ Returns characteristic points of "pass danger zone":
+        a = [danger_zone_corner_0 (ball_position),
+            player_to_pass_position (midpoint between corner 1 and 2)
+            danger_zone_corner_1,
+            danger_zone_corner_2]
+
+        """
         d = np.hypot(*(ball_position-player_position)) * TeamMasterSupporting.max_robot_speed_optimistic
         d /= TeamMasterSupporting.kick_speed
         n = TeamMasterSupporting.get_point_on_vector(player_position, kick_slope, d)
@@ -181,6 +199,9 @@ class TeamMasterSupporting:
 
     @staticmethod
     def get_point_on_vector(initial_pt, slope, distance):
+        """
+        Returns a point in given distance from the initial point that lies on the line with a given slope
+        """
         dx = 1
         dy = slope * dx
         terminal_pt = [initial_pt[0] + dx, initial_pt[1] + dy]
@@ -191,12 +212,6 @@ class TeamMasterSupporting:
         point = v - distance * n
 
         return tuple(point)
-
-    @staticmethod
-    def test_generate_new_point():
-        pass
-
-
 
     @staticmethod
     def lineseg_dists(p, a, b):

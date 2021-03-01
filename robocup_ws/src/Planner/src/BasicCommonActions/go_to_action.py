@@ -1,5 +1,6 @@
 import numpy as np
 from game_interfaces.msg import Position
+from .plan_supporting_functions import TeamMasterSupporting
 
 def calculate_angle_difference(alpha, beta):
     """
@@ -51,7 +52,9 @@ def go_to_fast(robot_state: Position, target: Position):
     K_P_FORWARD_COMPONENT = 50
     return go_to_parametrized(robot_state, target, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT)
 
-def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_position: Position):
+def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_position: Position, ball_velocity: Position):
+    if np.hypot(ball_velocity.x, ball_velocity.y) > TeamMasterSupporting.max_robot_speed:
+        return 0, 0, 2  # Stop the ball
     dx_ball_player = ball_position.x - robot_state.x
     dy_ball_player = ball_position.y - robot_state.y
     ball_player_angle = np.arctan2(dy_ball_player, dx_ball_player)
