@@ -32,7 +32,7 @@ class BasicVisualizer:
         self._goal_area_width = 1.5 * display_scale
         self._goal_area_height = 3 * display_scale
         self._margin = 0.3 * display_scale
-        self._gate_height = 0.5 * display_scale
+        self._gate_height = 1 * display_scale
 
     def __del__(self):
         pygame.quit()
