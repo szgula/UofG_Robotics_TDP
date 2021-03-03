@@ -1,5 +1,6 @@
 from game_interfaces.msg import PlayerCommand
 import numpy as np
+import matplotlib.pyplot as plt
 from BasicCommonActions.go_to_action import simple_go_to_action
 from game_interfaces.msg import Position
 from Planner.src.brachistochrone import cycloid
@@ -18,6 +19,8 @@ class PlayerController:  #(Robot)
                                                 my_pos_efcs.y + 3,
                                                 ball_pos_efcs.x + 5,
                                                 ball_pos_efcs.y + 3)
+        # plt.plot(x_trajectory,y_trajectory)
+        # plt.show()
         for x, y in zip(x_trajectory, y_trajectory):
             self.points_to_visit.append(Position(x, y, 0))
 
