@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 class TeamMasterSupporting:
     field_size_x = 10
     field_size_y = 6
+    net_length = 2
     simulation_dt = 0.1
     max_robot_speed = 0.05
-    max_robot_speed_optimistic = 0.07
+    max_robot_speed_optimistic = 0.075
     not_reachable = 1000
     kick_speed = 0.4
 
@@ -162,7 +163,11 @@ class TeamMasterSupporting:
             points_vis.append(a_vis)
 
         if vis:  # This is just for debug visualisation
-            TeamMasterSupporting.debug_visualize_pass_danger_zones(points_vis, opponents_position)
+            pos_opponent = [
+                (opponents_position.players_positions_wcs[i].x, opponents_position.players_positions_wcs[i].y)
+                for i in range(5)]
+            pos_opponent = np.array(pos_opponent)
+            TeamMasterSupporting.debug_visualize_pass_danger_zones(points_vis, pos_opponent)
 
         # TODO: check if any opponent in "pass danger zone" - opponent able to capture the ball
         # TODO: if opponent in "danger zone" - find alternative kick angles (not direct ones) to safely pass the ball
@@ -171,12 +176,9 @@ class TeamMasterSupporting:
         return points, best_player_to_pass
 
     @staticmethod
-    def debug_visualize_pass_danger_zones(points_vis, opponents_position):
+    def debug_visualize_pass_danger_zones(points_vis, pos_opponent):
         for a in points_vis:
             plt.plot(a[:, 0], a[:, 1])
-        pos_opponent = [
-            (opponents_position.players_positions_wcs[i].x, opponents_position.players_positions_wcs[i].y)
-            for i in range(5)]
         pos_opponent = np.array(pos_opponent)
         plt.scatter(pos_opponent[:, 0], pos_opponent[:, 1], s=100)
 
@@ -202,6 +204,8 @@ class TeamMasterSupporting:
         """
         Returns a point in given distance from the initial point that lies on the line with a given slope
         """
+        if slope == np.inf or slope == -np.inf:
+            return (initial_pt[0], initial_pt[1] + distance)
         dx = 1
         dy = slope * dx
         terminal_pt = [initial_pt[0] + dx, initial_pt[1] + dy]
@@ -246,3 +250,68 @@ class TeamMasterSupporting:
         c = d_pa[:, 0] * d[:, 1] - d_pa[:, 1] * d[:, 0]
 
         return np.hypot(h, c)
+
+    @staticmethod
+    def check_if_direct_goal_feasible(player_pos_wcs, ball_pos, opponents_pos_wcs, team_id, vis=False):
+        points_to_check = 5
+        conversion = 1 if team_id == 0 else -1
+        ball_pos_wcs = np.array([ball_pos.x * conversion, ball_pos.y * conversion])
+        opponents_wcs = np.array([[pos.x, pos.y] for pos in opponents_pos_wcs])
+        net_pos_x_wcs = 5 if team_id == 0 else -5
+        net_pos_y_0 = TeamMasterSupporting.net_length / 2 - 0.1
+        net_pos_y_1 = -TeamMasterSupporting.net_length / 2 + 0.1
+
+        x = np.array([net_pos_x_wcs for _ in range(points_to_check)])
+        distance_between_points = (net_pos_y_0 - net_pos_y_1) / (points_to_check - 1)
+        y = np.array([net_pos_y_1 + distance_between_points * d for d in range(points_to_check)])
+        slope = y / x
+
+        slope_perpendicular = -1 / slope
+        points_wcs, points_vis = [], []
+        for i in range(5):
+            s = slope_perpendicular[i]
+            p = np.array([x[i], y[i]])
+            a, a_vis = TeamMasterSupporting.get_intersection_region(ball_pos_wcs, p, s)
+            points_wcs.append(a)
+            points_vis.append(a_vis)
+
+        if vis:  # This is just for debug visualisation
+            TeamMasterSupporting.debug_visualize_pass_danger_zones(points_vis, opponents_wcs)
+
+        free_to_kick = []
+        for zone in points_wcs:
+            no_enemies = True
+            for opp in opponents_wcs:
+                no_enemies &= not(TeamMasterSupporting.point_in_triangle(opp, zone[0], zone[2], zone[3]))
+                if not no_enemies:
+                    break
+            free_to_kick.append(no_enemies)
+
+        # Select point to kick
+        direct_kick_feasible = False
+        kick_x, kick_y = None, None
+        if any(free_to_kick):
+            for idx, status in enumerate(free_to_kick):
+                if status:
+                    break
+            direct_kick_feasible = True
+            kick_x = x[idx] * conversion
+            kick_y = y[idx] * conversion
+
+        return direct_kick_feasible, kick_x, kick_y
+
+    @staticmethod
+    def triangle_area(p1, p2, p3):
+
+        return abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0)
+
+    @staticmethod
+    def point_in_triangle(point, t0, t1, t2):
+        """ https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle """
+        # Calculate area of triangle ABC
+        A = TeamMasterSupporting.triangle_area(t0, t1, t2)
+        A1 = TeamMasterSupporting.triangle_area(point, t1, t2)
+        A2 = TeamMasterSupporting.triangle_area(t0, point, t2)
+        A3 = TeamMasterSupporting.triangle_area(t0, t1, point)
+        return abs(A - (A1 + A2 + A3)) < 0.01
+

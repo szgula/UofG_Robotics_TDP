@@ -51,9 +51,9 @@ class Team1GoalkeeperController:  #(Robot)
         self.center_of_net = {'x': -5+0.15, 'y': 0.0}
         self.move_radius = 1.2
         self.safe_ball_distance = 4
-        self.kick_distance = 0.15
+        self.kick_distance = 0.17
 
-    def get_action(self, my_pos_efcs, ball_pos_efcs):
+    def get_action(self, my_pos_efcs, ball_pos_efcs, team_positions_wcs=None, opponents_positions_wcs=None):
         ball_from_net_x = ball_pos_efcs.x - self.center_of_net['x']
         ball_from_net_y = ball_pos_efcs.y - self.center_of_net['y']
         d = np.hypot(ball_from_net_x, ball_from_net_y)
