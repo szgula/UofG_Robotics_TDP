@@ -9,7 +9,7 @@ from game_interfaces.msg import Position
 class Team1DefenceController:  #(Robot)
     def __init__(self, init_y_pos):
         self.init_y_pos = init_y_pos
-        self.kick_distance = 0.15
+        self.kick_distance = 0.17
         self.perfect_neutral_pos_x = -2
         self.net_pos_x = 5
 
@@ -29,7 +29,7 @@ class Team1DefenceController:  #(Robot)
             y = ball_pos_efcs.y
         return y
 
-    def get_action(self, my_pos_efcs, ball_pos_efcs):
+    def get_action(self, my_pos_efcs, ball_pos_efcs, team_positions_wcs=None, opponents_positions_wcs=None):
         d_player2ball = np.hypot(my_pos_efcs.x-ball_pos_efcs.x, my_pos_efcs.y-ball_pos_efcs.y)
 
         x = self.get_current_x_target(ball_pos_efcs)

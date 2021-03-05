@@ -78,13 +78,29 @@ class TeamMaster(ABC):
             self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
 
         self.actions[self.striker_left_idx] = self.striker_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.striker_left_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.striker_left_idx],
+            self.team_position.ball_pos_efcs,
+            self.team_position.players_positions_wcs,
+            self.opponents_position.players_positions_wcs
+            )
         self.actions[self.striker_right_idx] = self.striker_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.striker_right_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.striker_right_idx],
+            self.team_position.ball_pos_efcs,
+            self.team_position.players_positions_wcs,
+            self.opponents_position.players_positions_wcs
+            )
         self.actions[self.defence_left_idx] = self.defence_left_logic.get_action(
-            self.team_position.players_positions_efcs[self.defence_left_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.defence_left_idx],
+            self.team_position.ball_pos_efcs,
+            self.team_position.players_positions_wcs,
+            self.opponents_position.players_positions_wcs
+            )
         self.actions[self.defence_right_idx] = self.defence_right_logic.get_action(
-            self.team_position.players_positions_efcs[self.defence_right_idx], self.team_position.ball_pos_efcs)
+            self.team_position.players_positions_efcs[self.defence_right_idx],
+            self.team_position.ball_pos_efcs,
+            self.team_position.players_positions_wcs,
+            self.opponents_position.players_positions_wcs
+            )
         self.actions_planned = True
 
     def distribute_goals_to_players(self):   # TODO: how about to rename 'goals -> commends'
