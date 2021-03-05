@@ -73,7 +73,14 @@ class TeamMaster(ABC):
             return
 
         self.actions = [PlayerCommand(0, 0, 0) for _ in range(5)]
-
+        # self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
+        #     self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
+        # for player in range(1,5):
+        #     self.player_id = player
+        #     self.actions[self.player_id] = self.player_logic.plan(
+        #     self.team_position,
+        #     self.opponents_position
+        #     )
         self.actions[self.goalkeeper_idx] = self.goalkeeper_logic.get_action(
             self.team_position.players_positions_efcs[self.goalkeeper_idx], self.team_position.ball_pos_efcs)
 
