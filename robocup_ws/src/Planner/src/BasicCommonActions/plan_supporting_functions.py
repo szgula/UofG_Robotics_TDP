@@ -67,9 +67,9 @@ class TeamMasterSupporting:
         bounce_speed_damping = 0.8
         bounce_pos = TeamMasterSupporting.get_ball_pos_at_time(bounce_time, ball_pos, ball_vel)
         new_vel = Position(ball_vel.x*bounce_speed_damping, ball_vel.y*bounce_speed_damping, 0)
-        if abs(abs(bounce_pos.x) - TeamMasterSupporting.field_size_x) < almost_zero_threshold:
+        if abs(abs(bounce_pos.x) - TeamMasterSupporting.field_size_x / 2) <= almost_zero_threshold:
             new_vel.x *= -1
-        if abs(abs(bounce_pos.y) - TeamMasterSupporting.field_size_y) < almost_zero_threshold:
+        if abs(abs(bounce_pos.y) - TeamMasterSupporting.field_size_y / 2) <= almost_zero_threshold:
             new_vel.y *= -1
         return bounce_pos, new_vel
 
@@ -173,7 +173,7 @@ class TeamMasterSupporting:
         opponent_can_get_to_ball = opponents_capture_time[opponent_id_min_time] < wall_coll_time
         if not team_can_get_to_ball:
             new_ball_pos = team_position.ball_pos_efcs
-            new_ball_vel = opponents_position.ball_vel_efcs
+            new_ball_vel = team_position.ball_vel_efcs
             coll_time = wall_coll_time
             for _ in range(2):
                 new_ball_pos, new_ball_vel = TeamMasterSupporting.predict_wall_bounce(new_ball_pos, new_ball_vel, coll_time)
