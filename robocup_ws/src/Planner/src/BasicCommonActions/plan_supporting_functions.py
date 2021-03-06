@@ -79,10 +79,21 @@ class TeamMasterSupporting:
         Estimate ball position at given time
         It assumes the ball will not interact with any players within given time
 
-        TODO: current limitation - it does not take tha wall bounce into consideration
+        TODO: write testcases to verify if
         """
-        x = ball_pos.x + ball_vel.x * t
-        y = ball_pos.y + ball_vel.y * t
+        new_pos, new_vel = ball_pos, ball_vel
+        first_collision_time = TeamMasterSupporting.calculate_time_to_wall_collision(ball_pos, ball_vel)
+        if t > first_collision_time:
+            new_pos, new_vel = TeamMasterSupporting.predict_wall_bounce(ball_pos, ball_vel, first_collision_time)
+            # second_collision_time - time between first bounce and second bounce
+            second_collision_time = TeamMasterSupporting.calculate_time_to_wall_collision(new_pos, new_vel)
+            t -= first_collision_time
+            if t > second_collision_time:
+                new_pos, new_vel = TeamMasterSupporting.predict_wall_bounce(new_pos, new_vel, second_collision_time)
+                t -= second_collision_time
+
+        x = new_pos.x + new_vel.x * t
+        y = new_pos.y + new_vel.y * t
         return Position(x, y, 0)
 
     @staticmethod
