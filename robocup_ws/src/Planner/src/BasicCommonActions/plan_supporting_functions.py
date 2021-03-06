@@ -1,6 +1,7 @@
 import numpy as np
 from game_interfaces.msg import Position, PlayerCommand, TeamPosition
 import matplotlib.pyplot as plt
+from typing import List
 
 
 class TeamMasterSupporting:
@@ -14,7 +15,13 @@ class TeamMasterSupporting:
     kick_speed = 0.4
 
     @staticmethod
-    def calculate_time_to_wall_collision(ball_pos, ball_vel):
+    def calculate_time_to_wall_collision(ball_pos: Position, ball_vel: Position):
+        """
+        Returns estimated nearest time when the ball will hit the wall
+        It assumes no players interactions - the ball is free to move
+
+        Returns: float, time
+        """
         if ball_vel.x >= 0:
             dx = TeamMasterSupporting.field_size_x/2 - ball_pos.x
         else:
@@ -29,7 +36,15 @@ class TeamMasterSupporting:
 
 
     @staticmethod
-    def get_team_capture_time(team_pos, ball_pos_efcs, ball_vel_efcs, extra_player_time=0):
+    def get_team_capture_time(team_pos: List[Position], ball_pos_efcs: Position, ball_vel_efcs: Position, extra_player_time: float = 0):
+        """
+        Returns an list of times:
+        Each cell include an estimated time within which the robot can get to the ball.
+        It assumes no ball friction
+        It assumes infinitely large field
+
+        Returns list[5], times for each team member
+        """
         capture_time = [0] * 5
         for player_id in range(5):
             capture_time[player_id] = TeamMasterSupporting.get_capture_time(ball_pos_efcs,
@@ -40,6 +55,14 @@ class TeamMasterSupporting:
 
     @staticmethod
     def predict_wall_bounce(ball_pos: Position, ball_vel: Position, bounce_time: float):
+        """
+        If no robot can get to ball before it bounce the wall, we estimate the ball bounce position and
+        ball velocity after the bounce
+        This enable us to find intersection point after the bounce
+
+        Returns: bounce_pos (Position) - the location of the bounce
+        Returns: new_vel (Position) - estimated velocity after the bounce
+        """
         almost_zero_threshold = 0.01
         bounce_speed_damping = 0.8
         bounce_pos = TeamMasterSupporting.get_ball_pos_at_time(bounce_time, ball_pos, ball_vel)
@@ -51,25 +74,46 @@ class TeamMasterSupporting:
         return bounce_pos, new_vel
 
     @staticmethod
-    def get_ball_pos_at_time(t, ball_pos: Position, ball_vel: Position) -> Position:
+    def get_ball_pos_at_time(t: float, ball_pos: Position, ball_vel: Position) -> Position:
+        """
+        Estimate ball position at given time
+        It assumes the ball will not interact with any players within given time
+
+        TODO: current limitation - it does not take tha wall bounce into consideration
+        """
         x = ball_pos.x + ball_vel.x * t
         y = ball_pos.y + ball_vel.y * t
         return Position(x, y, 0)
 
     @staticmethod
-    def get_capture_time(ball_pos, player_pos, ball_vel, extra_player_time=0):
+    def get_capture_time(ball_pos: Position, player_pos: Position, ball_vel: Position, extra_player_time: float = 0):
+        """
+        Estimates the time in which a player can get to the ball
+
+        Return: float, time
+        """
         if abs(ball_vel.x) < 0.0001 and abs(ball_vel.y) < 0.0001:
             return TeamMasterSupporting.get_time_for_stationary_ball(ball_pos, player_pos)
         return TeamMasterSupporting.get_time_for_moving_ball(ball_pos, player_pos, ball_vel, extra_player_time)
 
     @staticmethod
-    def get_time_for_stationary_ball(ball_pos, position):
+    def get_time_for_stationary_ball(ball_pos: Position, position: Position):
+        """
+        Estimates the time in which a player can get to the stationary ball
+
+        Return: float, time
+        """
         d = np.hypot(ball_pos.x - position.x, ball_pos.y - position.y)
         return d / TeamMasterSupporting.max_robot_speed
 
     @staticmethod
     def get_time_for_moving_ball(ball_pos, position, ball_vel, last_bounce_time=0):
         """
+        Estimates the time in which a player can get to the moving ball
+        It assumes the infinitely large field
+
+        Return: float, time
+
         Solve for no friction ball
         xb, yb, xb', yb', xp, yp = x ball pos, y ball pos, x ball vel, y ball bel, x player pos, y player pos
         (xb'*t + xb - xp)^2 + (yb'*t + yb - yp)^2 = max_player_vel * (t+last_bounce_time)
@@ -99,6 +143,16 @@ class TeamMasterSupporting:
     @staticmethod
     def get_soonest_contact(team_position: TeamPosition, opponents_position: TeamPosition):
         """
+        Estimate time when all players can get to the ball
+        Check if players can get to ball within given time horizon
+        Opponents horizon: first ball bounce from wall
+        Players horizon: 3rd ball bounce from wall
+
+        Returns: Bool, team_can_get_to_ball: flag if our team can get to ball within given horizon
+        Returns: list[5], players_capture_time: list of times when players can get to ball
+        Returns: Bool, opponent_can_get_to_ball: flag if opponent's team can get to ball within given horizon
+        Returns: list[5], opponents_capture_time: list of times when opponents can get to ball
+
         Current limitations:
         - finds (this team) players contact time until the 3rd wall bounce (ball free moving)
         - finds opponents contact time until 1st bounce
@@ -138,12 +192,16 @@ class TeamMasterSupporting:
         """
         Returns true if robot has enough time to go around ball and prepare to kick in any direction
         """
+        # TODO: improve this logic
         min_rotation_time = 2  # TODO: experiment needed to find the value
         all_safe = all(np.arrya(opponents_capture_time) > min_rotation_time)
         return all_safe or (not opponent_can_get_to_ball)
 
     @staticmethod
     def find_safe_players_to_pass(team_position: TeamPosition, opponents_position: TeamPosition, team_id, player_with_ball_id, vis=False):
+        """
+        Check which players are safe to pass the ball to
+        """
         players_pos_wcs = np.array([[pos.x, pos.y] for pos in team_position.players_positions_wcs])
         opponents_pos_wcs = np.array([[pos.x, pos.y] for pos in opponents_position.players_positions_wcs])
         ball_pos_wcs = team_position.ball_pos_efcs if team_id == 0 else opponents_position.ball_pos_efcs
@@ -151,7 +209,7 @@ class TeamMasterSupporting:
 
         d = ball_pos_wcs - players_pos_wcs
         slope = d[:, 1] / d[:, 0]
-        # FIXME: slope = 0, prevent 0 division
+        # FIXME: slope = 0, prevent 0 division -> this results in inf and is handled later on
         slope_perpendicular = -1 / slope
 
         points, points_vis = [], []
@@ -177,18 +235,27 @@ class TeamMasterSupporting:
 
     @staticmethod
     def debug_visualize_pass_danger_zones(points_vis, pos_opponent):
+        """
+        Visualise danger zones - for debugging porpoises
+        """
         for a in points_vis:
             plt.plot(a[:, 0], a[:, 1])
         pos_opponent = np.array(pos_opponent)
         plt.scatter(pos_opponent[:, 0], pos_opponent[:, 1], s=100)
 
     @staticmethod
-    def get_intersection_region(ball_position, player_position, kick_slope):
-        """ Returns characteristic points of "pass danger zone":
+    def get_intersection_region(ball_position: np.array, player_position: np.array, kick_slope: float):
+        """
+        Estimate the region from where an opponent can capture the ball
+        The region is represented by a triangle
+
+        Returns characteristic points of "pass danger zone":
         a = [danger_zone_corner_0 (ball_position),
             player_to_pass_position (midpoint between corner 1 and 2)
             danger_zone_corner_1,
             danger_zone_corner_2]
+
+        a_vis - is visualization array for pyplot (just for debugging)
 
         """
         d = np.hypot(*(ball_position-player_position)) * TeamMasterSupporting.max_robot_speed_optimistic
@@ -200,9 +267,13 @@ class TeamMasterSupporting:
         return a, a_vis
 
     @staticmethod
-    def get_point_on_vector(initial_pt, slope, distance):
+    def get_point_on_vector(initial_pt: np.array, slope: float, distance:float):
         """
         Returns a point in given distance from the initial point that lies on the line with a given slope
+
+        This is supporting math function
+
+        Returns (x, y) coordinate
         """
         if slope == np.inf or slope == -np.inf:
             return (initial_pt[0], initial_pt[1] + distance)
@@ -220,6 +291,8 @@ class TeamMasterSupporting:
     @staticmethod
     def lineseg_dists(p, a, b):
         """
+        Math supporting function, calculate distance between point and line segment
+
         https://stackoverflow.com/a/58781995
         Cartesian distance from point to line segment
 
@@ -252,7 +325,15 @@ class TeamMasterSupporting:
         return np.hypot(h, c)
 
     @staticmethod
-    def check_if_direct_goal_feasible(player_pos_wcs, ball_pos, opponents_pos_wcs, team_id, vis=False):
+    def check_if_direct_goal_feasible(player_pos_wcs: Position, ball_pos: Position, opponents_pos_wcs: List[Position], team_id: int, vis: bool = False):
+        """
+        Check if from current position it is possible to kick a goal
+        It takes into consideration opponents position
+
+        Returns: direct_kick_feasible, bool - flag if direct goal is possible
+        Returns: kick_x, float - x coordinate where the goal is possible
+        Returns: kick_y, float - y coordinate where the goal is possible
+        """
         points_to_check = 5
         conversion = 1 if team_id == 0 else -1
         ball_pos_wcs = np.array([ball_pos.x * conversion, ball_pos.y * conversion])
@@ -302,12 +383,20 @@ class TeamMasterSupporting:
 
     @staticmethod
     def triangle_area(p1, p2, p3):
+        """
+        Supporting math function: calculate triangle position
+        This is used to check if opponent is within danger zone
+        """
 
         return abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0)
 
     @staticmethod
     def point_in_triangle(point, t0, t1, t2):
-        """ https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle """
+        """
+        Supporting math function: check if point is within triangle (t0, t1, t2)
+        This is used to check if opponent is within danger zone
+        https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+        """
         # Calculate area of triangle ABC
         A = TeamMasterSupporting.triangle_area(t0, t1, t2)
         A1 = TeamMasterSupporting.triangle_area(point, t1, t2)
