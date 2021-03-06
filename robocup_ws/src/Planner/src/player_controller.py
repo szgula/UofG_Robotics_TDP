@@ -59,7 +59,6 @@ class PlayerController:  #(Robot)
         vantage_point = ball_pos - 0.1*unit_vector
         kick = 1
         if(np.linalg.norm(np.array([main_player.x, main_player.y]).astype(float) - vantage_point) <= 0.1):
-            # print("VANTAGE: " + str(np.linalg.norm(np.array([main_player.x, main_player.y]).astype(float) - vantage_point)))
             return PlayerCommand(0,0,kick)
         lv, rv = go_to_fast(main_player,Position(vantage_point[0],vantage_point[1],0))
         return PlayerCommand(lv,rv,0)
@@ -78,15 +77,14 @@ class PlayerController:  #(Robot)
     def go_to_strategic_point(self,game_info):
         return PlayerCommand(0,0,0) #TODO
 
-    def intercept(self,game_info: list, enemy_id: int):
-        # print("INTERCEPT!")
+    def intercept(self,game_info: list, enemy_id: int, net: list) -> PlayerCommand:
         team = game_info[0]
         opponents = game_info[1]
         enemies_positions = opponents.players_positions_wcs
         player_id = game_info[2]
         main_player = team.players_positions_efcs[player_id]
         main_enemy = enemies_positions[enemy_id]
-        enemy_candidate = self.get_opponent_pass_candidate(enemies_positions,enemy_id)
+        enemy_candidate = self.get_opponent_pass_candidate(enemies_positions,enemy_id, net)
         candidate_coord = enemies_positions[enemy_candidate]
         ball_pos = team.ball_pos_efcs
         kick_slope = (candidate_coord.y - main_enemy.y)/(candidate_coord.x - main_enemy.x)
@@ -95,16 +93,14 @@ class PlayerController:  #(Robot)
                                                                      np.array([candidate_coord.x,
                                                                                candidate_coord.y]),
                                                                      kick_slope)
-        # print(f"DANGER {danger_clause}")
         danger_corner_1 = danger_clause[2]
         lv, rv = go_to_fast(main_player,Position(danger_corner_1[0],danger_corner_1[1],0))
         return PlayerCommand(lv,rv,0)
 
-    def get_opponent_pass_candidate(self, enemies: list, enemy_id: int) -> int:
+    def get_opponent_pass_candidate(self, enemies: list, enemy_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in enemies]
-        enemy_with_ball = position[enemy_id]
         position[enemy_id] = np.array([np.inf, np.inf])
-        opponent_pass_candidate = np.argmin(np.linalg.norm(position - enemy_with_ball, axis=1))
+        opponent_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
         return opponent_pass_candidate
 
     def ball_is_free(self,game_info: list) -> [bool, int]:

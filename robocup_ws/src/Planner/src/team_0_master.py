@@ -28,7 +28,7 @@ class TeamMaster0(TeamMaster):
         player_id = 0
         for player, mode in self.players.items():
             player = PlayerController(player_id)
-            self.tree = DecisionTree(pc = player)
+            self.tree = DecisionTree(self.team_id, pc = player)
             self.actions[player_id] = self.tree.plan(self.team_position,self.opponents_position, player_id, mode)
             player_id+=1
 
