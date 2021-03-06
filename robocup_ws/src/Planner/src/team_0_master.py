@@ -11,7 +11,7 @@ class TeamMaster0(TeamMaster):
     def __init__(self):
         team_id = 0
         super().__init__(team_id)
-        self.goalkeeper_logic = Team1GoalkeeperController(team_id)
+        self.goalkeeper_logic = Team1GoalkeeperController(self.team_id)
         self.striker_left_logic = NullController()
         self.striker_right_logic = NullController()
         self.defence_left_logic = NullController()
