@@ -4,13 +4,16 @@ from .plan_supporting_functions import TeamMasterSupporting
 
 def calculate_angle_difference(alpha, beta):
     """
-    Return min angle in rad in range <-pi, pi>
+    Return min angle in rad between two give angles in range <-pi, pi>
     """
     diff = alpha - beta
     diff = clip_angle(diff)
     return diff
 
 def clip_angle(angle):
+    """
+    Ensure the agnel is within <-pi, pi> range
+    """
     if angle > np.pi:
         angle -= 2*np.pi
     elif angle < -np.pi:
@@ -18,6 +21,9 @@ def clip_angle(angle):
     return angle
 
 def go_to_parametrized(robot_state: Position, target: Position, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT):
+    """
+    Simple proportional controller
+    """
     dx = target.x - robot_state.x
     dy = target.y - robot_state.y
     d = np.hypot(dx, dy)
@@ -83,18 +89,29 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
 
 def go_around_the_point(robot_state: Position, go_around_point: Position, radius, direction=1, R_vel = 3):
     """
+    Generate wheel velocities for robot to go around the point
+
+    Limitation: it assumes for now the robot is already on the circle around the point
+
+    R_vel - velocity of the faster wheel
     direction: 1 = clockwise, -1 = counterclockwise
     """
     l = 0.05  # distance between wheels
     K = 2 * radius / l
     C = (K-1) / (K+1)
     L_vel = R_vel * C
+    if abs(L_vel) > 3:  # 3 is current max rotation speed
+        L_vel = R_vel
+        R_vel = L_vel / C
     if direction == 1:
         return L_vel, R_vel
     elif direction == -1:
         return R_vel, L_vel
 
-def rotate_towards(robot_state: Position, target_heading):
+def rotate_towards(robot_state: Position, target_heading: float):
+    """
+    Simple controller to rotate a robot towards given heading
+    """
     K_P_PURE_ROTATION = 6
     angle_diff = calculate_angle_difference(target_heading, robot_state.theta)
     done = False
@@ -110,5 +127,8 @@ def rotate_towards(robot_state: Position, target_heading):
     return vel_l, vel_r, action, done
 
 def stop_the_ball():
+    """
+    Stop the ball action
+    """
     return 0, 0, 2
 
