@@ -10,7 +10,7 @@ class TeamMasterSupporting:
     net_length = 2
     simulation_dt = 0.1
     max_robot_speed = 0.05
-    max_robot_speed_optimistic = 0.075
+    max_robot_speed_optimistic = 0.1
     not_reachable = 1000
     kick_speed = 0.4
 

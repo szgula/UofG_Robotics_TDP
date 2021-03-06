@@ -59,6 +59,9 @@ def go_to_fast(robot_state: Position, target: Position):
     return go_to_parametrized(robot_state, target, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT)
 
 def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_position: Position, ball_velocity: Position):
+    """
+    This function generate the action to receive the ball, stop it, move ther
+    """
     if np.hypot(ball_velocity.x, ball_velocity.y) > TeamMasterSupporting.max_robot_speed:
         return 0, 0, 2  # Stop the ball
     dx_ball_player = ball_position.x - robot_state.x
@@ -73,13 +76,16 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
     if abs(angle_diff) < np.deg2rad(177):
         if angle_diff > 0:
             new_heading = clip_angle(ball_player_angle + np.pi/2)
+            direction = 1
         else:
             new_heading = clip_angle(ball_player_angle - np.pi/2)
+            direction = -1
         robot_heading_diff = calculate_angle_difference(robot_state.theta, new_heading)
         if abs(robot_heading_diff) > np.deg2rad(3):
             vel_l, vel_r, action, _ = rotate_towards(robot_state, new_heading)
         else:
-            vel_l, vel_r = go_around_the_point(robot_state, None, 0.05)
+            r = np.hypot(dx_ball_player, dy_ball_player)
+            vel_l, vel_r = go_around_the_point(robot_state, None, r, direction)  #0.05)
             action = 0
     else:
         vel_l = 0
