@@ -71,5 +71,3 @@ class Team1GoalkeeperController:  #(Robot)
         action = 0 if d_player2ball > self.kick_distance else 1
 
         return PlayerCommand(l_v, r_v, action)
-
-

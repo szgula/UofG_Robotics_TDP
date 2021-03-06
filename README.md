@@ -90,6 +90,25 @@
 9) cd robotcup
 10) roslaunch GameEngine game.launch
 
+
+### How to test:
+Simple ros launch:
+
+```roslaunch GameEngine game.launch```
+
+ros launch with the ball init position at x = 1, y = 2 in world coordinate system 
+
+```roslaunch GameEngine game.launch simulator_args:="--ball_pos 1 2"```
+
+ros launch with the ball init position at x = 1, y = 2 (in world coordinate system) and vel x = 0 y = 0.4
+
+```roslaunch GameEngine game.launch simulator_args:="--ball_pos 0.5 0.5 --ball_vel 0 0.4"```
+
+ros launch with team 1 at new positions: player1_x, player1_y, player2_x, player2_y, ... , player5_y
+
+```roslaunch GameEngine game.launch simulator_args:="--team_1_init_pos -2 2 -2 -2 2 1 2 -1 -4 0"```
+
+
 ## Roadmap
 The step to finish the project.
 
