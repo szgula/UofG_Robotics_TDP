@@ -74,14 +74,15 @@ class BallActions(Enum):
 
 
 class BallBasicModel(BallModel):
-    def __init__(self, init_x_pos: float, init_y_pos: float, dt: float = 0.1, friction:float = 0.01, mass:float = 0.1,
+    def __init__(self, init_x_pos: float, init_y_pos: float,
+                 init_x_vel: float = 0, init_y_vel: float = 0, dt: float = 0.1, friction:float = 0.01, mass:float = 0.1,
                  vel_bounce_coef: float = 0.8, radius:float = 0.01, ball_max_vel: float = 3):
         """
         :param dt: simulation time step
         """
         self._dt = dt
-        self._x_vel = 0                                     # robot velocity x component
-        self._y_vel = 0                                     # robot velocity y component
+        self._x_vel = init_x_vel                            # robot velocity x component
+        self._y_vel = init_y_vel                            # robot velocity y component
         self._max_vel = ball_max_vel                        # robot velocity limits
         self._init_pos = [init_x_pos, init_y_pos]
         self._x_pos = init_x_pos                            # ball x coordinate in field coordinate system

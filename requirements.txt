@@ -4,3 +4,4 @@ pandas
 matplotlib
 pyyaml
 tqdm
+sympy

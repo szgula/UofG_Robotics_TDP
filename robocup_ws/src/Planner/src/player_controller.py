@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from BasicCommonActions.go_to_action import simple_go_to_action
 from game_interfaces.msg import Position
-from Planner.src.brachistochrone import cycloid
+from brachistochrone import cycloid
 from BasicCommonActions.go_to_action import go_to_fast
 from BasicCommonActions.plan_supporting_functions import TeamMasterSupporting
 import math
