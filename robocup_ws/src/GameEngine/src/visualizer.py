@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 import logging
+from pygame.locals import *
 
 # TODO: add unittests, smoke test, and functional tests
 # TODO: Write documentation
@@ -10,6 +11,8 @@ class BasicVisualizer:
 
     def __init__(self, simulator: None, number_of_players: int = 5, field_size: tuple = (10, 6),
                  display_scale: int = 100):
+        pygame.init()
+        self.font = pygame.font.SysFont('Arial', 16)
         self._number_of_players = number_of_players
         self._position_dim = 3  # x, y, heading
         self._field_size = np.array(field_size)
@@ -99,12 +102,18 @@ class BasicVisualizer:
                          self._field_line_width)
         # ball
         pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(int), 5)
+        team_ids = 0
         for pos in state_players_1:
-            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2] * self.scale).astype(int), self._robo_radius)
+            pygame.draw.circle(self.screen, (173, 216, 230), (pos[:2] * self.scale).astype(int), self._robo_radius)
             self.draw_direction_arrow(pos)
+            self.screen.blit(self.font.render(str(team_ids), True, (0, 0, 0)), (pos[:2] * self.scale).astype(int))
+            team_ids+=1
+        team_ids = 0
         for pos in state_players_2:
             pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2] * self.scale).astype(int), self._robo_radius)
             self.draw_direction_arrow(pos)
+            self.screen.blit(self.font.render(str(team_ids), True, (0, 0, 0)), (pos[:2] * self.scale).astype(int))
+            team_ids+=1
         font = pygame.font.SysFont(None, 48)
         img = font.render(f'{score[0]} - {score[1]}', True, (255, 0, 0))
         self.screen.blit(img, (self._display_size[0] / 2 - 30, 0))
