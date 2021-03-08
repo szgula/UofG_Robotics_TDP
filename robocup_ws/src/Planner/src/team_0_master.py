@@ -22,6 +22,7 @@ class TeamMaster0(TeamMaster):
                         self.striker_right_logic:"ATTACK" }
         self.tree = None
         self.players_logic_was_updated = True
+        self.wait = 0
 
     def plan(self):
         super(TeamMaster0, self).plan()
