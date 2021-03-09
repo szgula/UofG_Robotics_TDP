@@ -288,8 +288,63 @@ class PlayerController:  #(Robot)
     #     vel_l, vel_r, action, _ = rotate_towards(pass_target, new_heading)
     #
     #     return PlayerCommand(vel_l, vel_r, 2)
+    def distance_judge(self, game_info: list) -> [bool, int, int]:
+        team = game_info[0]
+        enemy = game_info[1]
+        player_id = game_info[2]
+        # team_distance = []
+        # enemy_distance = []
 
+        my_pos = team.players_positions_efcs[player_id]
+        team_pos = team.players_positions_efcs
+        enemy_pos = enemy.players_positions_wcs
+            # print("T:", team_pos)
+            # print("E:", enemy_pos)
+        for i in range(5):
+            team_distance = np.hypot(team_pos[i].x - my_pos.x, team_pos[i].y - my_pos.y)
 
+            if (team_distance <= 0.6) and (team_distance != 0):
+                print(f"team_distance:{team_distance}")
+                    # print("Ture")
+                return True, 0, i
+
+        for j in range(5):
+            enemy_distance = np.hypot(enemy_pos[j].x - my_pos.x, enemy_pos[j].y - my_pos.y)
+            if enemy_distance <= 0.6:
+            # print(f"team_distance:{team_distance}", f"enemy_distance:{enemy_distance}")
+            # print("Ture")
+                return True, 1, j
+
+        return False, -1, -1
+
+    def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
+        team = game_info[0]
+        obstacle_team = game_info[team_id]
+        player_id = game_info[2]
+        my_pos = team.players_positions_efcs[player_id]
+        safe_pos = obstacle_team.players_positions_wcs[obstacle_player_id]
+
+        lv, rv = self.go_around_the_point(my_pos, safe_pos, 0.3)
+        return PlayerCommand(lv, rv, 0)
+
+    def go_around_the_point(self, robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
+        """
+        Generate wheel velocities for robot to go around the point
+        Limitation: it assumes for now the robot is already on the circle around the point
+        R_vel - velocity of the faster wheel
+        direction: 1 = clockwise, -1 = counterclockwise
+        """
+        l = 0.05  # distance between wheels
+        K = 2 * radius / l
+        C = (K - 1) / (K + 1)
+        L_vel = R_vel * C
+        if abs(L_vel) > 3:  # 3 is current max rotation speed
+            L_vel = R_vel
+            R_vel = L_vel / C
+        if direction == 1:
+            return L_vel, R_vel
+        elif direction == -1:
+            return R_vel, L_vel
 
     def go_to_ball(self,game_info: list) -> PlayerCommand:
         team = game_info[0]
