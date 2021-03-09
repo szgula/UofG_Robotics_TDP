@@ -27,6 +27,8 @@ def go_to_parametrized(robot_state: Position, target: Position, MIN_PURE_ROTATIO
     dx = target.x - robot_state.x
     dy = target.y - robot_state.y
     d = np.hypot(dx, dy)
+    if d < 0.01:
+        return 0, 0
     target_angle = np.arctan2(dy, dx)
     angle_diff = calculate_angle_difference(target_angle, robot_state.theta)
 

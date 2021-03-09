@@ -62,14 +62,6 @@ class TeamMaster1(TeamMaster):
         return PlayerCommand(*go_to_fast(robot_state, target), action)
 
     def simple_go_to_point_and_receive(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id):
-        if my_robot_id == 2:
-            player_to_pass = 0
-        elif my_robot_id == 3:
-            player_to_pass = 1
-        elif my_robot_id == 0:
-            player_to_pass = 3
-        else:
-            player_to_pass = 2
 
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
@@ -83,7 +75,7 @@ class TeamMaster1(TeamMaster):
                 raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position, ball_vel)
                 command = PlayerCommand(*raw_command)
             else:
-                _, player_to_pass_ = TeamMasterSupporting.find_safe_players_to_pass(self.team_position, self.opponents_position, self.team_id, my_robot_id)
+                _, player_to_pass = TeamMasterSupporting.find_safe_players_to_pass(self.team_position, self.opponents_position, self.team_id, my_robot_id)
                 temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
                 raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position, ball_vel)
                 command = PlayerCommand(*raw_command)

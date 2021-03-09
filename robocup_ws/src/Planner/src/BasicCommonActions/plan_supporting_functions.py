@@ -239,9 +239,21 @@ class TeamMasterSupporting:
             TeamMasterSupporting.debug_visualize_pass_danger_zones(points_vis, pos_opponent)
 
         # TODO: check if any opponent in "pass danger zone" - opponent able to capture the ball
+        free_to_kick = []
+        for zone in points:
+            no_enemies = True
+            for opp in opponents_pos_wcs:
+                no_enemies &= not (TeamMasterSupporting.point_in_triangle(opp, zone[0], zone[2], zone[3]))
+                if not no_enemies:
+                    break
+            free_to_kick.append(no_enemies)
         # TODO: if opponent in "danger zone" - find alternative kick angles (not direct ones) to safely pass the ball
+        best_player_to_pass = -1
+        for idx in [3, 2, 0, 1]:
+            if free_to_kick[idx]:
+                best_player_to_pass = idx
+                break
         # TODO: select the best player to pass ball to
-        best_player_to_pass = 2
         return points, best_player_to_pass
 
     @staticmethod
