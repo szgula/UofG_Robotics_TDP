@@ -1,7 +1,7 @@
 <launch>
   <arg name="simulator_args" default="--ball_pos 0 0"/>
   <node name="game_master" pkg="GameEngine" type="game_master.py" output="screen" cwd="node"/>
-  <!--<node name="game_simulator" pkg="GameEngine" type="game_simulator.py" cwd="node" args="$(arg simulator_args)" />-->
+  <node name="game_simulator" pkg="GameEngine" type="game_simulator.py" cwd="node" args="$(arg simulator_args)" />
   <node name="team_master_0" pkg="Planner" type="team_0_master.py" cwd="node"/>
   <node name="team_master_1" pkg="Planner" type="team_1_master.py" cwd="node"/>
 </launch>

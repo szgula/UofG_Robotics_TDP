@@ -190,8 +190,15 @@ class BallBasicModel(BallModel):
         player_radius = collision_object.radius
         dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
         diff = (dx ** 2 + dy ** 2) ** 0.5  # TODO: add check if in collision range (of this time step)
-        player_vx, player_vy = collision_object.get_velocity_components_wcs()
+        radius_sum = player_radius + self.radius
+        if diff <= radius_sum:  # The ball gets under the player, move it outwards the player body
+            # TODO: verify if this works fine
+            dx *= radius_sum / diff
+            dy *= radius_sum / diff
+            self._x_pos = player_pos_x + dx
+            self._y_pos = player_pos_y + dy
 
+        player_vx, player_vy = collision_object.get_velocity_components_wcs()
         def similar_speeds(player_vx_, player_vy_):
             speed_diff = np.hypot(player_vx_-self._x_vel, player_vy_-self._y_vel)
             same_speed_threshold = 0.01
@@ -226,7 +233,11 @@ class BallBasicModel(BallModel):
             b = -2 * (self._x_pos + M * k)
             c = self._x_pos ** 2 + M ** 2 - player_radius ** 2
         elif abs(player_vy) > move_vel_threshold:
-            raise NotImplementedError
+            # TODO: verify if this works fine
+            a = 1
+            b = -2 * player_pos_y
+            c = player_pos_y ** 2 + (self._x_pos - player_pos_x) ** 2 - player_radius ** 2
+            #raise NotImplementedError
         else:
             raise ValueError("No collision should happen if all vel are ~0")
 
@@ -248,7 +259,10 @@ class BallBasicModel(BallModel):
             get_y = lambda _x_: self._y_pos + self._y_vel * (_x_ - self._x_pos) / player_vx
             y1, y2 = get_y(x1), get_y(x2)
         elif abs(player_vy) > move_vel_threshold:
-            raise NotImplementedError
+            # TODO: verify if this works fine
+            x1, x2 = self._x_pos, self._x_pos
+            y1, y2 = sol1, sol2
+            #raise NotImplementedError
         else:
             raise ValueError("No collision should happen if all vel are ~0")
 
