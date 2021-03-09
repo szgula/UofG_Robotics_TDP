@@ -29,6 +29,7 @@ class PlayerController:  #(Robot)
         self.strategic_threshold = 1
         self.intercept_threshold = 0.2
         self.headed_threshold = 0.3
+        self.cover_threshold = 0.6
 
     def has_ball(self, game_info: list) -> bool:
         team = game_info[0]
@@ -181,10 +182,10 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_1
         else:
             candidate_coord = candidate_coord_2
-        candidate_coord.x = float(candidate_coord.x) - 0.2
-        candidate_coord.y = float(candidate_coord.y) - 0.2
+        candidate_coord.x = float(candidate_coord.x) - 0.4
+        candidate_coord.y = float(candidate_coord.y) - 0.4
         delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
-        if(delta_position <= self.goal_threshold):
+        if(delta_position <= self.cover_threshold):
             delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
             calculated_heading = np.arctan2(delta_position[1],delta_position[0])
             lv, rv, action, _ = rotate_towards(main_player, calculated_heading)
