@@ -145,6 +145,9 @@ class PlayerController:  #(Robot)
         candidate_coord_2 = enemies_positions[enemy_candidates[1]]
         candidate_coord_2_np = np.array([candidate_coord_2.x, candidate_coord_2.y])
         ball_pos = team.ball_pos_efcs
+        distance_to_ball_x = ball_pos.x - main_player.x
+        distance_to_ball_y = ball_pos.y - main_player.y
+        heading_angle = np.arctan2(distance_to_ball_y, distance_to_ball_x)
         min_1 = np.min(np.linalg.norm(main_player_np - candidate_coord_1_np))
         min_2 = np.min(np.linalg.norm(main_player_np - candidate_coord_2_np))
         final_min_candidates = min(min_1, min_2)
@@ -158,9 +161,16 @@ class PlayerController:  #(Robot)
                                                                      np.array([candidate_coord.x,
                                                                                candidate_coord.y]),
                                                                      kick_slope)
-        danger_corner_1 = danger_clause[2]
-        lv, rv = go_to_fast(main_player,Position(danger_corner_1[0],danger_corner_1[1],0))
+        danger_corner = danger_clause[1]
+        lv, rv = go_to_fast(main_player,Position(danger_corner[0],danger_corner[1],0))
         return PlayerCommand(lv,rv,0)
+
+    def ball_in_zone(self, game_info, field_size):
+        team = game_info[0]
+        ball_pos = team.ball_pos_efcs
+        if(ball_pos.x < field_size[0]/2):
+            return True
+        return False
 
     def cover(self, game_info: list, net: list):
         team = game_info[0]
@@ -182,8 +192,8 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_1
         else:
             candidate_coord = candidate_coord_2
-        candidate_coord.x = float(candidate_coord.x) - 0.4
-        candidate_coord.y = float(candidate_coord.y) - 0.4
+        candidate_coord.x = float(candidate_coord.x) - 0.2
+        candidate_coord.y = float(candidate_coord.y) - 0.2
         delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
         if(delta_position <= self.cover_threshold):
             delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
@@ -199,11 +209,11 @@ class PlayerController:  #(Robot)
         team_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
         return team_pass_candidate
 
-    def get_opponent_pass_candidate(self, enemies: list, enemy_id: int, net: list) -> int:
+    def get_opponent_pass_candidates(self, enemies: list, enemy_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in enemies]
         position[enemy_id] = np.array([np.inf, np.inf])
-        opponent_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
-        return opponent_pass_candidate
+        op1, op2, *_ = np.argpartition((np.linalg.norm(position - np.array(net), axis=1)), 1)
+        return [op1, op2]
 
     def get_dangerous_opponents(self, enemies, net):
         position = [np.array([position.x, position.y]) for position in enemies]
