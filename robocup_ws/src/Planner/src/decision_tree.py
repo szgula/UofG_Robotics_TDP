@@ -26,8 +26,10 @@ class DecisionTree():
         for controller in controllers:
             mode = modes[player_id]
             game_info = [team, enemy, player_id, mode[player_id]]
-
-            if(controller.has_ball(game_info)):
+            is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
+            if(is_obstacle):
+                actions.append([controller.avoid_obstacle(game_info,which_team,obstacle_id)])
+            elif(controller.has_ball(game_info)):
                 can_score, kick_x, kick_y = controller.can_score(game_info, self.team_id)
                 if(can_score):
                     actions.append([controller.score_goal(game_info, kick_x, kick_y)])
