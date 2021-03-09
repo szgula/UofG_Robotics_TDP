@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 import logging
+from pygame.locals import *
 
 # TODO: add unittests, smoke test, and functional tests
 # TODO: Write documentation
@@ -10,6 +11,8 @@ class BasicVisualizer:
 
     def __init__(self, simulator: None, number_of_players: int = 5, field_size: tuple = (10, 6),
                  display_scale: int = 100):
+        pygame.init()
+        self.font = pygame.font.SysFont('Arial', 16)
         self._number_of_players = number_of_players
         self._position_dim = 3  # x, y, heading
         self._field_size = np.array(field_size)
@@ -98,24 +101,31 @@ class BasicVisualizer:
                          ((self._display_size_width - self._margin), (-self._gate_height + self._display_size_height / 2)),
                          self._field_line_width)
         # ball
-        pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(int), 5)
+        pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), 5)
+        player_id = 0
         for pos in state_players_1:
-            pygame.draw.circle(self.screen, (0, 0, 255), (pos[:2] * self.scale).astype(int), self._robo_radius)
-            self.draw_direction_arrow(pos)
+            pygame.draw.circle(self.screen, (173, 216, 230), (pos[:2] * self.scale).astype(float), self._robo_radius)
+            self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            player_id += 1
+        player_id = 0
         for pos in state_players_2:
-            pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2] * self.scale).astype(int), self._robo_radius)
-            self.draw_direction_arrow(pos)
+            pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2] * self.scale).astype(float), self._robo_radius)
+            self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            player_id += 1
         font = pygame.font.SysFont(None, 48)
         img = font.render(f'{score[0]} - {score[1]}', True, (255, 0, 0))
         self.screen.blit(img, (self._display_size[0] / 2 - 30, 0))
         pygame.display.flip()
         self.fclock.tick(self.fps)
 
-    def draw_direction_arrow(self, pos):
+    def draw_direction_arrow_and_id_indicator(self, pos, player_id):
         start = np.array(pos[:2] * self.scale).reshape(2, 1)
-        change = np.array([self._robo_radius * np.cos(pos[2:]), -self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
-        pygame.draw.line(self.screen, self._robo_dirc_color, (pos[:2] * self.scale).astype(int),
-                         (start + change)[:, 0].astype(int), self._field_line_width)
+        start_change = np.array([0.5 * self._robo_radius * np.cos(pos[2:]), -0.5 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
+        end_change = np.array([1.2 * self._robo_radius * np.cos(pos[2:]), -1.2 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
+        pygame.draw.line(self.screen, self._robo_dirc_color, (start + start_change)[:, 0].astype(float),
+                         (start + end_change)[:, 0].astype(int), self._field_line_width)
+        id_indicator_pos = (pos[:2] * self.scale - [0.5 * self._robo_radius, 0.75 * self._robo_radius]).astype(float)
+        self.screen.blit(self.font.render(str(player_id), True, (0, 0, 0)), id_indicator_pos)
 
     def accrue_data_from_simulator(self, team_1=None, team_2=None, ball=None) -> (tuple, tuple, tuple):
         """

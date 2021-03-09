@@ -9,13 +9,18 @@ from collisions import CollisionTypes
 from visualizer import BasicVisualizer
 from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
 from game_interfaces.msg import TeamPosition
+import argparse
 
 VISUALIZER = True
 
 
 class GameSimulator:
     def __init__(self, robot_class: RobotModel, ball_model: BallModel, number_of_teams: int = 2, number_of_robots: int = 5,
-                 size_of_field: tuple = (10, 6), dt: float = 0.1):
+                 size_of_field: tuple = (10, 6), dt: float = 0.1,
+                 team_0_starting_points: list = None,
+                 team_1_starting_points: list = None,
+                 ball_init_pos: tuple = None,
+                 ball_init_vel: tuple = None):
         """
 
         Ego field coordinate system: located in the middle of the field, positive X towards opponent's goal
@@ -34,13 +39,23 @@ class GameSimulator:
         self._robots = [list() for _ in range(self._number_of_teams)]
         self.size_of_net = 2
         self.team_CS_rotations = [0, np.pi]
-        self.team_starting_points = [(-3,2), (-3,-2), (-1,2), (-1, -2), (-4, 0)]
-        for team in range(self._number_of_teams):
-            for player_id in range(self._number_of_robots):
-                self._robots[team].append(
-                    self._robot_class(*self.team_starting_points[player_id], cord_system_rot=self.team_CS_rotations[team], dt=self.dt))
+        self.team_0_starting_points = team_0_starting_points
+        self.team_1_starting_points = team_1_starting_points
 
-        self.ball = ball_model(0, 0, dt=self.dt )
+        if self.team_0_starting_points is None:
+            self.team_0_starting_points = [(-3, 2), (-3, -2), (-1, 2), (-1, -2), (-4, 0)]
+        if self.team_1_starting_points is None:
+            self.team_1_starting_points = [(-3, 2), (-3, -2), (-1, 2), (-1, -2), (-4, 0)]
+
+        for player_id in range(self._number_of_robots):
+            self._robots[0].append(
+                self._robot_class(*self.team_0_starting_points[player_id], cord_system_rot=self.team_CS_rotations[0], dt=self.dt))
+            self._robots[1].append(
+                self._robot_class(*self.team_1_starting_points[player_id], cord_system_rot=self.team_CS_rotations[1], dt=self.dt))
+
+        ball_pos = ball_init_pos if ball_init_pos is not None else (0, 0)
+        ball_vel = ball_init_vel if ball_init_vel is not None else (0, 0)
+        self.ball = ball_model(ball_pos[0], ball_pos[1], init_x_vel=ball_vel[0], init_y_vel=ball_vel[1], dt=self.dt)
         self._internal_goal_counter = [0, 0]
 
     def reset(self):
@@ -233,9 +248,9 @@ class GameSimulator:
 
 
 class GameSimulationServer(GameSimulator):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.visualizer = BasicVisualizer(None)
-        super().__init__(RobotBasicModel, BallBasicModel)
+        super().__init__(RobotBasicModel, BallBasicModel, *args, **kwargs)
         rospy.init_node('game_simulation_server')
         s = rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
         print("Ready to simulate the game.")
@@ -271,4 +286,49 @@ class GameSimulationServer(GameSimulator):
 
 
 if __name__ == "__main__":
-    GSS = GameSimulationServer()
+    my_parser = argparse.ArgumentParser(description='Simulation config')
+    my_parser.add_argument('--ball_pos',
+                           type=float,
+                           nargs='+',
+                           help='ball initial pos in wcs: 2 floats (x, y)',
+                           required=False)
+    my_parser.add_argument('--ball_vel',
+                           type=float,
+                           nargs='+',
+                           help='ball initial vel in wcs: 2 floats (x, y)',
+                           required=False)
+    my_parser.add_argument('--team_0_init_pos',
+                           type=float,
+                           nargs='+',
+                           help='team 0 initial pos in wcs: 10 floats (x0, y0, x1, y1...)',
+                           required=False)
+    my_parser.add_argument('--team_1_init_pos',
+                           type=float,
+                           nargs='+',
+                           help='team 0 initial pos in wcs: 10 floats (x0, y0, x1, y1...)',
+                           required=False)
+
+    # Remove some roslaunch artefacts
+    idx_to_rem = []
+    for arg_idx, arg_name in enumerate(sys.argv):
+        if "__name:=game_simulator" in arg_name or "__log:=" in arg_name:
+            idx_to_rem.append(arg_idx)
+    for idx in idx_to_rem[::-1]:
+        sys.argv.pop(idx)
+
+    # Parse arguments
+    args_cl, unknown = my_parser.parse_known_args()
+    team_0_starting_points = args_cl.team_0_init_pos
+    team_1_starting_points = args_cl.team_1_init_pos
+    ball_init_pos = args_cl.ball_pos
+    ball_init_vel = args_cl.ball_vel
+
+    # reformat positions
+    if team_0_starting_points is not None:
+        team_0_starting_points = [(team_0_starting_points[2 * i], team_0_starting_points[2 * i + 1]) for i in range(5)]
+    if team_1_starting_points is not None:
+        team_1_starting_points = [(team_1_starting_points[2 * i], team_1_starting_points[2 * i + 1]) for i in range(5)]
+    GSS = GameSimulationServer(team_0_starting_points=team_0_starting_points,
+                               team_1_starting_points=team_1_starting_points,
+                               ball_init_pos=ball_init_pos,
+                               ball_init_vel=ball_init_vel)
