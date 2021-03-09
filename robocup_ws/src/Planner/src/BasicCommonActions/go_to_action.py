@@ -58,6 +58,13 @@ def go_to_fast(robot_state: Position, target: Position):
     K_P_FORWARD_COMPONENT = 50
     return go_to_parametrized(robot_state, target, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT)
 
+def boost(robot_state: Position, target: Position):
+    MIN_PURE_ROTATION_ANGLE = np.pi / 36
+    K_P_PURE_ROTATION = 10
+    MAX_OUTPUT_VALUR = 10
+    K_P_FORWARD_COMPONENT = 50
+    return go_to_parametrized(robot_state, target, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT)
+
 def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_position: Position, ball_velocity: Position):
     """
     This function generate the action to receive the ball, stop it, move ther
