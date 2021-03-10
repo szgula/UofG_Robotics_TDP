@@ -26,7 +26,7 @@ class PlayerController:  #(Robot)
         self.points_to_visit = []
         self.current_goal = 0
         self.goal_threshold = 0.2
-        self.strategic_threshold = 1
+        self.strategic_threshold = 2
         self.intercept_threshold = 0.2
         self.headed_threshold = 0.2
         self.cover_threshold = 0.4
@@ -75,16 +75,22 @@ class PlayerController:  #(Robot)
         player_id = game_info[2]
         positions = team.players_positions_efcs
         main_player = positions[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
         ball_pos = team.ball_pos_efcs
         pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
         candidate_pos = positions[pass_candidate]
         candidate_pos_np = np.array([candidate_pos.x, candidate_pos.y])
+        distance_player_target = np.linalg.norm(main_player_np - candidate_pos_np)
         strategic_point = deepcopy(ball_pos)
+        if(distance_player_target <= 1):
+            self.strategic_threshold = 1
+        else:
+            self.strategic_threshold = 2
         strategic_point.x = float(strategic_point.x) + 1
         if (ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 0.5
+            strategic_point.y = float(strategic_point.y) + 1
         else:
-            strategic_point.y = float(strategic_point.y) - 0.5
+            strategic_point.y = float(strategic_point.y) - 1
         strategic_point_np = np.array([strategic_point.x, strategic_point.y])
         delta_strategic_point = np.linalg.norm(strategic_point_np - candidate_pos_np)
         if(delta_strategic_point <= self.strategic_threshold):
