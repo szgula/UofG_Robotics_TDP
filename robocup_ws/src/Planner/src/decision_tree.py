@@ -27,25 +27,31 @@ class DecisionTree():
             mode = modes[player_id]
             game_info = [team, enemy, player_id, mode]
             is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
-            if(is_obstacle and controller.has_ball(game_info)):
-                is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
-            elif(controller.has_ball(game_info)):
+            if (controller.has_ball(game_info)):
                 can_score, kick_x, kick_y = controller.can_score(game_info, self.team_id)
-                if(can_score):
+                if can_score:
                     actions.append([controller.score_goal(game_info, kick_x, kick_y)])
                 else:
                     if(mode == "DEFEND"):
-                        can_pass, pass_candidate = controller.defender_pass(game_info, self.enemy_net)
-                        if (can_pass):
-                            actions.append([controller.pass_ball(game_info, pass_candidate)])
+                        can_dribble = controller.check_for_dribble(game_info)
+                        if can_dribble:
+                            actions.append([controller.dribble_ball(game_info)])
                         else:
-                            actions.append([PlayerCommand(0, 0, 2)])
+                            can_pass, pass_candidate = controller.defender_pass(game_info, self.enemy_net)
+                            if (can_pass):
+                                actions.append([controller.pass_ball(game_info, pass_candidate)])
+                            else:
+                                actions.append([PlayerCommand(0, 0, 2)])
                     elif(mode == "ATTACK"):
-                        can_pass, pass_candidate = controller.check_for_pass(game_info, self.enemy_net)
-                        if(can_pass):
-                            actions.append([controller.pass_ball(game_info,pass_candidate)])
+                        can_dribble = controller.check_for_dribble(game_info)
+                        if can_dribble:
+                            actions.append([controller.dribble_ball(game_info)])
                         else:
-                            actions.append([PlayerCommand(0,0,2)])
+                            can_pass, pass_candidate = controller.check_for_pass(game_info, self.enemy_net)
+                            if(can_pass):
+                                actions.append([controller.pass_ball(game_info,pass_candidate)])
+                            else:
+                                actions.append([PlayerCommand(0,0,2)])
             else:
                 capture_pos,closest_player = controller.fastest_to_ball(game_info)
                 #if team_or_enemy = 1 => ball with teammate else ball with opponent

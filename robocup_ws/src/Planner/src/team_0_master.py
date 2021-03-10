@@ -20,7 +20,7 @@ class TeamMaster0(TeamMaster):
         self.players = {self.defence_left_logic: "DEFEND",
                         self.defence_right_logic: "DEFEND",
                         self.striker_left_logic: "ATTACK",
-                        self.striker_right_logic:"ATTACK" }
+                        self.striker_right_logic: "ATTACK"}
         self.tree = None
         self.players_logic_was_updated = True
         self.wait = 0
@@ -34,13 +34,13 @@ class TeamMaster0(TeamMaster):
         for player, mode in self.players.items():
             player = PlayerController(player_id)
             controllers.append(player)
-            player_id+=1
+            player_id += 1
         self.tree = DecisionTree(self.team_id)
         actions_full = self.tree.plan(self.team_position, self.opponents_position, controllers, modes, actions_empty)
         player_id = 0
         for action in actions_full:
             self.actions[player_id] = action[0]
-            player_id+=1
+            player_id += 1
 
 if __name__ == "__main__":
     team_mater_0 = TeamMaster0()

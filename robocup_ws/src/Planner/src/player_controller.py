@@ -1,7 +1,7 @@
 from game_interfaces.msg import PlayerCommand
 import numpy as np
 import matplotlib.pyplot as plt
-from BasicCommonActions.go_to_action import simple_go_to_action
+from BasicCommonActions.go_to_action import simple_go_to_action, receive_and_dribble_action
 from game_interfaces.msg import Position
 from brachistochrone import cycloid
 from BasicCommonActions.go_to_action import go_to_fast, \
@@ -64,7 +64,6 @@ class PlayerController:  #(Robot)
         out_tms = TeamMasterSupporting.get_soonest_contact(team, enemy)
         team_can_get_to_ball, players_capture_time, opponent_can_get_to_ball, opponents_capture_time = out_tms
         player_id_min_time = int(np.argmin(players_capture_time))
-        opponent_id_min_time = int(np.argmin(opponents_capture_time))
         capture_pos = TeamMasterSupporting.get_ball_pos_at_time(players_capture_time[player_id_min_time],
                                                                 team.ball_pos_efcs,
                                                                 team.ball_vel_efcs)
@@ -108,6 +107,17 @@ class PlayerController:  #(Robot)
         return True, pass_candidate
 
 
+    def check_for_dribble(self, game_info: list) -> [bool]:
+        team = game_info[0]
+        opponents = game_info[1]
+        ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
+        positions_opponents = opponents.players_positions_wcs
+        position_opponents = [[position.x, position.y] for position in positions_opponents]
+        for opponent_pos in position_opponents:
+            if ball_pos[0] - 0.5 <= opponent_pos[0] <= ball_pos[0] + 0.5 and ball_pos[1] - 0.5 <= opponent_pos[1] <= ball_pos[1] + 0.5:
+                return False
+        return True
+
     def pass_ball(self, game_info: list, candidate: int) -> PlayerCommand:
         team = game_info[0]
         ball_vel = team.ball_vel_efcs
@@ -117,6 +127,14 @@ class PlayerController:  #(Robot)
         ball = team.ball_pos_efcs
         lv, rv, action = receive_and_pass_action(main_player,candidate_pos,ball, ball_vel)
         return PlayerCommand(lv,rv,action)
+
+    def dribble_ball(self, game_info: list) -> PlayerCommand:
+        team = game_info[0]
+        ball_vel = team.ball_vel_efcs
+        main_player = team.players_positions_efcs[game_info[2]]
+        ball = team.ball_pos_efcs
+        lv, rv, action = receive_and_dribble_action(main_player, Position(5,0,0), ball, ball_vel)
+        return PlayerCommand(lv, rv, action)
 
 
     def closest_to_ball(self,game_info: list) -> int:
@@ -370,7 +388,6 @@ class PlayerController:  #(Robot)
             self.current_goal += 1
             self.current_goal %= 6
         l_rpm, r_rpm, = simple_go_to_action(my_pos_efcs, goal_pos)
-        print(f"({l_rpm}, {r_rpm})")
         return PlayerCommand(l_rpm, r_rpm, 0)
 
     def distance_judge(self, game_info: list, init_distance = None) -> [bool, int, int]:

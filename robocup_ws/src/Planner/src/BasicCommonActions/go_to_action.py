@@ -100,6 +100,40 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
         action = 1
     return vel_l, vel_r, action
 
+def receive_and_dribble_action(robot_state: Position, dribble_target: Position, ball_position: Position, ball_velocity: Position):
+    """
+    This function generate the action to receive the ball, stop it, move ther
+    """
+    dx_ball_player = ball_position.x - robot_state.x
+    dy_ball_player = ball_position.y - robot_state.y
+    ball_player_angle = np.arctan2(dy_ball_player, dx_ball_player)
+
+    dx_ball_target = ball_position.x - dribble_target.x
+    dy_ball_target = ball_position.y - dribble_target.y
+    ball_target_angle = np.arctan2(dy_ball_target, dx_ball_target)
+
+    angle_diff = calculate_angle_difference(ball_target_angle, ball_player_angle)
+    if abs(angle_diff) < np.deg2rad(177):
+        if np.hypot(ball_velocity.x, ball_velocity.y) > TeamMasterSupporting.max_robot_speed:
+            return 0, 0, 2  # Stop the ball
+        if angle_diff > 0:
+            new_heading = clip_angle(ball_player_angle + np.pi/2)
+            direction = 1
+        else:
+            new_heading = clip_angle(ball_player_angle - np.pi/2)
+            direction = -1
+        robot_heading_diff = calculate_angle_difference(robot_state.theta, new_heading)
+        if abs(robot_heading_diff) > np.deg2rad(3):
+            vel_l, vel_r, action, _ = rotate_towards(robot_state, new_heading)
+        else:
+            r = np.hypot(dx_ball_player, dy_ball_player)
+            vel_l, vel_r = go_around_the_point(robot_state, None, r, direction)  #0.05)
+            action = 0
+    else:
+        vel_l , vel_r = simple_go_to_action(robot_state, dribble_target)
+        action = 2
+    return vel_l, vel_r, action
+
 def go_around_the_point(robot_state: Position, go_around_point: Position, radius, direction=1, R_vel = 3):
     """
     Generate wheel velocities for robot to go around the point
