@@ -3,6 +3,7 @@ import pygame
 import logging
 from pygame.locals import *
 
+
 # TODO: add unittests, smoke test, and functional tests
 # TODO: Write documentation
 
@@ -28,14 +29,18 @@ class BasicVisualizer:
         self.fps = 500
         self.fclock = pygame.time.Clock()
         self._robo_radius = 10
-        self._field_line_color = (0, 0, 0)
+        self._field_line_color = (255, 255, 255)
+        self._field_color = (55, 170, 80)
         self._robo_dirc_color = (255, 0, 0)
         self._field_line_width = 3
         self._center_circle_radius = 1 * display_scale
         self._goal_area_width = 1.5 * display_scale
         self._goal_area_height = 3 * display_scale
+        self._offside_area_radius = 0.8 * display_scale
+        self._offside_center_distance = 1.1 * display_scale
         self._margin = 0.3 * display_scale
-        self._gate_height = 1 * display_scale
+        self._gate_height = 2 * display_scale
+        self._gate_color = (170, 170, 170)
 
     def __del__(self):
         pygame.quit()
@@ -65,7 +70,7 @@ class BasicVisualizer:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._exit_display()
-        self.screen.fill((255, 255, 255))
+        self.screen.fill(self._field_color)
         # center circle
         center_circle_size = (self._display_size_width / 2 - self._center_circle_radius,
                               self._display_size_height / 2 - self._center_circle_radius,
@@ -90,16 +95,36 @@ class BasicVisualizer:
                                 self._goal_area_width,
                                 self._goal_area_height)
         pygame.draw.rect(self.screen, self._field_line_color, right_goal_area_size, self._field_line_width)
+        # left offside area
+        left_offside_area_size = (self._margin + self._offside_center_distance - self._offside_area_radius,
+                                  (self._display_size_height / 2 - self._offside_area_radius),
+                                  2 * self._offside_area_radius, 2 * self._offside_area_radius)
+        r = self._offside_area_radius
+        l = self._goal_area_width - self._offside_center_distance
+        offside_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, left_offside_area_size, -1 * offside_area_theta,
+                        offside_area_theta,
+                        self._field_line_width)
+        # right offside area
+        right_offside_area_size = (
+        (self._display_size_width - self._margin - self._offside_center_distance - self._offside_area_radius),
+        (self._display_size_height / 2 - self._offside_area_radius),
+        2 * self._offside_area_radius, 2 * self._offside_area_radius)
+        r = self._offside_area_radius
+        l = self._goal_area_width - self._offside_center_distance
+        offside_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, right_offside_area_size, -1 * offside_area_theta + np.pi,
+                        offside_area_theta + np.pi,
+                        self._field_line_width)
         # left gate
-        pygame.draw.line(self.screen, (0, 255, 0),
-                         (self._margin, (self._gate_height + self._display_size_height / 2)),
-                         (self._margin, (-self._gate_height + self._display_size_height / 2)),
-                         self._field_line_width)
+        left_gate_size = (self._margin, self._display_size_height / 2 - self._gate_height / 2,
+                          self._goal_area_width / 3, self._gate_height)
+        pygame.draw.rect(self.screen, self._field_line_color, left_gate_size, self._field_line_width)
         # right gate
-        pygame.draw.line(self.screen, (0, 255, 0),
-                         ((self._display_size_width - self._margin), (self._gate_height + self._display_size_height / 2)),
-                         ((self._display_size_width - self._margin), (-self._gate_height + self._display_size_height / 2)),
-                         self._field_line_width)
+        right_gate_size = ((self._display_size_width - self._margin - self._goal_area_width / 3 - 1),
+                           self._display_size_height / 2 - self._gate_height / 2,
+                           self._goal_area_width / 3, self._gate_height)
+        pygame.draw.rect(self.screen, self._field_line_color, right_gate_size, self._field_line_width)
         # ball
         pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), 5)
         player_id = 0
@@ -120,8 +145,10 @@ class BasicVisualizer:
 
     def draw_direction_arrow_and_id_indicator(self, pos, player_id):
         start = np.array(pos[:2] * self.scale).reshape(2, 1)
-        start_change = np.array([0.5 * self._robo_radius * np.cos(pos[2:]), -0.5 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
-        end_change = np.array([1.2 * self._robo_radius * np.cos(pos[2:]), -1.2 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
+        start_change = np.array(
+            [0.5 * self._robo_radius * np.cos(pos[2:]), -0.5 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
+        end_change = np.array(
+            [1.2 * self._robo_radius * np.cos(pos[2:]), -1.2 * self._robo_radius * np.sin(pos[2:])]).reshape(2, 1)
         pygame.draw.line(self.screen, self._robo_dirc_color, (start + start_change)[:, 0].astype(float),
                          (start + end_change)[:, 0].astype(int), self._field_line_width)
         id_indicator_pos = (pos[:2] * self.scale - [0.5 * self._robo_radius, 0.75 * self._robo_radius]).astype(float)
@@ -141,4 +168,3 @@ class BasicVisualizer:
     def send_game_state(self, team_1, team_2, ball, score):
         self._data_provided = True
         self._data_provided_buffer = (team_1, team_2, ball, score)
-
