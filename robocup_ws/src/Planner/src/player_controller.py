@@ -28,8 +28,8 @@ class PlayerController:  #(Robot)
         self.goal_threshold = 0.2
         self.strategic_threshold = 1
         self.intercept_threshold = 0.2
-        self.headed_threshold = 0.3
-        self.cover_threshold = 0.6
+        self.headed_threshold = 0.2
+        self.cover_threshold = 0.4
 
     def has_ball(self, game_info: list) -> bool:
         team = game_info[0]
@@ -90,6 +90,17 @@ class PlayerController:  #(Robot)
         if(delta_strategic_point <= self.strategic_threshold):
             return True, pass_candidate
         return False, pass_candidate
+
+
+    def defender_pass(self,game_info, net):
+        team = game_info[0]
+        player_id = game_info[2]
+        positions = team.players_positions_efcs
+        main_player = positions[player_id]
+        ball_pos = team.ball_pos_efcs
+        pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
+        return True, pass_candidate
+
 
     def pass_ball(self, game_info: list, candidate: int) -> PlayerCommand:
         team = game_info[0]
@@ -192,8 +203,8 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_1
         else:
             candidate_coord = candidate_coord_2
-        candidate_coord.x = float(candidate_coord.x) - 0.2
-        candidate_coord.y = float(candidate_coord.y) - 0.2
+        candidate_coord.x = float(candidate_coord.x) - 0.4
+        candidate_coord.y = float(candidate_coord.y) - 0.4
         delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
         if(delta_position <= self.cover_threshold):
             delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
@@ -267,56 +278,6 @@ class PlayerController:  #(Robot)
             command = PlayerCommand(*go_to_fast(robot_state, target), action)
         return command
 
-    # def receive_ball(self, game_info):
-    #
-    #     team = game_info[0]
-    #     player_id = game_info[2]
-    #
-    #     pass_target = team.players_positions_efcs[player_id]
-    #     ball_position = team.ball_pos_efcs
-    #
-    #     delta_position = np.array([ball_position.x, ball_position.y]) - np.array([pass_target.x, pass_target.y])
-    #     calculated_heading = np.arctan2(delta_position[1],delta_position[0])
-    #     if(calculated_heading is None):
-    #         if(delta_position[1] >= 0):
-    #             new_heading = np.pi/2
-    #         else:
-    #             new_heading = -np.pi/2
-    #     else:
-    #         new_heading = calculated_heading
-    #
-    #     vel_l, vel_r, action, _ = rotate_towards(pass_target, new_heading)
-    #
-    #     return PlayerCommand(vel_l, vel_r, 2)
-    def distance_judge(self, game_info: list) -> [bool, int, int]:
-        team = game_info[0]
-        enemy = game_info[1]
-        player_id = game_info[2]
-        # team_distance = []
-        # enemy_distance = []
-
-        my_pos = team.players_positions_efcs[player_id]
-        team_pos = team.players_positions_efcs
-        enemy_pos = enemy.players_positions_wcs
-            # print("T:", team_pos)
-            # print("E:", enemy_pos)
-        for i in range(5):
-            team_distance = np.hypot(team_pos[i].x - my_pos.x, team_pos[i].y - my_pos.y)
-
-            if (team_distance <= 0.6) and (team_distance != 0):
-                print(f"team_distance:{team_distance}")
-                    # print("Ture")
-                return True, 0, i
-
-        for j in range(5):
-            enemy_distance = np.hypot(enemy_pos[j].x - my_pos.x, enemy_pos[j].y - my_pos.y)
-            if enemy_distance <= 0.6:
-            # print(f"team_distance:{team_distance}", f"enemy_distance:{enemy_distance}")
-            # print("Ture")
-                return True, 1, j
-
-        return False, -1, -1
-
     def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
         team = game_info[0]
         obstacle_team = game_info[team_id]
@@ -376,13 +337,8 @@ class PlayerController:  #(Robot)
             time = TeamMasterSupporting.get_time_for_moving_ball(ball_pos, receiver, team.ball_vel_efcs, 0)
         headed_pos = TeamMasterSupporting.get_ball_pos_at_time(time, ball_pos, team.ball_vel_efcs)
         delta_distance = np.hypot(ball_pos.x - receiver.x, ball_pos.y - receiver.y)
-        print(delta_distance)
         if(delta_distance<=self.headed_threshold):
-            if(game_info[2] == 3):
-                print("RECEIVE")
             return True
-        if(game_info[2] == 3):
-            print("GO TO BALL")
         return False
 
     def curvature(self, lookahead, pos, angle):
@@ -411,32 +367,32 @@ class PlayerController:  #(Robot)
         print(f"({l_rpm}, {r_rpm})")
         return PlayerCommand(l_rpm, r_rpm, 0)
 
-    def distance_judge(self, game_info: list) -> [bool, int, int]:
+    def distance_judge(self, game_info: list, init_distance = None) -> [bool, int, int]:
         team = game_info[0]
         enemy = game_info[1]
         player_id = game_info[2]
-        # team_distance = []
-        # enemy_distance = []
+        mode = game_info[3]
+        enemy_d = []
+        if(init_distance is not None):
+            distance = init_distance
+        elif(mode == "ATTACK"):
+            distance = 0.3
+        elif(mode == "DEFEND"):
+            distance = 0.3
 
         my_pos = team.players_positions_efcs[player_id]
         team_pos = team.players_positions_efcs
         enemy_pos = enemy.players_positions_wcs
-        # print("T:", team_pos)
-        # print("E:", enemy_pos)
-        for i in range(5):
-            team_distance = np.hypot(team_pos[i].x - my_pos.x, team_pos[i].y - my_pos.y)
-
-            if (team_distance <= 0.6) and (team_distance != 0):
-                print(f"team_distance:{team_distance}")
-                # print("Ture")
-                return True, 0, i
 
         for j in range(5):
             enemy_distance = np.hypot(enemy_pos[j].x - my_pos.x, enemy_pos[j].y - my_pos.y)
-            if enemy_distance <= 0.6:
-                # print(f"team_distance:{team_distance}", f"enemy_distance:{enemy_distance}")
-                # print("Ture")
+            if enemy_distance <= distance:
                 return True, 1, j
+
+        for i in range(5):
+            team_distance = np.hypot(team_pos[i].x - my_pos.x, team_pos[i].y - my_pos.y)
+            if (team_distance <= distance) and (team_distance != 0):
+                return True, 0, i
 
         return False, -1, -1
 
