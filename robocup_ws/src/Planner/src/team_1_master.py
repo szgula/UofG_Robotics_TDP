@@ -5,7 +5,7 @@ from goalkeeper_controller import Team1GoalkeeperController
 from striker_controller import DummyStrikerWithPredefinedPointsToMove, RotateController, Team1Striker
 from stay_in_place_controller import NullController
 from game_interfaces.msg import Position, PlayerCommand
-from BasicCommonActions.go_to_action import go_to_fast, receive_and_pass_action
+from BasicCommonActions.go_to_action import simple_go_to_action, receive_and_pass_action, go_to_fast
 from defence_controller import Team1DefenceController
 import numpy as np
 import logging
@@ -59,7 +59,7 @@ class TeamMaster1(TeamMaster):
         action = 0
         if d < 0.17:
             action = 1
-        return PlayerCommand(*go_to_fast(robot_state, target), action)
+        return PlayerCommand(*simple_go_to_action(robot_state, target), action)
 
     def simple_go_to_point_and_receive(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id):
         if my_robot_id == 2:
@@ -88,7 +88,7 @@ class TeamMaster1(TeamMaster):
                 raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position, ball_vel)
                 command = PlayerCommand(*raw_command)
         else:
-            command = PlayerCommand(*go_to_fast(robot_state, target), action)
+            command = PlayerCommand(*simple_go_to_action(robot_state, target), action)
         return command
 
 

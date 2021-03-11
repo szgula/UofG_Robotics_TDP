@@ -64,19 +64,25 @@ class DecisionTree():
                     else:
                         actions.append([controller.go_to_ball_special(game_info)])
                 elif(closest_player != player_id and mode == "ATTACK"):
+                    closest_striker = controller.get_closest_striker(game_info)
+                    if(closest_striker == player_id):
+                        actions.append([controller.go_to_ball_special(game_info)])
                     if (is_obstacle):
                         actions.append([controller.avoid_obstacle(game_info, which_team, obstacle_id)])
                     else:
                         actions.append([controller.go_to_strategic_point(game_info, closest_player)])
                 #DEFENDERS
                 ball_in_zone = controller.ball_in_zone(game_info, self.field_size)
-                if(closest_player == player_id  and mode == "DEFEND" and ball_in_zone):
+                if(closest_player == player_id and mode == "DEFEND" and ball_in_zone):
                     actions.append([controller.go_to_ball_special(game_info)])
                 elif(mode == "DEFEND"):
+                    opponent = controller.get_covered_opponent(game_info, self.net_coords)
                     if(is_obstacle):
                         actions.append([controller.avoid_obstacle(game_info, which_team, obstacle_id)])
-                    else:
+                    elif(opponent.x < 0):
                         actions.append([controller.cover(game_info, self.net_coords)]) #COVER OVER DEFENCE
+                    else:
+                        actions.append([PlayerCommand(0,0,0)])
             player_id+=1
         return actions
 

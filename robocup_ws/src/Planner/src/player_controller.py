@@ -69,6 +69,17 @@ class PlayerController:  #(Robot)
                                                                 team.ball_vel_efcs)
         return capture_pos, player_id_min_time
 
+    def get_closest_striker(self, game_info):
+        team = game_info[0]
+        player_id = game_info[2]
+        positions = team.players_positions_efcs
+        position = [[position.x, position.y] for position in positions]
+        striker_positions = [position[2], position[3]]
+        position = np.array(position).astype(float)
+        ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
+        idx = np.argmin(np.linalg.norm(ball_pos - position, axis=1))
+        return idx
+
     def check_for_pass(self, game_info: list, net:list) -> [bool, int]:
         team = game_info[0]
         player_id = game_info[2]
@@ -227,8 +238,8 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_1
         else:
             candidate_coord = candidate_coord_2
-        candidate_coord.x = float(candidate_coord.x) - 0.4
-        candidate_coord.y = float(candidate_coord.y) - 0.4
+        candidate_coord.x = float(candidate_coord.x) + 0.5
+        candidate_coord.y = float(candidate_coord.y)
         delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
         if(delta_position <= self.cover_threshold):
             delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
@@ -237,6 +248,28 @@ class PlayerController:  #(Robot)
         else:
             lv, rv = go_to_fast(main_player, candidate_coord)
         return PlayerCommand(lv, rv, 0)
+
+    def get_covered_opponent(self, game_info, net):
+        team = game_info[0]
+        opponents = game_info[1]
+        enemies_positions = opponents.players_positions_wcs
+        player_id = game_info[2]
+        main_player = team.players_positions_efcs[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
+        enemy_candidates = self.get_dangerous_opponents(enemies_positions, net)
+        candidate_coord_1 = enemies_positions[enemy_candidates[0]]
+        candidate_coord_1_np = np.array([candidate_coord_1.x, candidate_coord_1.y])
+        candidate_coord_2 = enemies_positions[enemy_candidates[1]]
+        candidate_coord_2_np = np.array([candidate_coord_2.x, candidate_coord_2.y])
+        ball_pos = team.ball_pos_efcs
+        min_1 = np.min(np.linalg.norm(main_player_np - candidate_coord_1_np))
+        min_2 = np.min(np.linalg.norm(main_player_np - candidate_coord_2_np))
+        final_min_candidates = min(min_1, min_2)
+        if (final_min_candidates == min_1):
+            candidate_coord = candidate_coord_1
+        else:
+            candidate_coord = candidate_coord_2
+        return candidate_coord
 
     def get_team_pass_candidate(self, team: list, player_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in team]
