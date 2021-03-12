@@ -40,7 +40,7 @@ class PlayerController:  #(Robot)
         if (d <= self.goal_threshold):
             return True
         return False
-
+    @staticmethod
     def can_score(self, game_info: list, team_id):
         team = game_info[0]
         opponent = game_info[1]
@@ -49,7 +49,7 @@ class PlayerController:  #(Robot)
                                                                                                  opponent.players_positions_wcs,
                                                                                                  team_id)
         return direct_kick_feasible, kick_x, kick_y
-
+    @staticmethod
     def score_goal(self,game_info,kick_x,kick_y):
         team = game_info[0]
         main_player = team.players_positions_efcs[game_info[2]]
@@ -90,17 +90,17 @@ class PlayerController:  #(Robot)
         pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
         candidate_pos = positions[pass_candidate]
         candidate_pos_np = np.array([candidate_pos.x, candidate_pos.y])
-        distance_player_target = np.linalg.norm(main_player_np - candidate_pos_np)
+        distance_player_enemy = self.get_closest_opponent(game_info)
         strategic_point = deepcopy(ball_pos)
-        if(distance_player_target <= 1):
-            self.strategic_threshold = 1
-        else:
+        if(distance_player_enemy < 5):
             self.strategic_threshold = 2
-        strategic_point.x = float(strategic_point.x) + 1
-        if (ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 1
         else:
-            strategic_point.y = float(strategic_point.y) - 1
+            self.strategic_threshold = 1
+        strategic_point.x = float(strategic_point.x) + 2
+        if (ball_pos.y < 0):
+            strategic_point.y = float(strategic_point.y) + 2
+        else:
+            strategic_point.y = float(strategic_point.y) - 2
         strategic_point_np = np.array([strategic_point.x, strategic_point.y])
         delta_strategic_point = np.linalg.norm(strategic_point_np - candidate_pos_np)
         if(delta_strategic_point <= self.strategic_threshold):
@@ -125,7 +125,7 @@ class PlayerController:  #(Robot)
         positions_opponents = opponents.players_positions_wcs
         position_opponents = [[position.x, position.y] for position in positions_opponents]
         for opponent_pos in position_opponents:
-            if ball_pos[0] - 0.5 <= opponent_pos[0] <= ball_pos[0] + 0.5 and ball_pos[1] - 0.5 <= opponent_pos[1] <= ball_pos[1] + 0.5:
+            if ball_pos[0] - 0.6 <= opponent_pos[0] <= ball_pos[0] + 0.6 and ball_pos[1] - 0.6 <= opponent_pos[1] <= ball_pos[1] + 0.6:
                 return False
         return True
 
@@ -167,11 +167,11 @@ class PlayerController:  #(Robot)
         main_player = team_positions[player_id]
         partner_player = team_positions[partner_id]
         strategic_point = deepcopy(ball_pos)
-        strategic_point.x = float(strategic_point.x) + 1
+        strategic_point.x = float(strategic_point.x) + 2
         if(ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 1
+            strategic_point.y = float(strategic_point.y) + 2
         else:
-            strategic_point.y = float(strategic_point.y) - 1
+            strategic_point.y = float(strategic_point.y) - 2
         lv, rv = boost(main_player, strategic_point)
         return PlayerCommand(lv,rv,0) #TODO
 
@@ -217,6 +217,19 @@ class PlayerController:  #(Robot)
         if(ball_pos.x < field_size[0]/2):
             return True
         return False
+
+    def get_closest_opponent(self, game_info):
+        team = game_info[0]
+        opponents = game_info[1]
+        enemies_positions = opponents.players_positions_wcs
+        player_id = game_info[2]
+        main_player = team.players_positions_efcs[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
+        position = [np.array([position.x, position.y]) for position in enemies_positions]
+        min_distance = np.min((np.linalg.norm(position - main_player_np)))
+        print(min_distance)
+        return min_distance
+
 
     def cover(self, game_info: list, net: list):
         team = game_info[0]
