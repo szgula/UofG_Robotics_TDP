@@ -102,8 +102,8 @@ class BasicVisualizer:
                          self._field_line_width)
         # ball
         pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), 5)
-        # ball_point = (ball * self.scale).astype(float)
-        # pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
+        ball_point = (ball * self.scale).astype(float)
+        pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
 
         player_id = 0
         for pos in state_players_1:

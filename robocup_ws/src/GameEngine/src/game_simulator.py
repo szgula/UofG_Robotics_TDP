@@ -10,6 +10,7 @@ from visualizer import BasicVisualizer
 from game_interfaces.srv import SimulationUpdate, SimulationUpdateResponse
 from game_interfaces.msg import TeamPosition
 import argparse
+import random
 
 VISUALIZER = True
 
@@ -52,7 +53,8 @@ class GameSimulator:
                 self._robot_class(*self.team_0_starting_points[player_id], cord_system_rot=self.team_CS_rotations[0], dt=self.dt))
             self._robots[1].append(
                 self._robot_class(*self.team_1_starting_points[player_id], cord_system_rot=self.team_CS_rotations[1], dt=self.dt))
-
+        rand_x = random.uniform(-4.6, 4.6)
+        rand_y = random.uniform(-2.6,2.6)
         ball_pos = ball_init_pos if ball_init_pos is not None else (0, 0)
         ball_vel = ball_init_vel if ball_init_vel is not None else (0, 0)
         self.ball = ball_model(ball_pos[0], ball_pos[1], init_x_vel=ball_vel[0], init_y_vel=ball_vel[1], dt=self.dt)
@@ -98,6 +100,7 @@ class GameSimulator:
             self.ball.players_actions(other_players_actions)
         self.ball.step()
         goal_status = self.check_if_ball_in_net()
+        # ball_status = self.check_if_ball_out(self._internal_goal_counter)
         return True, goal_status
 
     def get_positions_for_visualizer(self):
@@ -233,8 +236,9 @@ class GameSimulator:
         ball_pos = self.ball.get_position()
         field_size = self._size_of_field
         goal_state = 0
-
-        ball_in_net_x_threshold = 0.2
+        ball_out_x = [-4.7, 4.7]
+        ball_out_y = [-2.7, 2.7]
+        ball_in_net_x_threshold = 0.4
         if field_size[0]/2 - abs(ball_pos[0]) < ball_in_net_x_threshold:
             if abs(ball_pos[1]) <= self.size_of_net/2:
                 if ball_pos[0] > 0:
@@ -244,6 +248,8 @@ class GameSimulator:
                     goal_state = 2
                     self._internal_goal_counter[1] += 1
                 self.reset()
+        elif (ball_pos[0] < ball_out_x[0] or ball_pos[0] > ball_out_x[1] or ball_pos[1] < ball_out_y[0] or ball_pos[1] > ball_out_y[1]):
+            self.reset()
         return goal_state
 
 
