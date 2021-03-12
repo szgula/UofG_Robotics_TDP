@@ -1,14 +1,15 @@
 from game_interfaces.msg import PlayerCommand
 import numpy as np
 import matplotlib.pyplot as plt
-from BasicCommonActions.go_to_action import simple_go_to_action
+from BasicCommonActions.go_to_action import simple_go_to_action, receive_and_dribble_action
 from game_interfaces.msg import Position
 from brachistochrone import cycloid
 from BasicCommonActions.go_to_action import go_to_fast, \
     receive_and_pass_action,\
     rotate_towards,\
     calculate_angle_difference, \
-    clip_angle
+    clip_angle, \
+    boost
 from BasicCommonActions.plan_supporting_functions import TeamMasterSupporting
 import math
 from copy import deepcopy
@@ -25,8 +26,10 @@ class PlayerController:  #(Robot)
         self.points_to_visit = []
         self.current_goal = 0
         self.goal_threshold = 0.2
-        self.strategic_threshold = 0.2
+        self.strategic_threshold = 2
         self.intercept_threshold = 0.2
+        self.headed_threshold = 0.2
+        self.cover_threshold = 0.4
 
     def has_ball(self, game_info: list) -> bool:
         team = game_info[0]
@@ -37,9 +40,23 @@ class PlayerController:  #(Robot)
         if (d <= self.goal_threshold):
             return True
         return False
-
-    def can_score(self, game_info: list):
-        return False #TODO
+    @staticmethod
+    def can_score(self, game_info: list, team_id):
+        team = game_info[0]
+        opponent = game_info[1]
+        direct_kick_feasible, kick_x, kick_y = TeamMasterSupporting.check_if_direct_goal_feasible(None,
+                                                                                                 team.ball_pos_efcs,
+                                                                                                 opponent.players_positions_wcs,
+                                                                                                 team_id)
+        return direct_kick_feasible, kick_x, kick_y
+    @staticmethod
+    def score_goal(self,game_info,kick_x,kick_y):
+        team = game_info[0]
+        main_player = team.players_positions_efcs[game_info[2]]
+        temp_target_pos = Position(kick_x, kick_y, 0)
+        raw_command = receive_and_pass_action(main_player, temp_target_pos, team.ball_pos_efcs, team.ball_vel_efcs)
+        command = PlayerCommand(*raw_command)
+        return command
 
     def fastest_to_ball(self, game_info):
         team = game_info[0]
@@ -47,32 +64,70 @@ class PlayerController:  #(Robot)
         out_tms = TeamMasterSupporting.get_soonest_contact(team, enemy)
         team_can_get_to_ball, players_capture_time, opponent_can_get_to_ball, opponents_capture_time = out_tms
         player_id_min_time = int(np.argmin(players_capture_time))
-        opponent_id_min_time = int(np.argmin(opponents_capture_time))
         capture_pos = TeamMasterSupporting.get_ball_pos_at_time(players_capture_time[player_id_min_time],
                                                                 team.ball_pos_efcs,
                                                                 team.ball_vel_efcs)
         return capture_pos, player_id_min_time
+
+    def get_closest_striker(self, game_info):
+        team = game_info[0]
+        player_id = game_info[2]
+        positions = team.players_positions_efcs
+        position = [[position.x, position.y] for position in positions]
+        striker_positions = [position[2], position[3]]
+        position = np.array(position).astype(float)
+        ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
+        idx = np.argmin(np.linalg.norm(ball_pos - position, axis=1))
+        return idx
 
     def check_for_pass(self, game_info: list, net:list) -> [bool, int]:
         team = game_info[0]
         player_id = game_info[2]
         positions = team.players_positions_efcs
         main_player = positions[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
         ball_pos = team.ball_pos_efcs
         pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
         candidate_pos = positions[pass_candidate]
         candidate_pos_np = np.array([candidate_pos.x, candidate_pos.y])
+        distance_player_enemy = self.get_closest_opponent(game_info)
         strategic_point = deepcopy(ball_pos)
-        strategic_point.x = float(strategic_point.x) + 1
-        if (ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 0.5
+        if(distance_player_enemy < 5):
+            self.strategic_threshold = 2
         else:
-            strategic_point.y = float(strategic_point.y) - 0.5
+            self.strategic_threshold = 1
+        strategic_point.x = float(strategic_point.x) + 2
+        if (ball_pos.y < 0):
+            strategic_point.y = float(strategic_point.y) + 2
+        else:
+            strategic_point.y = float(strategic_point.y) - 2
         strategic_point_np = np.array([strategic_point.x, strategic_point.y])
         delta_strategic_point = np.linalg.norm(strategic_point_np - candidate_pos_np)
         if(delta_strategic_point <= self.strategic_threshold):
             return True, pass_candidate
         return False, pass_candidate
+
+
+    def defender_pass(self,game_info, net):
+        team = game_info[0]
+        player_id = game_info[2]
+        positions = team.players_positions_efcs
+        main_player = positions[player_id]
+        ball_pos = team.ball_pos_efcs
+        pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
+        return True, pass_candidate
+
+
+    def check_for_dribble(self, game_info: list) -> [bool]:
+        team = game_info[0]
+        opponents = game_info[1]
+        ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
+        positions_opponents = opponents.players_positions_wcs
+        position_opponents = [[position.x, position.y] for position in positions_opponents]
+        for opponent_pos in position_opponents:
+            if ball_pos[0] - 0.6 <= opponent_pos[0] <= ball_pos[0] + 0.6 and ball_pos[1] - 0.6 <= opponent_pos[1] <= ball_pos[1] + 0.6:
+                return False
+        return True
 
     def pass_ball(self, game_info: list, candidate: int) -> PlayerCommand:
         team = game_info[0]
@@ -83,6 +138,14 @@ class PlayerController:  #(Robot)
         ball = team.ball_pos_efcs
         lv, rv, action = receive_and_pass_action(main_player,candidate_pos,ball, ball_vel)
         return PlayerCommand(lv,rv,action)
+
+    def dribble_ball(self, game_info: list) -> PlayerCommand:
+        team = game_info[0]
+        ball_vel = team.ball_vel_efcs
+        main_player = team.players_positions_efcs[game_info[2]]
+        ball = team.ball_pos_efcs
+        lv, rv, action = receive_and_dribble_action(main_player, Position(5,0,0), ball, ball_vel)
+        return PlayerCommand(lv, rv, action)
 
 
     def closest_to_ball(self,game_info: list) -> int:
@@ -103,13 +166,13 @@ class PlayerController:  #(Robot)
         team_positions = team.players_positions_efcs
         main_player = team_positions[player_id]
         partner_player = team_positions[partner_id]
-        strategic_point = ball_pos
-        strategic_point.x = float(strategic_point.x) + 1
+        strategic_point = deepcopy(ball_pos)
+        strategic_point.x = float(strategic_point.x) + 2
         if(ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 0.5
+            strategic_point.y = float(strategic_point.y) + 2
         else:
-            strategic_point.y = float(strategic_point.y) - 0.5
-        lv, rv = go_to_fast(main_player, strategic_point)
+            strategic_point.y = float(strategic_point.y) - 2
+        lv, rv = boost(main_player, strategic_point)
         return PlayerCommand(lv,rv,0) #TODO
 
     # def check_pass_candidate(self,game_info, :
@@ -128,6 +191,9 @@ class PlayerController:  #(Robot)
         candidate_coord_2 = enemies_positions[enemy_candidates[1]]
         candidate_coord_2_np = np.array([candidate_coord_2.x, candidate_coord_2.y])
         ball_pos = team.ball_pos_efcs
+        distance_to_ball_x = ball_pos.x - main_player.x
+        distance_to_ball_y = ball_pos.y - main_player.y
+        heading_angle = np.arctan2(distance_to_ball_y, distance_to_ball_x)
         min_1 = np.min(np.linalg.norm(main_player_np - candidate_coord_1_np))
         min_2 = np.min(np.linalg.norm(main_player_np - candidate_coord_2_np))
         final_min_candidates = min(min_1, min_2)
@@ -141,9 +207,29 @@ class PlayerController:  #(Robot)
                                                                      np.array([candidate_coord.x,
                                                                                candidate_coord.y]),
                                                                      kick_slope)
-        danger_corner_1 = danger_clause[2]
-        lv, rv = go_to_fast(main_player,Position(danger_corner_1[0],danger_corner_1[1],0))
+        danger_corner = danger_clause[1]
+        lv, rv = go_to_fast(main_player,Position(danger_corner[0],danger_corner[1],0))
         return PlayerCommand(lv,rv,0)
+
+    def ball_in_zone(self, game_info, field_size):
+        team = game_info[0]
+        ball_pos = team.ball_pos_efcs
+        if(ball_pos.x < field_size[0]/2):
+            return True
+        return False
+
+    def get_closest_opponent(self, game_info):
+        team = game_info[0]
+        opponents = game_info[1]
+        enemies_positions = opponents.players_positions_wcs
+        player_id = game_info[2]
+        main_player = team.players_positions_efcs[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
+        position = [np.array([position.x, position.y]) for position in enemies_positions]
+        min_distance = np.min((np.linalg.norm(position - main_player_np)))
+        print(min_distance)
+        return min_distance
+
 
     def cover(self, game_info: list, net: list):
         team = game_info[0]
@@ -165,10 +251,38 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_1
         else:
             candidate_coord = candidate_coord_2
-        candidate_coord.x = float(candidate_coord.x) - 0.2
-        candidate_coord.y = float(candidate_coord.y) - 0.2
-        lv, rv = go_to_fast(main_player, candidate_coord)
+        candidate_coord.x = float(candidate_coord.x) + 0.5
+        candidate_coord.y = float(candidate_coord.y)
+        delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
+        if(delta_position <= self.cover_threshold):
+            delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
+            calculated_heading = np.arctan2(delta_position[1],delta_position[0])
+            lv, rv, action, _ = rotate_towards(main_player, calculated_heading)
+        else:
+            lv, rv = go_to_fast(main_player, candidate_coord)
         return PlayerCommand(lv, rv, 0)
+
+    def get_covered_opponent(self, game_info, net):
+        team = game_info[0]
+        opponents = game_info[1]
+        enemies_positions = opponents.players_positions_wcs
+        player_id = game_info[2]
+        main_player = team.players_positions_efcs[player_id]
+        main_player_np = np.array([main_player.x, main_player.y])
+        enemy_candidates = self.get_dangerous_opponents(enemies_positions, net)
+        candidate_coord_1 = enemies_positions[enemy_candidates[0]]
+        candidate_coord_1_np = np.array([candidate_coord_1.x, candidate_coord_1.y])
+        candidate_coord_2 = enemies_positions[enemy_candidates[1]]
+        candidate_coord_2_np = np.array([candidate_coord_2.x, candidate_coord_2.y])
+        ball_pos = team.ball_pos_efcs
+        min_1 = np.min(np.linalg.norm(main_player_np - candidate_coord_1_np))
+        min_2 = np.min(np.linalg.norm(main_player_np - candidate_coord_2_np))
+        final_min_candidates = min(min_1, min_2)
+        if (final_min_candidates == min_1):
+            candidate_coord = candidate_coord_1
+        else:
+            candidate_coord = candidate_coord_2
+        return candidate_coord
 
     def get_team_pass_candidate(self, team: list, player_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in team]
@@ -176,11 +290,11 @@ class PlayerController:  #(Robot)
         team_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
         return team_pass_candidate
 
-    def get_opponent_pass_candidate(self, enemies: list, enemy_id: int, net: list) -> int:
+    def get_opponent_pass_candidates(self, enemies: list, enemy_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in enemies]
         position[enemy_id] = np.array([np.inf, np.inf])
-        opponent_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
-        return opponent_pass_candidate
+        op1, op2, *_ = np.argpartition((np.linalg.norm(position - np.array(net), axis=1)), 1)
+        return [op1, op2]
 
     def get_dangerous_opponents(self, enemies, net):
         position = [np.array([position.x, position.y]) for position in enemies]
@@ -213,31 +327,55 @@ class PlayerController:  #(Robot)
                 return False, 0, min_arg_opponents
         return True, -1, -1
 
-    def receive_ball(self, game_info, partner_id):
 
-        team = game_info[0]
-        player_id = game_info[2]
-
-        partner = team.players_positions_efcs[partner_id]
-
-        pass_target = team.players_positions_efcs[player_id]
-        ball_position = team.ball_pos_efcs
-
-        delta_position = np.array([partner.x, partner.y]) - np.array([pass_target.x, pass_target.y])
-        calculated_heading = np.arctan2(delta_position[1],delta_position[0])
-        if(calculated_heading is None):
-            if(delta_position[1] >= 0):
-                new_heading = np.pi/2
+    def receive_ball(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id, player_to_pass):
+        d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
+        action = 0
+        if d < 0.17:
+            direct_kick_feasible, kick_x, kick_y = TeamMasterSupporting.check_if_direct_goal_feasible(None,
+                                                                                                      self.team_position.ball_pos_efcs,
+                                                                                                      self.opponents_position.players_positions_wcs,
+                                                                                                      self.team_id)
+            if direct_kick_feasible and my_robot_id in [self.striker_right_idx, self.striker_left_idx]:
+                temp_target_pos = Position(kick_x, kick_y, 0)
+                raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position, ball_vel)
+                command = PlayerCommand(*raw_command)
             else:
-                new_heading = -np.pi/2
+                temp_target_pos = self.team_position.players_positions_efcs[player_to_pass]
+                raw_command = receive_and_pass_action(robot_state, temp_target_pos, ball_position, ball_vel)
+                command = PlayerCommand(*raw_command)
         else:
-            new_heading = calculated_heading
+            command = PlayerCommand(*go_to_fast(robot_state, target), action)
+        return command
 
-        vel_l, vel_r, action, _ = rotate_towards(pass_target, new_heading)
+    def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
+        team = game_info[0]
+        obstacle_team = game_info[team_id]
+        player_id = game_info[2]
+        my_pos = team.players_positions_efcs[player_id]
+        safe_pos = obstacle_team.players_positions_wcs[obstacle_player_id]
 
-        return PlayerCommand(vel_l, vel_r, action)
+        lv, rv = self.go_around_the_point(my_pos, safe_pos, 0.3)
+        return PlayerCommand(lv, rv, 0)
 
-
+    def go_around_the_point(self, robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
+        """
+        Generate wheel velocities for robot to go around the point
+        Limitation: it assumes for now the robot is already on the circle around the point
+        R_vel - velocity of the faster wheel
+        direction: 1 = clockwise, -1 = counterclockwise
+        """
+        l = 0.05  # distance between wheels
+        K = 2 * radius / l
+        C = (K - 1) / (K + 1)
+        L_vel = R_vel * C
+        if abs(L_vel) > 3:  # 3 is current max rotation speed
+            L_vel = R_vel
+            R_vel = L_vel / C
+        if direction == 1:
+            return L_vel, R_vel
+        elif direction == -1:
+            return R_vel, L_vel
 
     def go_to_ball(self,game_info: list) -> PlayerCommand:
         team = game_info[0]
@@ -258,6 +396,20 @@ class PlayerController:  #(Robot)
         go_to_pos = TeamMasterSupporting.get_ball_pos_at_time(time, ball_pos, team.ball_vel_efcs)
         lv, rv = go_to_fast(pos, go_to_pos)
         return PlayerCommand(lv, rv, 0)
+
+    def ball_headed(self, game_info):
+        team = game_info[0]
+        receiver = team.players_positions_efcs[game_info[2]]
+        ball_pos = team.ball_pos_efcs
+        if(abs(team.ball_vel_efcs.x) < 0.0001 and abs(team.ball_vel_efcs.y) < 0.0001):
+            time = TeamMasterSupporting.get_time_for_stationary_ball(ball_pos, receiver)
+        else:
+            time = TeamMasterSupporting.get_time_for_moving_ball(ball_pos, receiver, team.ball_vel_efcs, 0)
+        headed_pos = TeamMasterSupporting.get_ball_pos_at_time(time, ball_pos, team.ball_vel_efcs)
+        delta_distance = np.hypot(ball_pos.x - receiver.x, ball_pos.y - receiver.y)
+        if(delta_distance<=self.headed_threshold):
+            return True
+        return False
 
     def curvature(self, lookahead, pos, angle):
         side = np.sign(math.sin(angle) * (lookahead.x - pos.x) - math.cos(angle) * (lookahead.y - pos.y))
@@ -282,5 +434,62 @@ class PlayerController:  #(Robot)
             self.current_goal += 1
             self.current_goal %= 6
         l_rpm, r_rpm, = simple_go_to_action(my_pos_efcs, goal_pos)
-        print(f"({l_rpm}, {r_rpm})")
         return PlayerCommand(l_rpm, r_rpm, 0)
+
+    def distance_judge(self, game_info: list, init_distance = None) -> [bool, int, int]:
+        team = game_info[0]
+        enemy = game_info[1]
+        player_id = game_info[2]
+        mode = game_info[3]
+        enemy_d = []
+        if(init_distance is not None):
+            distance = init_distance
+        elif(mode == "ATTACK"):
+            distance = 0.3
+        elif(mode == "DEFEND"):
+            distance = 0.3
+
+        my_pos = team.players_positions_efcs[player_id]
+        team_pos = team.players_positions_efcs
+        enemy_pos = enemy.players_positions_wcs
+
+        for j in range(5):
+            enemy_distance = np.hypot(enemy_pos[j].x - my_pos.x, enemy_pos[j].y - my_pos.y)
+            if enemy_distance <= distance:
+                return True, 1, j
+
+        for i in range(5):
+            team_distance = np.hypot(team_pos[i].x - my_pos.x, team_pos[i].y - my_pos.y)
+            if (team_distance <= distance) and (team_distance != 0):
+                return True, 0, i
+
+        return False, -1, -1
+
+    def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
+        team = game_info[0]
+        obstacle_team = game_info[team_id]
+        player_id = game_info[2]
+        my_pos = team.players_positions_efcs[player_id]
+        safe_pos = obstacle_team.players_positions_wcs[obstacle_player_id]
+
+        lv, rv = self.go_around_the_point(my_pos, safe_pos, 0.3)
+        return PlayerCommand(lv, rv, 0)
+
+    def go_around_the_point(self, robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
+        """
+        Generate wheel velocities for robot to go around the point
+        Limitation: it assumes for now the robot is already on the circle around the point
+        R_vel - velocity of the faster wheel
+        direction: 1 = clockwise, -1 = counterclockwise
+        """
+        l = 0.05  # distance between wheels
+        K = 2 * radius / l
+        C = (K - 1) / (K + 1)
+        L_vel = R_vel * C
+        if abs(L_vel) > 3:  # 3 is current max rotation speed
+            L_vel = R_vel
+            R_vel = L_vel / C
+        if direction == 1:
+            return L_vel, R_vel
+        elif direction == -1:
+            return R_vel, L_vel

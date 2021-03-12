@@ -127,6 +127,9 @@ class BasicVisualizer:
         pygame.draw.rect(self.screen, self._field_line_color, right_gate_size, self._field_line_width)
         # ball
         pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), 5)
+        # ball_point = (ball * self.scale).astype(float)
+        # pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
+
         player_id = 0
         for pos in state_players_1:
             pygame.draw.circle(self.screen, (173, 216, 230), (pos[:2] * self.scale).astype(float), self._robo_radius)
