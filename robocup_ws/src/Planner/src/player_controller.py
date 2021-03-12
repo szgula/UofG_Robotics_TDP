@@ -40,7 +40,7 @@ class PlayerController:  #(Robot)
         if (d <= self.goal_threshold):
             return True
         return False
-    @staticmethod
+
     def can_score(self, game_info: list, team_id):
         team = game_info[0]
         opponent = game_info[1]
@@ -49,7 +49,7 @@ class PlayerController:  #(Robot)
                                                                                                  opponent.players_positions_wcs,
                                                                                                  team_id)
         return direct_kick_feasible, kick_x, kick_y
-    @staticmethod
+
     def score_goal(self,game_info,kick_x,kick_y):
         team = game_info[0]
         main_player = team.players_positions_efcs[game_info[2]]
@@ -98,9 +98,9 @@ class PlayerController:  #(Robot)
             self.strategic_threshold = 1
         strategic_point.x = float(strategic_point.x) + 2
         if (ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 2
+            strategic_point.y = float(strategic_point.y) + 1
         else:
-            strategic_point.y = float(strategic_point.y) - 2
+            strategic_point.y = float(strategic_point.y) - 1
         strategic_point_np = np.array([strategic_point.x, strategic_point.y])
         delta_strategic_point = np.linalg.norm(strategic_point_np - candidate_pos_np)
         if(delta_strategic_point <= self.strategic_threshold):
@@ -169,9 +169,9 @@ class PlayerController:  #(Robot)
         strategic_point = deepcopy(ball_pos)
         strategic_point.x = float(strategic_point.x) + 2
         if(ball_pos.y < 0):
-            strategic_point.y = float(strategic_point.y) + 2
+            strategic_point.y = float(strategic_point.y) + 1
         else:
-            strategic_point.y = float(strategic_point.y) - 2
+            strategic_point.y = float(strategic_point.y) - 1
         lv, rv = boost(main_player, strategic_point)
         return PlayerCommand(lv,rv,0) #TODO
 
