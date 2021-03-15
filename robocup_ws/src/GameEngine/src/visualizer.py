@@ -36,8 +36,8 @@ class BasicVisualizer:
         self._center_circle_radius = 1 * display_scale
         self._goal_area_width = 1.5 * display_scale
         self._goal_area_height = 3 * display_scale
-        self._offside_area_radius = 0.8 * display_scale
-        self._offside_center_distance = 1.1 * display_scale
+        self._penalty_arc_area_radius = 0.8 * display_scale
+        self._penalty_arc_center_distance = 1.1 * display_scale
         self._margin = 0.3 * display_scale
         self._gate_height = 2 * display_scale
         self._gate_color = (170, 170, 170)
@@ -95,26 +95,26 @@ class BasicVisualizer:
                                 self._goal_area_width,
                                 self._goal_area_height)
         pygame.draw.rect(self.screen, self._field_line_color, right_goal_area_size, self._field_line_width)
-        # left offside area
-        left_offside_area_size = (self._margin + self._offside_center_distance - self._offside_area_radius,
-                                  (self._display_size_height / 2 - self._offside_area_radius),
-                                  2 * self._offside_area_radius, 2 * self._offside_area_radius)
-        r = self._offside_area_radius
-        l = self._goal_area_width - self._offside_center_distance
-        offside_area_theta = np.arccos(l / r)
-        pygame.draw.arc(self.screen, self._field_line_color, left_offside_area_size, -1 * offside_area_theta,
-                        offside_area_theta,
+        # left penalty_arc area
+        left_penalty_arc_area_size = (self._margin + self._penalty_arc_center_distance - self._penalty_arc_area_radius,
+                                  (self._display_size_height / 2 - self._penalty_arc_area_radius),
+                                  2 * self._penalty_arc_area_radius, 2 * self._penalty_arc_area_radius)
+        r = self._penalty_arc_area_radius
+        l = self._goal_area_width - self._penalty_arc_center_distance
+        penalty_arc_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, left_penalty_arc_area_size, -1 * penalty_arc_area_theta,
+                        penalty_arc_area_theta,
                         self._field_line_width)
-        # right offside area
-        right_offside_area_size = (
-        (self._display_size_width - self._margin - self._offside_center_distance - self._offside_area_radius),
-        (self._display_size_height / 2 - self._offside_area_radius),
-        2 * self._offside_area_radius, 2 * self._offside_area_radius)
-        r = self._offside_area_radius
-        l = self._goal_area_width - self._offside_center_distance
-        offside_area_theta = np.arccos(l / r)
-        pygame.draw.arc(self.screen, self._field_line_color, right_offside_area_size, -1 * offside_area_theta + np.pi,
-                        offside_area_theta + np.pi,
+        # right penalty_arc area
+        right_penalty_arc_area_size = (
+        (self._display_size_width - self._margin - self._penalty_arc_center_distance - self._penalty_arc_area_radius),
+        (self._display_size_height / 2 - self._penalty_arc_area_radius),
+        2 * self._penalty_arc_area_radius, 2 * self._penalty_arc_area_radius)
+        r = self._penalty_arc_area_radius
+        l = self._goal_area_width - self._penalty_arc_center_distance
+        penalty_arc_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, right_penalty_arc_area_size, -1 * penalty_arc_area_theta + np.pi,
+                        penalty_arc_area_theta + np.pi,
                         self._field_line_width)
         # left gate
         left_gate_size = (self._margin, self._display_size_height / 2 - self._gate_height / 2,
