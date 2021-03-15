@@ -305,7 +305,7 @@ class BallBasicModel(BallModel):
         player_pos_x, player_pos_y = collision_object.get_position_components_wcs()
         dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
         diff = np.hypot(dx, dy)
-        if diff < 0.17:
+        if diff < 0.2:
             kick_vel = min(kick_vel, self._max_vel)
             self._x_vel = kick_vel * dx / diff
             self._y_vel = kick_vel * dy / diff
@@ -319,7 +319,7 @@ class BallBasicModel(BallModel):
         player_pos_x, player_pos_y = collision_object.get_position_components_wcs()
         dx, dy = self._x_pos - player_pos_x, self._y_pos - player_pos_y
         diff = np.hypot(dx, dy)
-        if diff < 0.17:
+        if diff < 0.2:
             self._x_vel, self._y_vel = collision_object.get_velocity_components_wcs()
 
     def get_position(self):

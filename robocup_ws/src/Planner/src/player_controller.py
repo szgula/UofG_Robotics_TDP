@@ -19,29 +19,33 @@ from copy import deepcopy
 #Having us just worry about adding extra functionalities instead of coding all over again
 
 class PlayerController:  #(Robot)
+    goal_threshold = 0.2
+    intercept_threshold = 0.2
+    headed_threshold = 0.2
+    cover_threshold = 0.4
+
     #All in all, this class contains all actions that players can perform within the field.
     def __init__(self, player_id: int):
         self.read = True
         self.player = player_id
         self.points_to_visit = []
         self.current_goal = 0
-        self.goal_threshold = 0.2
         self.strategic_threshold = 2
-        self.intercept_threshold = 0.2
-        self.headed_threshold = 0.2
-        self.cover_threshold = 0.4
 
-    def has_ball(self, game_info: list) -> bool:
+
+    @staticmethod
+    def has_ball(game_info: list) -> bool:
         team = game_info[0]
         player_id = game_info[2]
         position = team.players_positions_efcs[player_id]
         ball_pos = team.ball_pos_efcs
         d = np.hypot(ball_pos.x - position.x, ball_pos.y - position.y)
-        if (d <= self.goal_threshold):
+        if (d <= PlayerController.goal_threshold):
             return True
         return False
+
     @staticmethod
-    def can_score(self, game_info: list, team_id):
+    def can_score(game_info: list, team_id):
         team = game_info[0]
         opponent = game_info[1]
         direct_kick_feasible, kick_x, kick_y = TeamMasterSupporting.check_if_direct_goal_feasible(None,
@@ -49,8 +53,9 @@ class PlayerController:  #(Robot)
                                                                                                  opponent.players_positions_wcs,
                                                                                                  team_id)
         return direct_kick_feasible, kick_x, kick_y
+
     @staticmethod
-    def score_goal(self,game_info,kick_x,kick_y):
+    def score_goal(game_info,kick_x,kick_y):
         team = game_info[0]
         main_player = team.players_positions_efcs[game_info[2]]
         temp_target_pos = Position(kick_x, kick_y, 0)
@@ -58,7 +63,8 @@ class PlayerController:  #(Robot)
         command = PlayerCommand(*raw_command)
         return command
 
-    def fastest_to_ball(self, game_info):
+    @staticmethod
+    def fastest_to_ball(game_info):
         team = game_info[0]
         enemy = game_info[1]
         out_tms = TeamMasterSupporting.get_soonest_contact(team, enemy)
@@ -69,7 +75,8 @@ class PlayerController:  #(Robot)
                                                                 team.ball_vel_efcs)
         return capture_pos, player_id_min_time
 
-    def get_closest_striker(self, game_info):
+    @staticmethod
+    def get_closest_striker(game_info):
         team = game_info[0]
         player_id = game_info[2]
         positions = team.players_positions_efcs
@@ -117,8 +124,8 @@ class PlayerController:  #(Robot)
         pass_candidate = self.get_team_pass_candidate(positions, player_id, net)
         return True, pass_candidate
 
-
-    def check_for_dribble(self, game_info: list) -> [bool]:
+    @staticmethod
+    def check_for_dribble(game_info: list) -> [bool]:
         team = game_info[0]
         opponents = game_info[1]
         ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
@@ -129,7 +136,8 @@ class PlayerController:  #(Robot)
                 return False
         return True
 
-    def pass_ball(self, game_info: list, candidate: int) -> PlayerCommand:
+    @staticmethod
+    def pass_ball(game_info: list, candidate: int) -> PlayerCommand:
         team = game_info[0]
         ball_vel = team.ball_vel_efcs
         main_player = team.players_positions_efcs[game_info[2]]
@@ -139,7 +147,8 @@ class PlayerController:  #(Robot)
         lv, rv, action = receive_and_pass_action(main_player,candidate_pos,ball, ball_vel)
         return PlayerCommand(lv,rv,action)
 
-    def dribble_ball(self, game_info: list) -> PlayerCommand:
+    @staticmethod
+    def dribble_ball(game_info: list) -> PlayerCommand:
         team = game_info[0]
         ball_vel = team.ball_vel_efcs
         main_player = team.players_positions_efcs[game_info[2]]
@@ -147,19 +156,20 @@ class PlayerController:  #(Robot)
         lv, rv, action = receive_and_dribble_action(main_player, Position(5,0,0), ball, ball_vel)
         return PlayerCommand(lv, rv, action)
 
-
-    def closest_to_ball(self,game_info: list) -> int:
+    @staticmethod
+    def closest_to_ball(game_info: list) -> int:
         team = game_info[0]
         player_id = game_info[2]
         positions = team.players_positions_efcs
-        position = [[position.x,position.y] for position in positions]
+        position = [[position.x, position.y] for position in positions]
         position = np.array(position).astype(float)
-        ball_pos = np.array([team.ball_pos_efcs.x,team.ball_pos_efcs.y]).astype(float)
+        ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
         idx = np.argmin(np.linalg.norm(ball_pos-position, axis=1))
         return idx
 
 #This function allows a striker to follow his teammate who is closest or has the ball in a parallel manner
-    def go_to_strategic_point(self,game_info, partner_id):
+    @staticmethod
+    def go_to_strategic_point(game_info, partner_id):
         team = game_info[0]
         player_id = game_info[2]
         ball_pos = team.ball_pos_efcs
@@ -211,14 +221,16 @@ class PlayerController:  #(Robot)
         lv, rv = go_to_fast(main_player,Position(danger_corner[0],danger_corner[1],0))
         return PlayerCommand(lv,rv,0)
 
-    def ball_in_zone(self, game_info, field_size):
+    @staticmethod
+    def ball_in_zone(game_info, field_size):
         team = game_info[0]
         ball_pos = team.ball_pos_efcs
         if(ball_pos.x < field_size[0]/2):
             return True
         return False
 
-    def get_closest_opponent(self, game_info):
+    @staticmethod
+    def get_closest_opponent(game_info):
         team = game_info[0]
         opponents = game_info[1]
         enemies_positions = opponents.players_positions_wcs
@@ -254,7 +266,7 @@ class PlayerController:  #(Robot)
         candidate_coord.x = float(candidate_coord.x) + 0.5
         candidate_coord.y = float(candidate_coord.y)
         delta_position = np.hypot(candidate_coord.x - main_player.x, candidate_coord.y - main_player.y)
-        if(delta_position <= self.cover_threshold):
+        if(delta_position <= PlayerController.cover_threshold):
             delta_position = np.array([ball_pos.x, ball_pos.y]) - np.array([main_player.x, main_player.y])
             calculated_heading = np.arctan2(delta_position[1],delta_position[0])
             lv, rv, action, _ = rotate_towards(main_player, calculated_heading)
@@ -284,24 +296,28 @@ class PlayerController:  #(Robot)
             candidate_coord = candidate_coord_2
         return candidate_coord
 
-    def get_team_pass_candidate(self, team: list, player_id: int, net: list) -> int:
+    @staticmethod
+    def get_team_pass_candidate(team: list, player_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in team]
         position[player_id] = np.array([np.inf, np.inf])
         team_pass_candidate = np.argmin(np.linalg.norm(position - np.array(net), axis=1))
         return team_pass_candidate
 
-    def get_opponent_pass_candidates(self, enemies: list, enemy_id: int, net: list) -> int:
+    @staticmethod
+    def get_opponent_pass_candidates( enemies: list, enemy_id: int, net: list) -> int:
         position = [np.array([position.x, position.y]) for position in enemies]
         position[enemy_id] = np.array([np.inf, np.inf])
         op1, op2, *_ = np.argpartition((np.linalg.norm(position - np.array(net), axis=1)), 1)
         return [op1, op2]
 
-    def get_dangerous_opponents(self, enemies, net):
+    @staticmethod
+    def get_dangerous_opponents(enemies, net):
         position = [np.array([position.x, position.y]) for position in enemies]
         op1, op2, *_ = np.argpartition((np.linalg.norm(position - np.array(net), axis=1)), 1)
         return [op1, op2]
 
-    def ball_is_free(self,game_info: list) -> [bool, int, int]:
+    @staticmethod
+    def ball_is_free(game_info: list) -> [bool, int, int]:
         team = game_info[0]
         opponents = game_info[1]
         ball_pos = np.array([team.ball_pos_efcs.x, team.ball_pos_efcs.y]).astype(float)
@@ -320,18 +336,17 @@ class PlayerController:  #(Robot)
         final_min = min(min_pos_team, min_pos_opponents)
 
         if(final_min == min_pos_team):
-            if(min_pos_team <= self.intercept_threshold):
+            if(min_pos_team <= PlayerController.intercept_threshold):
                 return False, 1, min_arg_team
         else:
-            if(min_pos_opponents <= self.intercept_threshold):
+            if(min_pos_opponents <= PlayerController.intercept_threshold):
                 return False, 0, min_arg_opponents
         return True, -1, -1
-
 
     def receive_ball(self, robot_state: Position, target: Position, ball_position: Position, ball_vel: Position, my_robot_id, player_to_pass):
         d = np.hypot(robot_state.x - ball_position.x, robot_state.y - ball_position.y)
         action = 0
-        if d < 0.17:
+        if d < 0.2:
             direct_kick_feasible, kick_x, kick_y = TeamMasterSupporting.check_if_direct_goal_feasible(None,
                                                                                                       self.team_position.ball_pos_efcs,
                                                                                                       self.opponents_position.players_positions_wcs,
@@ -348,36 +363,8 @@ class PlayerController:  #(Robot)
             command = PlayerCommand(*go_to_fast(robot_state, target), action)
         return command
 
-    def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
-        team = game_info[0]
-        obstacle_team = game_info[team_id]
-        player_id = game_info[2]
-        my_pos = team.players_positions_efcs[player_id]
-        safe_pos = obstacle_team.players_positions_wcs[obstacle_player_id]
-
-        lv, rv = self.go_around_the_point(my_pos, safe_pos, 0.3)
-        return PlayerCommand(lv, rv, 0)
-
-    def go_around_the_point(self, robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
-        """
-        Generate wheel velocities for robot to go around the point
-        Limitation: it assumes for now the robot is already on the circle around the point
-        R_vel - velocity of the faster wheel
-        direction: 1 = clockwise, -1 = counterclockwise
-        """
-        l = 0.05  # distance between wheels
-        K = 2 * radius / l
-        C = (K - 1) / (K + 1)
-        L_vel = R_vel * C
-        if abs(L_vel) > 3:  # 3 is current max rotation speed
-            L_vel = R_vel
-            R_vel = L_vel / C
-        if direction == 1:
-            return L_vel, R_vel
-        elif direction == -1:
-            return R_vel, L_vel
-
-    def go_to_ball(self,game_info: list) -> PlayerCommand:
+    @staticmethod
+    def go_to_ball(game_info: list) -> PlayerCommand:
         team = game_info[0]
         player_id = game_info[2]
         pos = team.players_positions_efcs[player_id]
@@ -385,7 +372,8 @@ class PlayerController:  #(Robot)
         lv, rv = go_to_fast(pos, ball_pos)
         return PlayerCommand(lv, rv, 0)
 
-    def go_to_ball_special(self,game_info: list) -> PlayerCommand:
+    @staticmethod
+    def go_to_ball_special(game_info: list) -> PlayerCommand:
         team = game_info[0]
         player_id = game_info[2]
         pos = team.players_positions_efcs[player_id]
@@ -397,7 +385,8 @@ class PlayerController:  #(Robot)
         lv, rv = go_to_fast(pos, go_to_pos)
         return PlayerCommand(lv, rv, 0)
 
-    def ball_headed(self, game_info):
+    @staticmethod
+    def ball_headed(game_info):
         team = game_info[0]
         receiver = team.players_positions_efcs[game_info[2]]
         ball_pos = team.ball_pos_efcs
@@ -407,11 +396,12 @@ class PlayerController:  #(Robot)
             time = TeamMasterSupporting.get_time_for_moving_ball(ball_pos, receiver, team.ball_vel_efcs, 0)
         headed_pos = TeamMasterSupporting.get_ball_pos_at_time(time, ball_pos, team.ball_vel_efcs)
         delta_distance = np.hypot(ball_pos.x - receiver.x, ball_pos.y - receiver.y)
-        if(delta_distance<=self.headed_threshold):
+        if(delta_distance <= PlayerController.headed_threshold):
             return True
         return False
 
-    def curvature(self, lookahead, pos, angle):
+    @staticmethod
+    def curvature(lookahead, pos, angle):
         side = np.sign(math.sin(angle) * (lookahead.x - pos.x) - math.cos(angle) * (lookahead.y - pos.y))
         a = -math.tan(angle)
         c = math.tan(angle) * pos.x - pos.y
@@ -430,13 +420,14 @@ class PlayerController:  #(Robot)
 
     def get_action(self, my_pos_efcs:Position):
         goal_pos = self.points_to_visit[self.current_goal]
-        if np.hypot(goal_pos.x - my_pos_efcs.x, goal_pos.y - my_pos_efcs.y) < self.goal_threshold:
+        if np.hypot(goal_pos.x - my_pos_efcs.x, goal_pos.y - my_pos_efcs.y) < PlayerController.goal_threshold:
             self.current_goal += 1
             self.current_goal %= 6
         l_rpm, r_rpm, = simple_go_to_action(my_pos_efcs, goal_pos)
         return PlayerCommand(l_rpm, r_rpm, 0)
 
-    def distance_judge(self, game_info: list, init_distance = None) -> [bool, int, int]:
+    @staticmethod
+    def distance_judge(game_info: list, init_distance = None) -> [bool, int, int]:
         team = game_info[0]
         enemy = game_info[1]
         player_id = game_info[2]
@@ -465,17 +456,19 @@ class PlayerController:  #(Robot)
 
         return False, -1, -1
 
-    def avoid_obstacle(self, game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
+    @staticmethod
+    def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
         team = game_info[0]
         obstacle_team = game_info[team_id]
         player_id = game_info[2]
         my_pos = team.players_positions_efcs[player_id]
         safe_pos = obstacle_team.players_positions_wcs[obstacle_player_id]
 
-        lv, rv = self.go_around_the_point(my_pos, safe_pos, 0.3)
+        lv, rv = PlayerController.go_around_the_point(my_pos, safe_pos, 0.3)
         return PlayerCommand(lv, rv, 0)
 
-    def go_around_the_point(self, robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
+    @staticmethod
+    def go_around_the_point(robot_state: Position, go_around_point: Position, radius, direction=1, R_vel=3):
         """
         Generate wheel velocities for robot to go around the point
         Limitation: it assumes for now the robot is already on the circle around the point
