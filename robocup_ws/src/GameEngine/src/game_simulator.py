@@ -97,6 +97,7 @@ class GameSimulator:
         if len(other_players_actions) != 0:
             self.ball.players_actions(other_players_actions)
         self.ball.step()
+        f_state_verified = self.sanity_check_ball_not_under_the_robot()
         goal_status = self.check_if_ball_in_net()
         return True, goal_status
 
@@ -141,7 +142,7 @@ class GameSimulator:
     def check_ball_collisions(self):
         x, y = self.ball.get_position()
         wall_collision = self.check_wall_collisions(x, y)
-        players_collision, collisions_with = self.check_players_collisions(x, y, 0, -1, -1)
+        players_collision, collisions_with = self.check_players_collisions(x, y, self.ball.radius, -1, -1)
         any_collision = True
         if wall_collision == CollisionTypes.NO and players_collision == CollisionTypes.NO:
             any_collision = False
@@ -200,6 +201,14 @@ class GameSimulator:
         else:
             return CollisionTypes.NO
 
+    def sanity_check_ball_not_under_the_robot(self):
+        x, y = self.ball.get_position()
+        players_collision, collisions_with = self.check_players_collisions(x, y, self.ball.radius, -1, -1)
+        if players_collision != CollisionTypes.NO:
+            # TODO: add recovery procedure
+            return False
+        return True
+
     def check_players_collisions(self, p_x, p_y, R, this_player_id, this_team_id):
         """
         Check if object is in collision with other players, list all collisions
@@ -212,7 +221,7 @@ class GameSimulator:
         """
         safe_collision_threshold = 1.1  # FIXME
         #p_x, p_y = player.get_position_components_wcs()
-        R = R + self._robots[0][0].radius  * safe_collision_threshold
+        R = (R + self._robots[0][0].radius)  * safe_collision_threshold
         collisions_list = []
 
         for team in range(self._number_of_teams):

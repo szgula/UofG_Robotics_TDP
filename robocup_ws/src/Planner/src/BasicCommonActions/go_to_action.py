@@ -85,17 +85,28 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
     if abs(angle_diff) < np.deg2rad(177):
         if angle_diff > 0:
             new_heading = clip_angle(ball_player_angle + np.pi/2)
+            heading_correction_for_change_direction = -np.deg2rad(45)
             direction = 1
         else:
             new_heading = clip_angle(ball_player_angle - np.pi/2)
+            heading_correction_for_change_direction = +np.deg2rad(45)
             direction = -1
+
+        new_heading = clip_angle(new_heading + heading_correction_for_change_direction)
         robot_heading_diff = calculate_angle_difference(robot_state.theta, new_heading)
         if abs(robot_heading_diff) > np.deg2rad(3):
             vel_l, vel_r, action, _ = rotate_towards(robot_state, new_heading)
+            forward_component = 3 - max(vel_l, vel_r)
+            vel_l += forward_component
+            vel_r += forward_component
         else:
-            r = np.hypot(dx_ball_player, dy_ball_player)
+            r = 1  # np.hypot(dx_ball_player, dy_ball_player)
             vel_l, vel_r = go_around_the_point(robot_state, None, r, direction)  #0.05)
             action = 0
+        #r = 0.5
+        #vel_l, vel_r = go_around_the_point(robot_state, None, r, direction)  # 0.05)
+        #action = 0
+
     else:
         vel_l = 0
         vel_r = 0
@@ -104,7 +115,7 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
 
 def receive_and_dribble_action(robot_state: Position, dribble_target: Position, ball_position: Position, ball_velocity: Position):
     """
-    This function generate the action to receive the ball, stop it, move ther
+    This function generate the action to receive the ball, stop it, move to dribble target
     """
     dx_ball_player = ball_position.x - robot_state.x
     dy_ball_player = ball_position.y - robot_state.y
