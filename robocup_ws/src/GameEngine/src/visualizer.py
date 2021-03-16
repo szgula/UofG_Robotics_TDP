@@ -30,7 +30,8 @@ class BasicVisualizer:
         self.fclock = pygame.time.Clock()
         self._robo_radius = 10
         self._field_line_color = (255, 255, 255)
-        self._field_color = (55, 170, 80)
+        self._offside_line_color = (255, 105, 180, 100)
+        self._field_color = (55, 170, 80, 0)
         self._robo_dirc_color = (255, 0, 0)
         self._field_line_width = 3
         self._center_circle_radius = 1 * display_scale
@@ -131,20 +132,45 @@ class BasicVisualizer:
         # pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
 
         player_id = 0
+        players_pos_0 = []
         for pos in state_players_1:
             pygame.draw.circle(self.screen, (173, 216, 230), (pos[:2] * self.scale).astype(float), self._robo_radius)
             self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            players_pos_0.append(pos[:2])
             player_id += 1
+        self.draw_offside_line(players_pos_0, ball, 0)
         player_id = 0
+        players_pos_1 = []
         for pos in state_players_2:
             pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2] * self.scale).astype(float), self._robo_radius)
             self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            players_pos_1.append(pos[:2])
             player_id += 1
+        self.draw_offside_line(players_pos_1, ball, 1)
         font = pygame.font.SysFont(None, 48)
         img = font.render(f'{score[0]} - {score[1]}', True, (255, 0, 0))
         self.screen.blit(img, (self._display_size[0] / 2 - 30, 0))
         pygame.display.flip()
         self.fclock.tick(self.fps)
+
+    def draw_offside_line(self, players_pose, ball_pose, team_id):
+        ball_x = ball_pose[0]
+        # 2 defenders (player ids are 0,1 ) and 1 goalkeeper(player id is 4)
+        plays_x = [players_pose[0][0], players_pose[1][0], players_pose[4][0]]
+        plays_x.sort()
+        player_x = plays_x[1]
+        x = player_x
+        if team_id == 0:
+            x = min(ball_x * self.scale, player_x * self.scale)
+            x = max(min(self._display_size_width / 2, x), self._margin)
+        else:
+            x = max(ball_x * self.scale, player_x * self.scale)
+            x = max(min(self._display_size_width - self._margin, x), self._display_size_width / 2)
+        # draw offside warning line
+        surface = self.screen.convert_alpha()
+        pygame.draw.line(surface, self._offside_line_color, [x, self._margin],
+                         [x, self._display_size_height - self._margin], self._field_line_width)
+        self.screen.blit(surface, (0, 0))
 
     def draw_direction_arrow_and_id_indicator(self, pos, player_id):
         start = np.array(pos[:2] * self.scale).reshape(2, 1)
