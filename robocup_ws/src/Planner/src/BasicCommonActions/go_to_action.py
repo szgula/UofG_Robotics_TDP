@@ -148,7 +148,7 @@ def receive_and_pass_action(robot_state: Position, pass_target: Position, ball_p
     angle_diff = calculate_angle_difference(ball_target_angle, ball_player_angle)
     if abs(angle_diff) < np.deg2rad(177):
         vel_l, vel_r, action = move_player_inline_with_ball_and_target(robot_state, ball_position, ball_player_angle,
-                                                                       ball_target_angle, inplace=True, radius=1)
+                                                                       ball_target_angle, inplace=False, radius=1)
 
     else:
         vel_l = 0
@@ -168,7 +168,7 @@ def receive_and_dribble_action(robot_state: Position, dribble_target: Position, 
     angle_diff = calculate_angle_difference(ball_target_angle, ball_player_angle)
     if abs(angle_diff) < np.deg2rad(177):
         vel_l, vel_r, action = move_player_inline_with_ball_and_target(robot_state, ball_position, ball_player_angle,
-                                                                       ball_target_angle, inplace=True, radius=1)
+                                                                       ball_target_angle, inplace=False, radius=1)
     else:
         vel_l, vel_r = simple_go_to_action(robot_state, dribble_target)
         action = 2
