@@ -30,14 +30,15 @@ class BasicVisualizer:
         self.fclock = pygame.time.Clock()
         self._robo_radius = 10
         self._field_line_color = (255, 255, 255)
-        self._field_color = (55, 170, 80)
+        self._offside_line_color = (255, 105, 180, 100)
+        self._field_color = (55, 170, 80, 0)
         self._robo_dirc_color = (255, 0, 0)
         self._field_line_width = 3
         self._center_circle_radius = 1 * display_scale
         self._goal_area_width = 1.5 * display_scale
         self._goal_area_height = 3 * display_scale
-        self._offside_area_radius = 0.8 * display_scale
-        self._offside_center_distance = 1.1 * display_scale
+        self._penalty_arc_area_radius = 0.8 * display_scale
+        self._penalty_arc_center_distance = 1.1 * display_scale
         self._margin = 0.3 * display_scale
         self._gate_height = 2 * display_scale
         self._gate_color = (170, 170, 170)
@@ -95,26 +96,26 @@ class BasicVisualizer:
                                 self._goal_area_width,
                                 self._goal_area_height)
         pygame.draw.rect(self.screen, self._field_line_color, right_goal_area_size, self._field_line_width)
-        # left offside area
-        left_offside_area_size = (self._margin + self._offside_center_distance - self._offside_area_radius,
-                                  (self._display_size_height / 2 - self._offside_area_radius),
-                                  2 * self._offside_area_radius, 2 * self._offside_area_radius)
-        r = self._offside_area_radius
-        l = self._goal_area_width - self._offside_center_distance
-        offside_area_theta = np.arccos(l / r)
-        pygame.draw.arc(self.screen, self._field_line_color, left_offside_area_size, -1 * offside_area_theta,
-                        offside_area_theta,
+        # left penalty_arc area
+        left_penalty_arc_area_size = (self._margin + self._penalty_arc_center_distance - self._penalty_arc_area_radius,
+                                  (self._display_size_height / 2 - self._penalty_arc_area_radius),
+                                  2 * self._penalty_arc_area_radius, 2 * self._penalty_arc_area_radius)
+        r = self._penalty_arc_area_radius
+        l = self._goal_area_width - self._penalty_arc_center_distance
+        penalty_arc_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, left_penalty_arc_area_size, -1 * penalty_arc_area_theta,
+                        penalty_arc_area_theta,
                         self._field_line_width)
-        # right offside area
-        right_offside_area_size = (
-        (self._display_size_width - self._margin - self._offside_center_distance - self._offside_area_radius),
-        (self._display_size_height / 2 - self._offside_area_radius),
-        2 * self._offside_area_radius, 2 * self._offside_area_radius)
-        r = self._offside_area_radius
-        l = self._goal_area_width - self._offside_center_distance
-        offside_area_theta = np.arccos(l / r)
-        pygame.draw.arc(self.screen, self._field_line_color, right_offside_area_size, -1 * offside_area_theta + np.pi,
-                        offside_area_theta + np.pi,
+        # right penalty_arc area
+        right_penalty_arc_area_size = (
+        (self._display_size_width - self._margin - self._penalty_arc_center_distance - self._penalty_arc_area_radius),
+        (self._display_size_height / 2 - self._penalty_arc_area_radius),
+        2 * self._penalty_arc_area_radius, 2 * self._penalty_arc_area_radius)
+        r = self._penalty_arc_area_radius
+        l = self._goal_area_width - self._penalty_arc_center_distance
+        penalty_arc_area_theta = np.arccos(l / r)
+        pygame.draw.arc(self.screen, self._field_line_color, right_penalty_arc_area_size, -1 * penalty_arc_area_theta + np.pi,
+                        penalty_arc_area_theta + np.pi,
                         self._field_line_width)
         # left gate
         left_gate_size = (self._margin, self._display_size_height / 2 - self._gate_height / 2,
@@ -131,20 +132,45 @@ class BasicVisualizer:
         # pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
 
         player_id = 0
+        players_pos_0 = []
         for pos in state_players_1:
             pygame.draw.circle(self.screen, (173, 216, 230), (pos[:2] * self.scale).astype(float), self._robo_radius)
             self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            players_pos_0.append(pos[:2])
             player_id += 1
+        self.draw_offside_line(players_pos_0, ball, 0)
         player_id = 0
+        players_pos_1 = []
         for pos in state_players_2:
             pygame.draw.circle(self.screen, (0, 255, 0), (pos[:2] * self.scale).astype(float), self._robo_radius)
             self.draw_direction_arrow_and_id_indicator(pos, player_id)
+            players_pos_1.append(pos[:2])
             player_id += 1
+        self.draw_offside_line(players_pos_1, ball, 1)
         font = pygame.font.SysFont(None, 48)
         img = font.render(f'{score[0]} - {score[1]}', True, (255, 0, 0))
         self.screen.blit(img, (self._display_size[0] / 2 - 30, 0))
         pygame.display.flip()
         self.fclock.tick(self.fps)
+
+    def draw_offside_line(self, players_pose, ball_pose, team_id):
+        ball_x = ball_pose[0]
+        # 2 defenders (player ids are 0,1 ) and 1 goalkeeper(player id is 4)
+        plays_x = [players_pose[0][0], players_pose[1][0], players_pose[4][0]]
+        plays_x.sort()
+        player_x = plays_x[1]
+        x = player_x
+        if team_id == 0:
+            x = min(ball_x * self.scale, player_x * self.scale)
+            x = max(min(self._display_size_width / 2, x), self._margin)
+        else:
+            x = max(ball_x * self.scale, player_x * self.scale)
+            x = max(min(self._display_size_width - self._margin, x), self._display_size_width / 2)
+        # draw offside warning line
+        surface = self.screen.convert_alpha()
+        pygame.draw.line(surface, self._offside_line_color, [x, self._margin],
+                         [x, self._display_size_height - self._margin], self._field_line_width)
+        self.screen.blit(surface, (0, 0))
 
     def draw_direction_arrow_and_id_indicator(self, pos, player_id):
         start = np.array(pos[:2] * self.scale).reshape(2, 1)
