@@ -1,23 +1,52 @@
 Introduction
 ============
 
-Why such robo games are important. What we can hope to achive and learn
-from implementing such projects. More than just a game.
+This project is about simulating a football game played by robots.
+Such projects give us a way to test out the theory we have learnt, develop an understanding
+of how to design and implement projects of a substantial size and to co-ordinate in a team.
+We can hope to learn various aspects of software engineering, logic, algorithms, mathematics
+and kinematics. Therefore this project becomes more than just a game, it is an opportunity to
+learn at a fast pace.
 
 Problem Statement
 -----------------
 
-Problem Statement given by McGookin. His expectations mentioned by him
-in the beginning.
+In a team we must create a simulation of a robot soccer team and the playing environment. 
+We must develop a playing environment, behavioural algorithms and a visualisation of the
+pitch and players.
+There must be two strikers, two defenders and a goalkeeper.
+We must consider either two, three of four wheeled robots.
+
+Note: Although the platform of choice was Matlab(with it's wonderfull packages
+such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with.  
+
 
 Objective
 ---------
+The ojective mirrors the problem statement. There are a few points to consider.
 
-Since the Problem Statement gave us the freedom to decide the scope of
-the project. The scope must be iterated here. We must also justify the
-use of ROS, Python etc. We must also justify the lowest level of
-abstraction here. We assume here that the controllers can impart an
-instantaneous angulat velocity to the wheels.
+### Level of Abstraction
+The problem statement gives us the freedom to choose the level of abstraction of the simulation.
+The level of abstraction here means the lowest level of detail of physics, the simulation
+is going to take under consideration.
+We have chosen that we can impart instantaeous angular velocity to the
+the wheels. This will make the interface of further development of functions easier for all team members.
+
+### Choice of ROS and Python as the Technology
+We have chosen ROS because
+
+We have chosen Python as it is slowly becoming the language of choice for scientific comuting.
+Python is also a general purpose language which means, any practice of it comes under the category
+of "Transfarable learning", i.e. the knowledge of the programming language carries over to application
+in other budding fields such as A.I. and Data Science. For scientific computing and linear algebra
+Python has a state of the art library called NumPy. Numpy has data structures, indexing and 
+syntax almost identical to Matlab, which makes it easy for people who are well versed in speaking Matlab
+to migrate to Pythondom.
+
+Therefore we must develop a playing environment, the laws of physics of the simulated world, with models of the ball
+and differential drive robots the behavioural algorithms of such robots. We shall do this implementing ROS and the
+Python programming language.
+
 
 Overview
 --------
@@ -40,11 +69,9 @@ the simulation is discussed.
 Coordinate System
 -----------------
 
-Coordinate System of the football field. Global and Ego-Coordinate
-systems, why two Co-ordinate Systems were used. The size of the field is
-10 units in horizontal direction and six units in the vertical
-direction. The origin lies at the centre of the field which makes x lie
-between -5 and 5 and y lie between -3 and 3.
+The size of the field is 10 units in horizontal direction and six units in the vertical
+direction. The origin lies at the centre of the field which makes x(horizontal direction) lie between -5 and 5 and
+y(vertical direction) lie between -3 and 3.
 
 Kinematics
 ----------
@@ -53,25 +80,54 @@ Kinematics
 
 The position of Robots and the ball are kept in a buffer and updated in
 syncronization with each step in the simulation. All robots and the ball
-have a common clock.
+have a common clock. The new position of a robot is determined by its instantaeous speed and heading
+direction. New position of the ball is determing by its instantaneous speed and a coefficient of friction.
 
 ### Ball Model
+The ball is considered a point object which is always decelerating due to a coeficient of friction. The ball
+will bounce according to the laws of elastic collision with round players and the walls of the field as discussed
+in the following sections.
+
+#### Mass
+Mass is defined in the model of the ball as 0.1 units.
+
+#### Position
+The ball class has a variable position (defined seperately for x and y coordintaes) 
+which gets updated at each step according to the formula:
+
+#### Velocity
+The velocity of the ball is defined for both x and y coordinates and is dependent on the friction (negative acceleration)
+and time elapsed according to the formula:
 
 #### Friction
-
-Friction is implemented in each step.
+The coefficient of dynamic friction is taken to be 0.01 and this gives negative acceleration to the ball at each step
+untill the next event happens.
 
 #### Collision
+Collision of the ball with a wall or with a player is an important event. Collision of a ball is identical to
+law of reflection of a light ray on a mirror, whether it is collision with a wall (flat surface) or a robot (round surface).
+Such collisions happen without any loss in the magnitude in the velocity of the ball. It is just the direction which
+changes. The incident angle equals the reflection angle eventually.
 
 #### Players Action
+During the play. The players can impart certain changes to ball's trajectory. 
+This in the balls code is called player's actions. They are kick and receive as explained below.
 
 ##### Kick
+In this event the ball is imparted a velocity which is along the direction of the vector joining the ball and the centre point of
+the player. The imparted velocity's magnitude is fixed. The kick is only executed only when the ball is within a certain
+distance threshold of the position of the player.
 
 ##### Receive
+In the reveive action, the velocity of the ball is imparted the velocity of the player which recieves the ball if the ball
+is within a certain distance threshold.
 
 ### Robot Model
 
-Differential drive Kinematics and how it was implemented.
+The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
+In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
+angle and the next position of the robot are derived out of the the angular velocities of the wheels.
+
 $$x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r)$$
 
 Basic Queries
