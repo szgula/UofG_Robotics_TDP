@@ -17,27 +17,27 @@ pitch and players.
 There must be two strikers, two defenders and a goalkeeper.
 We must consider either two, three of four wheeled robots.
 
-Note: Although the platform of choice was Matlab(with it's wonderfull packages
+Note: Although the platform of choice was Matlab(with it's wonderful packages
 such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with.  
 
 
 Objective
 ---------
-The ojective mirrors the problem statement. There are a few points to consider.
+The objective mirrors the problem statement. There are a few points to consider.
 
 ### Level of Abstraction
 The problem statement gives us the freedom to choose the level of abstraction of the simulation.
 The level of abstraction here means the lowest level of detail of physics, the simulation
 is going to take under consideration.
-We have chosen that we can impart instantaeous angular velocity to the
+We have chosen that we can impart instantaneous angular velocity to 
 the wheels. This will make the interface of further development of functions easier for all team members.
 
 ### Choice of ROS and Python as the Technology
 We have chosen ROS because
 
-We have chosen Python as it is slowly becoming the language of choice for scientific comuting.
+We have chosen Python as it is slowly becoming the language of choice for scientific computing.
 Python is also a general purpose language which means, any practice of it comes under the category
-of "Transfarable learning", i.e. the knowledge of the programming language carries over to application
+of "Transferable learning", i.e. the knowledge of the programming language carries over to application
 in other budding fields such as A.I. and Data Science. For scientific computing and linear algebra
 Python has a state of the art library called NumPy. Numpy has data structures, indexing and 
 syntax almost identical to Matlab, which makes it easy for people who are well versed in speaking Matlab
@@ -58,7 +58,7 @@ ROS nodes
 
 Since ROS implementation gives the structure to the project at the
 highest level it must be discussed first. Brief description of what is
-ROS. How it has been implemened.
+ROS. How it has been implemented.
 
 Physics
 =======
@@ -79,12 +79,12 @@ Kinematics
 ### Step
 
 The position of Robots and the ball are kept in a buffer and updated in
-syncronization with each step in the simulation. All robots and the ball
-have a common clock. The new position of a robot is determined by its instantaeous speed and heading
-direction. New position of the ball is determing by its instantaneous speed and a coefficient of friction.
+synchronization with each step in the simulation. All robots and the ball
+have a common clock. The new position of a robot is determined by its instantaneous speed and heading
+direction. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
 
 ### Ball Model
-The ball is considered a point object which is always decelerating due to a coeficient of friction. The ball
+The ball is considered a point object which is always decelerating due to a coefficient of friction. The ball
 will bounce according to the laws of elastic collision with round players and the walls of the field as discussed
 in the following sections.
 
@@ -92,7 +92,7 @@ in the following sections.
 Mass is defined in the model of the ball as 0.1 units.
 
 #### Position
-The ball class has a variable position (defined seperately for x and y coordintaes) 
+The ball class has a variable position (defined separately for x and y coordinates) 
 which gets updated at each step according to the formula:
 
 #### Velocity
@@ -101,7 +101,7 @@ and time elapsed according to the formula:
 
 #### Friction
 The coefficient of dynamic friction is taken to be 0.01 and this gives negative acceleration to the ball at each step
-untill the next event happens.
+until the next event happens.
 
 #### Collision
 Collision of the ball with a wall or with a player is an important event. Collision of a ball is identical to
@@ -119,14 +119,14 @@ the player. The imparted velocity's magnitude is fixed. The kick is only execute
 distance threshold of the position of the player.
 
 ##### Receive
-In the reveive action, the velocity of the ball is imparted the velocity of the player which recieves the ball if the ball
+In the receive action, the ball is imparted the velocity of the player which receives the ball if the ball
 is within a certain distance threshold.
 
 ### Robot Model
 
 The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
 In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
-angle and the next position of the robot are derived out of the the angular velocities of the wheels.
+angle and the next position of the robot are derived out of the angular velocities of the wheels.
 
 $$x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r)$$
 
