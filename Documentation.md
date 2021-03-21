@@ -138,32 +138,40 @@ query into the state of the simulator using various functions. Such
 functions are very important in the implementation of the decision tree
 which is discussed in the next chapter.
 
-Obstacle distance calculation
------------------------------
 
 Has ball or not
 ---------------
+This function returns a boolean value of true if a ball is in a close proximity(defined by a proximity threshold) 
+of the player. It is then assumed that the player posseses the ball and will take actions which are appropriate.
 
 Check if the ball is free
 -------------------------
-
-This function gives the value of True when the ball is outside the
+This function returns a value of True when the ball is outside the
 proximity zone of all the players on the field.
 
 Check if the ball is in the teams half
 --------------------------------------
+This returns true if the ball is in the first half of the field. This puts the team in defence mode in the decision tree.
 
 Check if goal can be scored or not
 ----------------------------------
+This function checks if a player who has a ball has a clear line of sight to the goal of the opposite team. It returns true
+if such is the case.
 
 Check if dribble is safe or not
 -------------------------------
+This function returns a boolean value of true if none of the opponents are present in an imaginary square around the
+ball.
+
 
 Check for pass
 --------------
 
 Check if the ball can be passed by a defender to another
 --------------------------------------------------------
+
+Obstacle distance calculation
+-----------------------------
 
 Check which player can reach fastest to the ball
 ------------------------------------------------
