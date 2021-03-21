@@ -1,7 +1,3 @@
----
-useMath: true
----
-
 Introduction
 ============
 
@@ -132,8 +128,6 @@ is within a certain distance threshold.
 The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
 In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
 angle and the next position of the robot are derived out of the angular velocities of the wheels and the wheel's radius.
-
-$ x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r) $
 
 Basic Queries
 =============
