@@ -139,45 +139,35 @@ functions are very important in the implementation of the decision tree
 which is discussed in the next chapter.
 
 
-Has ball or not
----------------
+### Has ball or not
 This function returns a boolean value of true if a ball is in a close proximity(defined by a proximity threshold) 
 of the player. It is then assumed that the player posseses the ball and will take actions which are appropriate.
 
-Check if the ball is free
--------------------------
+### Check if the ball is free
 This function returns a value of True when the ball is outside the
 proximity zone of all the players on the field.
 
-Check if the ball is in the teams half
---------------------------------------
+### Check if the ball is in the teams half
 This returns true if the ball is in the first half of the field. This puts the team in defence mode in the decision tree.
 
-Check if goal can be scored or not
-----------------------------------
+### Check if goal can be scored or not
 This function checks if a player who has a ball has a clear line of sight to the goal of the opposite team. It returns true
 if such is the case.
 
-Check if dribble is safe or not
--------------------------------
+### Check if dribble is safe or not
 This function returns a boolean value of true if none of the opponents are present in an imaginary square around the
 ball.
 
 
-Check for pass
---------------
+### Check for pass
 
-Check if the ball can be passed by a defender to another
---------------------------------------------------------
+### Check if the ball can be passed by a defender to another
 
-Obstacle distance calculation
------------------------------
+### Obstacle distance calculation
 
-Check which player can reach fastest to the ball
-------------------------------------------------
+### Check which player can reach fastest to the ball
 
-Check which striker of the team is closest
-------------------------------------------
+### Check which striker of the team is closest
 
 Basic Actions
 =============
@@ -185,32 +175,23 @@ Basic Actions
 Atomic actions such as going to a point, scoring the goal, passing the
 ball, collision avoidance etc.
 
-Go to point
------------
+### Go to point
 
-Go around a point
------------------
+### Go around a point
 
-Rotate towards a direction
---------------------------
+### Rotate towards a direction
 
-Pass the ball
--------------
+### Pass the ball
 
-Dribble ball
-------------
+### Dribble ball
 
-Avoid obstacle
---------------
+### Avoid obstacle
 
-Go to strategic point
----------------------
+### Go to strategic point
 
-Cover the opponent
-------------------
+### Cover the opponent
 
-Score the Goal
---------------
+### Score the Goal
 
 Strategy
 ========
