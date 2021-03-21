@@ -1,3 +1,7 @@
+----
+useMath: true
+---
+
 Introduction
 ============
 
