@@ -17,8 +17,9 @@ pitch and players.
 There must be two strikers, two defenders and a goalkeeper.
 We must consider either two, three of four wheeled robots.
 
-Note: Although the platform of choice was Matlab(with it's wonderful packages
-such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with.  
+Note: Although the platform of choice was Matlab(with it's convenient packages
+such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with for reasons
+staded in the next section.  
 
 
 Objective
@@ -78,10 +79,10 @@ Kinematics
 
 ### Step
 
-The position of Robots and the ball are kept in a buffer and updated in
+The position of Robots and the ball are kept in a buffer and updated together in
 synchronization with each step in the simulation. All robots and the ball
-have a common clock. The new position of a robot is determined by its instantaneous speed and heading
-direction. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
+have a common clock. The new position of a robot is determined by its instantaneous angular speed of the wheels, the delta t and
+the radius of the wheels. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
 
 ### Ball Model
 The ball is considered a point object which is always decelerating due to a coefficient of friction. The ball
@@ -100,8 +101,8 @@ The velocity of the ball is defined for both x and y coordinates and is dependen
 and time elapsed according to the formula:
 
 #### Friction
-The coefficient of dynamic friction is taken to be 0.01 and this gives negative acceleration to the ball at each step
-until the next event happens.
+The coefficient of dynamic friction is taken to be 0.01. This gives negative acceleration to the ball at each step
+until the next event happens and a new velocity is imparted to the ball.
 
 #### Collision
 Collision of the ball with a wall or with a player is an important event. Collision of a ball is identical to
@@ -126,18 +127,18 @@ is within a certain distance threshold.
 
 The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
 In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
-angle and the next position of the robot are derived out of the angular velocities of the wheels.
+angle and the next position of the robot are derived out of the angular velocities of the wheels and the wheel's radius.
 
-$$x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r)$$
+$ x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r) $
 
 Basic Queries
 =============
 
-For calculating the next action, the robots need to know the position of
-the ball and all the players on the field. For this the players can
+For calculating the next action, the players need to know the position of
+the ball and all other players on the field. For this the players can
 query into the state of the simulator using various functions. Such
 functions are very important in the implementation of the decision tree
-as discussed in the next chapter.
+which is discussed in the next chapter.
 
 Obstacle distance calculation
 -----------------------------
