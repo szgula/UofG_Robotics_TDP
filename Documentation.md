@@ -200,14 +200,17 @@ ball, collision avoidance etc. More complex actions such as pass and receive act
 Strategy
 ========
 
-Strategy implemented in the team master zero and one.
+There are two teams on the pitch namely team zero and team one. Although a lot of Basic actions
+are shared by both teams, there is a difference in their overall strategies. 
+Strategy of team zero utilizes a decision tree.
+
 ![Alt text](Images/decesionTree.png?raw=true "Title")
 ![Alt text](Images/decisionTreeTwo.png?raw=true "Title")
 
 Output
 ======
 
-Appreciaton of the output.
+Appreciation of the output.
 
 Future Scope of Improvisation
 =============================
