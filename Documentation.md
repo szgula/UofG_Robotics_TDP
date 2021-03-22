@@ -165,15 +165,19 @@ ball.
 
 ### Obstacle distance calculation
 
-### Check which player can reach fastest to the ball
 
-### Check which striker of the team is closest
+### Check which player can reach fastest to the ball
+This function returns the player id which can intercept a moving ball in the minimum possible time and also the position
+that the player needs to go to.
+
+### Check which striker of the team is closest to the ball
+This function returns the player id of the striker which is closest to the ball.
 
 Basic Actions
 =============
 
 Atomic actions such as going to a point, scoring the goal, passing the
-ball, collision avoidance etc.
+ball, collision avoidance etc. More complex actions such as pass and receive actions.
 
 ### Go to point
 
