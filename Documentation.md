@@ -203,9 +203,13 @@ Strategy
 There are two teams on the pitch namely team zero and team one. Although a lot of Basic actions
 are shared by both teams, there is a difference in their overall strategies. 
 Strategy of team zero utilizes a decision tree.
-
-![Alt text](Images/decesionTree.png?raw=true "Title")
-![Alt text](Images/decisionTreeTwo.png?raw=true "Title")
+The decision tree is a combination of if-else statements. The most important thing which determines the
+behaviour of the player is whether it has a ball or not. This is a basic query which is explained in the basic queries
+section. Below are two flow charts which show the decision tree in two parts, first when the player has the ball. Second
+when it doesn't have the ball.
+![Alt text](Images/decesionTree.png?raw=true "Decision tree when player has the ball")
+When the player doesn't have the ball:
+![Alt text](Images/decisionTreeTwo.png?raw=true "Decision tree when player doesn't have the ball")
 
 Output
 ======
