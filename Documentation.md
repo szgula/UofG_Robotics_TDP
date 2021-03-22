@@ -201,11 +201,12 @@ Strategy
 ========
 
 Strategy implemented in the team master zero and one.
+![Alt text](Images/decesionTree.png?raw=true "Title")
 
 Output
 ======
 
-Appreciation of the output.
+Appreciaton of the output.
 
 Future Scope of Improvisation
 =============================
