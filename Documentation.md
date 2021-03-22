@@ -208,6 +208,7 @@ behaviour of the player is whether it has a ball or not. This is a basic query w
 section. Below are two flow charts which show the decision tree in two parts, first when the player has the ball. Second
 when it doesn't have the ball.
 ![Alt text](Images/decesionTree.png?raw=true "Decision tree when player has the ball")
+
 When the player doesn't have the ball:
 ![Alt text](Images/decisionTreeTwo.png?raw=true "Decision tree when player doesn't have the ball")
 
