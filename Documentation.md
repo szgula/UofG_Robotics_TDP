@@ -209,6 +209,10 @@ section. Below are two flow charts which show the decision tree in two parts, fi
 when it doesn't have the ball.
 
 ![Alt text](Images/decesionTree.png?raw=true "Decision tree when player has the ball")
+<p align="center">
+  <img src="Images/decesionTree.png" />
+</p>
+
 
 When the player doesn't have the ball:
 
