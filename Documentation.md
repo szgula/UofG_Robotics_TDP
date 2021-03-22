@@ -202,6 +202,7 @@ Strategy
 
 Strategy implemented in the team master zero and one.
 ![Alt text](Images/decesionTree.png?raw=true "Title")
+![Alt text](Images/decisionTreeTwo.png?raw=true "Title")
 
 Output
 ======
