@@ -76,7 +76,7 @@ class BallActions(Enum):
 class BallBasicModel(BallModel):
     def __init__(self, init_x_pos: float, init_y_pos: float,
                  init_x_vel: float = 0, init_y_vel: float = 0, dt: float = 0.1, friction:float = 0.01, mass:float = 0.1,
-                 vel_bounce_coef: float = 0.8, radius:float = 0.01, ball_max_vel: float = 3):
+                 vel_bounce_coef: float = 0.8, radius:float = 0.05, ball_max_vel: float = 3):
         """
         :param dt: simulation time step
         """

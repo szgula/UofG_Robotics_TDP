@@ -29,6 +29,7 @@ class BasicVisualizer:
         self.fps = 500
         self.fclock = pygame.time.Clock()
         self._robo_radius = 10
+        self._ball_radius = 5
         self._field_line_color = (255, 255, 255)
         self._offside_line_color = (255, 105, 180, 100)
         self._field_color = (55, 170, 80, 0)
@@ -127,7 +128,7 @@ class BasicVisualizer:
                            self._goal_area_width / 3, self._gate_height)
         pygame.draw.rect(self.screen, self._field_line_color, right_gate_size, self._field_line_width)
         # ball
-        pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), 5)
+        pygame.draw.circle(self.screen, (255, 0, 0), (ball * self.scale).astype(float), self._ball_radius)
         # ball_point = (ball * self.scale).astype(float)
         # pygame.draw.rect(self.screen, (0, 0, 255), (ball_point[0] - 50, ball_point[1] - 50, 100, 100), 1)
 
