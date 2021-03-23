@@ -9,7 +9,7 @@ For continuing the football match, robots need to deal with that problem by itse
 
 There are two problems to be considered:
 
-1. When to do avoding obstacle?
+### 1. When to do avoding obstacle?
 
    Two situations need to be considered:
    
@@ -19,18 +19,22 @@ There are two problems to be considered:
    
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
    
-2. How to do avoding obstacle?
+### 2. How to do avoding obstacle?
    
    First stage: go back
    
-        This method seems to be useful for testing. However, when the robot of the opponents go foraward and attack, it can not do anything for preventing the opponents.
+   This method seems to be useful for testing. However, when the robot of the opponents go foraward and attack, it can not do anything for preventing the opponents.
         
    Second stage: Rotate slight away from the obstacle
    
-        It should work in the theory. However, in the code, since the program judges the distance every time and replanning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obastacle, it will be more closer and closer and can't break away from the obstacle.
+   It should work in the theory. However, in the code, since the program judges the distance every time and replanning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obastacle, it will be more closer and closer and can't break away from the obstacle.
    
    Final stage: Keep distance larger than threshold 
    
-        This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
+   This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
+
+### Shortcomings and future improvements:
+   
+   It is considered that comebine the avoid obstacle and dribble together, if the robot can dribble and avoid obstacle, it will the professional robotic football player and the match will be more interesting.
         
 </p>
