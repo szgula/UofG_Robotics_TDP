@@ -17,8 +17,9 @@ pitch and players.
 There must be two strikers, two defenders and a goalkeeper.
 We must consider either two, three of four wheeled robots.
 
-Note: Although the platform of choice was Matlab(with it's wonderful packages
-such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with.  
+Note: Although the platform of choice was Matlab(with it's convenient packages
+such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with for reasons
+staded in the next section.  
 
 
 Objective
@@ -78,10 +79,10 @@ Kinematics
 
 ### Step
 
-The position of Robots and the ball are kept in a buffer and updated in
+The position of Robots and the ball are kept in a buffer and updated together in
 synchronization with each step in the simulation. All robots and the ball
-have a common clock. The new position of a robot is determined by its instantaneous speed and heading
-direction. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
+have a common clock. The new position of a robot is determined by its instantaneous angular speed of the wheels, the delta t and
+the radius of the wheels. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
 
 ### Ball Model
 The ball is considered a point object which is always decelerating due to a coefficient of friction. The ball
@@ -100,8 +101,8 @@ The velocity of the ball is defined for both x and y coordinates and is dependen
 and time elapsed according to the formula:
 
 #### Friction
-The coefficient of dynamic friction is taken to be 0.01 and this gives negative acceleration to the ball at each step
-until the next event happens.
+The coefficient of dynamic friction is taken to be 0.01. This gives negative acceleration to the ball at each step
+until the next event happens and a new velocity is imparted to the ball.
 
 #### Collision
 Collision of the ball with a wall or with a player is an important event. Collision of a ball is identical to
@@ -126,89 +127,97 @@ is within a certain distance threshold.
 
 The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
 In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
-angle and the next position of the robot are derived out of the angular velocities of the wheels.
-
-$$x_n = x + (r_w  \Delta t / 2) (\omega_l + \omega_r)$$
+angle and the next position of the robot are derived out of the angular velocities of the wheels and the wheel's radius.
 
 Basic Queries
 =============
 
-For calculating the next action, the robots need to know the position of
-the ball and all the players on the field. For this the players can
+For calculating the next action, the players need to know the position of
+the ball and all other players on the field. For this the players can
 query into the state of the simulator using various functions. Such
 functions are very important in the implementation of the decision tree
-as discussed in the next chapter.
+which is discussed in the next chapter.
 
-Obstacle distance calculation
------------------------------
 
-Has ball or not
----------------
+### Has ball or not
+This function returns a boolean value of true if a ball is in a close proximity(defined by a proximity threshold) 
+of the player. It is then assumed that the player posseses the ball and will take actions which are appropriate.
 
-Check if the ball is free
--------------------------
-
-This function gives the value of True when the ball is outside the
+### Check if the ball is free
+This function returns a value of True when the ball is outside the
 proximity zone of all the players on the field.
 
-Check if the ball is in the teams half
---------------------------------------
+### Check if the ball is in the teams half
+This returns true if the ball is in the first half of the field. This puts the team in defence mode in the decision tree.
 
-Check if goal can be scored or not
-----------------------------------
+### Check if goal can be scored or not
+This function checks if a player who has a ball has a clear line of sight to the goal of the opposite team. It returns true
+if such is the case.
 
-Check if dribble is safe or not
--------------------------------
+### Check if dribble is safe or not
+This function returns a boolean value of true if none of the opponents are present in an imaginary square around the
+ball.
 
-Check for pass
---------------
 
-Check if the ball can be passed by a defender to another
---------------------------------------------------------
+### Check for pass
 
-Check which player can reach fastest to the ball
-------------------------------------------------
+### Check if the ball can be passed by a defender to another
 
-Check which striker of the team is closest
-------------------------------------------
+### Obstacle distance calculation
+
+
+### Check which player can reach fastest to the ball
+This function returns the player id which can intercept a moving ball in the minimum possible time and also the position
+that the player needs to go to.
+
+### Check which striker of the team is closest to the ball
+This function returns the player id of the striker which is closest to the ball.
 
 Basic Actions
 =============
 
 Atomic actions such as going to a point, scoring the goal, passing the
-ball, collision avoidance etc.
+ball, collision avoidance etc. More complex actions such as pass and receive actions.
 
-Go to point
------------
+### Go to point
 
-Go around a point
------------------
+### Go around a point
 
-Rotate towards a direction
---------------------------
+### Rotate towards a direction
 
-Pass the ball
--------------
+### Pass the ball
 
-Dribble ball
-------------
+### Dribble ball
 
-Avoid obstacle
---------------
+### Avoid obstacle
 
-Go to strategic point
----------------------
+### Go to strategic point
 
-Cover the opponent
-------------------
+### Cover the opponent
 
-Score the Goal
---------------
+### Score the Goal
 
 Strategy
 ========
 
-Strategy implemented in the team master zero and one.
+There are two teams on the pitch namely team zero and team one. Although a lot of Basic actions
+are shared by both teams, there is a difference in their overall strategies. 
+Strategy of team zero utilizes a decision tree.
+The decision tree is a combination of if-else statements. The most important thing which determines the
+behaviour of the player is whether it has a ball or not. This is a basic query which is explained in the basic queries
+section. Below are two flow charts which show the decision tree in two parts, first when the player has the ball. Second
+when it doesn't have the ball.
+
+<p align="center">
+  <img src="Images/decesionTree.png" />
+</p>
+
+
+When the player doesn't have the ball:
+
+<p align="center">
+  <img src="Images/decisionTreeTwo.png" />
+</p>
 
 Output
 ======
