@@ -155,22 +155,23 @@ class BasicVisualizer:
         self.fclock.tick(self.fps)
 
     def draw_offside_line(self, players_pose, ball_pose, team_id):
+        # get the ball position x
         ball_x = ball_pose[0]
-        # 2 defenders (player ids are 0,1 ) and 1 goalkeeper(player id is 4)
-        plays_x = [players_pose[0][0], players_pose[1][0], players_pose[4][0]]
+        # get the second-last players position x
+        plays_x = np.array(players_pose)[:, 0]
         plays_x.sort()
         player_x = plays_x[1]
-        x = player_x
+        offside_line_x = player_x
         if team_id == 0:
-            x = min(ball_x * self.scale, player_x * self.scale)
-            x = max(min(self._display_size_width / 2, x), self._margin)
+            offside_line_x = min(ball_x * self.scale, player_x * self.scale)
+            offside_line_x = max(min(self._display_size_width / 2, offside_line_x), self._margin)
         else:
-            x = max(ball_x * self.scale, player_x * self.scale)
-            x = max(min(self._display_size_width - self._margin, x), self._display_size_width / 2)
+            offside_line_x = max(ball_x * self.scale, player_x * self.scale)
+            offside_line_x = max(min(self._display_size_width - self._margin, offside_line_x), self._display_size_width / 2)
         # draw offside warning line
         surface = self.screen.convert_alpha()
-        pygame.draw.line(surface, self._offside_line_color, [x, self._margin],
-                         [x, self._display_size_height - self._margin], self._field_line_width)
+        pygame.draw.line(surface, self._offside_line_color, [offside_line_x, self._margin],
+                         [offside_line_x, self._display_size_height - self._margin], self._field_line_width)
         self.screen.blit(surface, (0, 0))
 
     def draw_direction_arrow_and_id_indicator(self, pos, player_id):
