@@ -21,6 +21,7 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 1. [Introduction](#introduction)
 2. [Methodology](#methodology)
    * [Simulation](docs/simulation.md)
+   * [Strategy](docs/strategy.md)
 2. [Results and Analysis]()
 2. [Team Performance Analysis]()
 2. [Conclusions]()
