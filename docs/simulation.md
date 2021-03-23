@@ -1,7 +1,7 @@
 # Simulation 
 ##### [Go back to main page](../Documentation.md)
 
-## Architecture
+# Architecture
 The game simulator was developed following two the design patterns: 
 * __Mediator__ (behavioral design pattern) - used to communicate all simulation components and provide an information flow
 * __Builder__ (creational design pattern) - used to initialized all simulation components
@@ -9,13 +9,18 @@ The game simulator was developed following two the design patterns:
 Such architecture enabled fast development, provide easy to use interfaces and allow flexibility to reuse
 existing code.
 
-## Components
+![Behavioural Design](Figures/Simulation_behavior.png)
+__Figure 1:__ Simulation module design from behavioural perspective
+![Creational Design](Figures/Simulation_creation.png)
+__Figure 2:__ Simulation module design from creational perspective
+
+# Components
 The game simulation was split into following components:
 1. ```game_simulator.py``` - wrapper for the game simulation  
 2. ```ball_model.py``` - physic model of the ball 
 3. ```robot_model.py``` - physic model of the robot/player
 
-### 1. GameSimulation
+## 1. GameSimulation
 The ```class GameSimulation``` is responsible for three main functionalities. 
 
 First, it initializes the game field with modeled objects - a ball and robots which represents the players. 
@@ -26,12 +31,12 @@ Other class responsibility is to handle calling time updates for each object in 
 
 Finally, this module represents the static environment of the game-field (goal nets, field frame).
 
-#### Coordinate system
+### Coordinate system
 The project use two main coordinate systems (CS): world coordinate system (wcs) and ego-field coordinate system (efcs). 
 Both CS have orgin in the middle of the field. The X axis of wcs is oriented towards right net, the Y axis and angles are defined according to right-hand rule.
 The efcs are defined for each team separately. The difference between wcs is in X axis orientation, which is towards the opponent's net.
 
-#### External interface
+### External interface
 __Initialization:__
 
 ```GSS = GameSimulator()```
@@ -58,7 +63,9 @@ __Interface for the visualization__
 
 ```self.get_positions_for_visualizer())```
 
-## 1. Models
+## 2. Models
 The ```class BallModel``` and ```class RobotModel``` are objects which are used to create a dynamics part of the simulation. All models use the shared interface to initialize objects, 
 perform the time update and react on the external actions (if available for the object).
+
+
 
