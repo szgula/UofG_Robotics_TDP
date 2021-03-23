@@ -12,7 +12,7 @@ results. Overall assessment of the project outcomes.
 7) References – List of documents used in this assignment.
 8) Appendices – Additional material not needed in the main sections of the report e.g.
 Matlab code, full Simulink block diagrams.
-   
+
 __!! The report should indicate which team members were responsible for authoring the separate sections of the report e.g. Section 1 (written by Team Member 1 and Team Member 2).__
 
 __!! All figures, tables and equations must be numbered in an appropriate manner. Figures and tables need to have a descriptive caption. Axes on graphs need to be labelled appropriately.__
@@ -226,27 +226,6 @@ ball, collision avoidance etc. More complex actions such as pass and receive act
 
 ### Score the Goal
 
-Strategy
-========
-
-There are two teams on the pitch namely team zero and team one. Although a lot of Basic actions
-are shared by both teams, there is a difference in their overall strategies. 
-Strategy of team zero utilizes a decision tree.
-The decision tree is a combination of if-else statements. The most important thing which determines the
-behaviour of the player is whether it has a ball or not. This is a basic query which is explained in the basic queries
-section. Below are two flow charts which show the decision tree in two parts, first when the player has the ball. Second
-when it doesn't have the ball.
-
-<p align="center">
-  <img src="Images/decesionTree.png" />
-</p>
-
-
-When the player doesn't have the ball:
-
-<p align="center">
-  <img src="Images/decisionTreeTwo.png" />
-</p>
 
 Output
 ======
