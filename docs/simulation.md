@@ -1,5 +1,5 @@
 # Simulation 
-##### [Go back to main page](./Documentation.md)
+##### [Go back to main page](Documentation.md)
 
 ## Architecture
 The game simulator was developed following two the design patterns: 
