@@ -1,4 +1,32 @@
-Introduction
+## Plan according to the report guidlines 
+1) Abstract – Brief summary of the report. Usually only half a page for a report of this type.
+2) Introduction – Outline of the project requirements in your own words.
+3) Methodology – Description of the implementation aspects for each stage of the
+assignment e.g. creation of model, validation, control system design, tests.
+4) Results and Analysis – Required results to illustrate completion of each stage and
+discussion of the analysis of these results.
+5) Team Performance Analysis – Evaluation of the performance of your team, including a
+comparison of your estimated and actual time/costs.
+6) Conclusions – Findings from the methodology implementation and analysis of the
+results. Overall assessment of the project outcomes.
+7) References – List of documents used in this assignment.
+8) Appendices – Additional material not needed in the main sections of the report e.g.
+Matlab code, full Simulink block diagrams.
+   
+__!! The report should indicate which team members were responsible for authoring the separate sections of the report e.g. Section 1 (written by Team Member 1 and Team Member 2).__
+
+__!! All figures, tables and equations must be numbered in an appropriate manner. Figures and tables need to have a descriptive caption. Axes on graphs need to be labelled appropriately.__
+
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Methodology](#methodology)
+   * [Simulation](docs/simulation.md)
+2. [Results and Analysis]()
+2. [Team Performance Analysis]()
+2. [Conclusions]()
+2. [References]()
+
+Introduction <a name="introduction"></a>
 ============
 
 This project is about simulating a football game played by robots.
@@ -8,7 +36,7 @@ We can hope to learn various aspects of software engineering, logic, algorithms,
 and kinematics. Therefore this project becomes more than just a game, it is an opportunity to
 learn at a fast pace.
 
-Problem Statement
+Problem Statement 
 -----------------
 
 In a team we must create a simulation of a robot soccer team and the playing environment. 
@@ -22,7 +50,7 @@ such as Simulink and Stateflow), we have chosen Python as the technology to go a
 staded in the next section.  
 
 
-Objective
+Objective <a name="methodology"></a>
 ---------
 The objective mirrors the problem statement. There are a few points to consider.
 
