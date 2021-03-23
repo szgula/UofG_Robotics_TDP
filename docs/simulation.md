@@ -67,5 +67,20 @@ __Interface for the visualization__
 The ```class BallModel``` and ```class RobotModel``` are objects which are used to create a dynamics part of the simulation. All models use the shared interface to initialize objects, 
 perform the time update and react on the external actions (if available for the object).
 
+### Ball
+
+The ball is modeled as a rigid body with a point mass attached in the center. The main force acting on the object is a friction force proportional to the object velocity.
+Another forces which acts on the ball are collision forces (with players or walls), kick forces and receive forces. 
+The collision forces are simulated as elastic collisions with energy lost. 
+The kick and receive actions acts on the ball to compensate the ball velocity (receive) or add extra velocity outwards the player (kick).
+
+### Robot
+
+Robots are modeled as a two wheels differential drive platform with cylindrical shape. 
+For the model just kinematics is implemented (no dynamics) - this is under assumption that motors are overpowered and there is no wheel skid.
+Except the wheel speed control, each robot has two additional actions: kicking and receiving the ball which only works if ball is within the robot's contact range.
+
+![Diff drive](https://www.researchgate.net/profile/Claus-Sorensen/publication/267335976/figure/fig4/AS:295717655597070@1447515991705/Two-wheeled-vehicle-derived-using-differential-steering.png)
+__Figure 3:__ Differential drive model (Hameed, 2009)
 
 
