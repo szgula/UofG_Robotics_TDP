@@ -218,7 +218,7 @@ ball, collision avoidance etc. More complex actions such as pass and receive act
 
 ### Dribble ball
 
-### * [Avoid Obstackes](docs/Actions_Avoid_Obstacle.md)
+### *[Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
 
 ### Go to strategic point
 
