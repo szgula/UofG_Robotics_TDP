@@ -25,15 +25,15 @@ There are two problems to be considered:
    
 ### 2. How to do avoding obstacle?
    
-   First stage: go back
+   #### First stage: go back
    
    This method seems to be useful for testing. However, when the robot of the opponents go foraward and attack, it can not do anything for preventing the opponents.
         
-   Second stage: Rotate slight away from the obstacle
+   #### Second stage: Rotate slight away from the obstacle
    
    It should work in the theory. However, in the code, since the program judges the distance every time and replanning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obastacle, it will be more closer and closer and can't break away from the obstacle.
    
-   Final stage: Keep distance larger than threshold
+   #### Final stage: Keep distance larger than threshold
    
    <p align="center">
       <img src="../Images/avoid_obstacle_theory.png" />
