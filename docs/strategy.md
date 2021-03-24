@@ -18,13 +18,13 @@ The tree's structure is divided into two main branches, one that is based on the
 1. If the player has the ball:
 
 <p align="center">
-  <img src="../Images/decesionTree.png" />
+  <img src="../Images/Decision_Tree_1.svg" />
 </p>
 
 2. If the player does not have the ball:
 
    <p align="center">
-     <img src="../Images/decisionTreeTwo.png" />
+     <img src="../Images/Decision_Tree_2.svg" />
    </p>
 
 The decision tree sets an importance to has_ball() since the goal of the team is to get the most goals and win the match. Therefore, the first node that the tree follows is if the player has the ball. If yes, then follow the flow of the first branch, if not then shift to the next one.
