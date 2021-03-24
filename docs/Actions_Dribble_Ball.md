@@ -16,12 +16,15 @@ Then the player need to find a appropriate angle towards the opponent gate. In o
 
 Finally, we select two goal point where locate in the the two corners of the goal area. When players in the upper half of the field, they will choose the upper one and vice versa.
 
-   <p align="center">
-      <img src="../Images/dribble_ball_goal_points.png" />
-   </p>
+<p align="center">
+   <img src="../Images/dribble_ball_goal_points.png" />
+</p>
    
 ### Where to place this action in desition tree?
+<p align="center">
+  <img src="../Images/decesionTree.png" />
+</p>
+
+As the above flow chart shows, we place this advanced action the the second priority. It is no doubt that the play should shoot if there are any chance to score, but there are still lots of consituations the player is stuck or too far to the gate. So the best choice in the situation is to dribble the ball to reach a closer position towards gate.
 
 ### Implement Detail
-
-### Result
