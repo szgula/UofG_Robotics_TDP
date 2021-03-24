@@ -27,4 +27,8 @@ Finally, we select two goal point where locate in the the two corners of the goa
 
 As the above flow chart shows, we place this advanced action the the second priority. It is no doubt that the play should shoot if there are any chance to score, but there are still lots of consituations the player is stuck or too far to the gate. So the best choice in the situation is to dribble the ball to reach a closer position towards gate.
 
-### Implement Detail
+### Schematic Map
+
+<p align="center">
+  <img src="../Images/dribble_ball_schematic_map.jpg" />
+</p>
