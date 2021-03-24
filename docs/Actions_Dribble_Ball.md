@@ -10,11 +10,18 @@ goal net as closer as possible.
 
 ### How the Dribbling ball action works?
 
+When the player want to dribble the ball. The first thing need to consider is to control the speed of the ball, so we will use receive_ball method to sychronize the ball speed with player.
+
+Then the player need to find a appropriate angle towards the opponent gate. In order to reach this position where could let player convenient to push the ball, we use go_around method to let the player rotate the ball until reach that position.
+
+Finally, we select two goal point where locate in the the two corners of the goal area. When players in the upper half of the field, they will choose the upper one and vice versa.
+
+   <p align="center">
+      <img src="../Images/dribble_ball_goal_points.png" />
+   </p>
+   
 ### Where to place this action in desition tree?
 
 ### Implement Detail
 
 ### Result
-
-<p align="center">
-</p>
