@@ -20,12 +20,36 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 # Table of Contents
 1. [Introduction](#introduction)
 2. [Methodology](#methodology)
+   * [Architecture + ROS (empty)]()
    * [Simulation](docs/simulation.md)
-   * [Strategy](docs/strategy.md)
-2. [Results and Analysis]()
-2. [Team Performance Analysis]()
-2. [Conclusions]()
-2. [References]()
+   * [Visualisation (empty)]()
+   * Strategy
+      * [Team 0](docs/strategy.md)
+      * [Team 1](docs/strategy.md)
+   * Basic Actions   
+      * [Go To Point (empty)]()
+      * [Go Around Point (empty)]()
+      * [Kick Ball (empty)]()
+   * Strategic Actions
+      * [Pass Ball (empty)]()
+      * [Score Goal (empty)]()  
+      * [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
+      * [Dribble](docs/Actions_Dribble_Ball.md)
+      * [Cover Opponent (empty)]()
+      * [Go To Strategic point (?? Empty - is it different than go to point)]()
+   * Supporting functions
+      * Kicking the ball
+         * Check if pass the ball is feasible 
+         * Find player to Pass
+         * Check if score the goal is feasible
+      * Capture the ball   
+         * Get the soonest ball collision
+         * Get capture position (ball pos at time)
+         * Get the soonest contact
+2. [Results and Analysis (empty)]()
+2. [Team Performance Analysis (empty)]()
+2. [Conclusions (empty)]()
+2. [References (empty)]()
 
 Introduction <a name="introduction"></a>
 ============
