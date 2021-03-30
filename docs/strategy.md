@@ -1,4 +1,4 @@
-# **Strategy**
+# **Strategy Team 1**
 
 **[Go back to main page](../Documentation.md)**
 

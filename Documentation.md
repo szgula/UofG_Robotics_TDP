@@ -24,7 +24,7 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
    * [Simulation](docs/simulation.md)
    * [Visualisation (empty)]()
    * Strategy
-      * [Team 0](docs/strategy.md)
+      * [Team 0](docs/strategy_team_0.md)
       * [Team 1](docs/strategy.md)
    * Basic Actions   
       * [Go To Point (empty)]()
@@ -114,74 +114,6 @@ Since ROS implementation gives the structure to the project at the
 highest level it must be discussed first. Brief description of what is
 ROS. How it has been implemented.
 
-Physics
-=======
-
-In this section the coordinate system of the field and the physics of
-the simulation is discussed.
-
-Coordinate System
------------------
-
-The size of the field is 10 units in horizontal direction and six units in the vertical
-direction. The origin lies at the centre of the field which makes x(horizontal direction) lie between -5 and 5 and
-y(vertical direction) lie between -3 and 3.
-
-Kinematics
-----------
-
-### Step
-
-The position of Robots and the ball are kept in a buffer and updated together in
-synchronization with each step in the simulation. All robots and the ball
-have a common clock. The new position of a robot is determined by its instantaneous angular speed of the wheels, the delta t and
-the radius of the wheels. New position of the ball is determine by its instantaneous speed and a coefficient of friction.
-
-### Ball Model
-The ball is considered a point object which is always decelerating due to a coefficient of friction. The ball
-will bounce according to the laws of elastic collision with round players and the walls of the field as discussed
-in the following sections.
-
-#### Mass
-Mass is defined in the model of the ball as 0.1 units.
-
-#### Position
-The ball class has a variable position (defined separately for x and y coordinates) 
-which gets updated at each step according to the formula:
-
-#### Velocity
-The velocity of the ball is defined for both x and y coordinates and is dependent on the friction (negative acceleration)
-and time elapsed according to the formula:
-
-#### Friction
-The coefficient of dynamic friction is taken to be 0.01. This gives negative acceleration to the ball at each step
-until the next event happens and a new velocity is imparted to the ball.
-
-#### Collision
-Collision of the ball with a wall or with a player is an important event. Collision of a ball is identical to
-law of reflection of a light ray on a mirror, whether it is collision with a wall (flat surface) or a robot (round surface).
-Such collisions happen without any loss in the magnitude in the velocity of the ball. It is just the direction which
-changes. The incident angle equals the reflection angle eventually.
-
-#### Players Action
-During the play. The players can impart certain changes to ball's trajectory. 
-This in the balls code is called player's actions. They are kick and receive as explained below.
-
-##### Kick
-In this event the ball is imparted a velocity which is along the direction of the vector joining the ball and the centre point of
-the player. The imparted velocity's magnitude is fixed. The kick is only executed only when the ball is within a certain
-distance threshold of the position of the player.
-
-##### Receive
-In the receive action, the ball is imparted the velocity of the player which receives the ball if the ball
-is within a certain distance threshold.
-
-### Robot Model
-
-The robots are implemented using two wheel differential drive kinematics because they are also easier to implement physically.
-In the differential drive model each wheel is imparted with an independent angular velocity. The speed, the heading
-angle and the next position of the robot are derived out of the angular velocities of the wheels and the wheel's radius.
-
 Basic Queries
 =============
 
@@ -232,23 +164,18 @@ Basic Actions
 Atomic actions such as going to a point, scoring the goal, passing the
 ball, collision avoidance etc. More complex actions such as pass and receive actions.
 
-### Go to point
+### Basic Actions   
+  * [Go To Point (empty)]()
+  * [Go Around Point (empty)]()
+  * [Kick Ball (empty)]()
+### Strategic Actions
+  * [Pass Ball (empty)]()
+  * [Score Goal (empty)]()  
+  * [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
+  * [Dribble](docs/Actions_Dribble_Ball.md)
+  * [Cover Opponent (empty)]()
+  * [Go To Strategic point (?? Empty - is it different than go to point)]()
 
-### Go around a point
-
-### Rotate towards a direction
-
-### Pass the ball
-
-### Dribble ball
-
-### [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
-
-### Go to strategic point
-
-### Cover the opponent
-
-### Score the Goal
 
 
 Output
