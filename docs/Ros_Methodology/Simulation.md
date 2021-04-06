@@ -9,9 +9,9 @@ The game simulator was developed following two the design patterns:
 Such architecture enabled fast development, provide easy to use interfaces and allow flexibility to reuse
 existing code.
 
-![Behavioural Design](Figures/Simulation_behavior.png)
+![Behavioural Design](../Figures/Simulation_behavior.png)
 __Figure 1:__ Simulation module design from behavioural perspective
-![Creational Design](Figures/Simulation_creation.png)
+![Creational Design](../Figures/Simulation_creation.png)
 __Figure 2:__ Simulation module design from creational perspective
 
 # Components
