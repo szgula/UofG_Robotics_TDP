@@ -16,7 +16,7 @@
 <div align="center">
   
 [![Contributors](https://img.shields.io/github/contributors/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/graphs/contributors)
-[![Forks](https://img.shields.io/github/forks/szgula/UofG_Robotics_TDP_Buddy.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/network/members)
+[![Forks](https://img.shields.io/github/forks/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/network/members)
 [![Stars](https://img.shields.io/github/stars/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/stargazers)
 [![Issues](https://img.shields.io/github/issues/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/issues)
 [![License](https://img.shields.io/github/license/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/blob/main/LICENSE)
