@@ -1,6 +1,6 @@
 # **Strategy Team 0**
 
-**[Go back to main page](../Documentation.md)**
+**[Go back to main page](../../Documentation.md)**
 
 ## Structure
 
@@ -20,7 +20,7 @@ If such action is found, the base action is overwritten with initiative action.
 The goalkeeper operation space is defined as an ellipse with a centre in the middle of the net (Figure 1). 
 The robot desire position is defined as the cross point of the ellipse and vector ball to net-mid-point.  
 
-![Creational Design](../Images/goal_keeper.png)
+![Creational Design](../../Images/goal_keeper.png)
 __Figure 1:__ Goalkeeper operation space
 
 
@@ -37,17 +37,17 @@ Also, in Figure 3, the operation region for the left defender is presented by tr
 The right defender has mirrored along the x-axis zone.
 
 
-![Creational Design](../Images/pose_defence_1.png)
+![Creational Design](../../Images/pose_defence_1.png)
 __Figure 2:__ Defenders position when the ball is far from team's net
 
-![Creational Design](../Images/pose_defence_2.png)
+![Creational Design](../../Images/pose_defence_2.png)
 __Figure 3:__ Defenders position when the ball is close from team's net and left defender operation region.
 
 ### Strikers
 
 Strikers have a predefined base position which is a sub-optimal position (Figure 4) to conduct the attack and to receive the ball from defenders.
 
-![Creational Design](../Images/Strikers.png)
+![Creational Design](../../Images/Strikers.png)
 __Figure 4:__ Strikers base position
 
 
