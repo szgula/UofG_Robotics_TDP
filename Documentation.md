@@ -20,23 +20,23 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 # Table of Contents
 1. [Introduction - Omar](#introduction)
 2. [Methodology](#methodology)
-   * [Architecture + ROS (empty - Szymon & Omar)]()
+   * [Architecture + ROS (empty - Szymon & Omar)](docs/Architecture.md)
    * [Simulation](docs/simulation.md)
-   * [Visualisation (empty - Feng)]()
+   * [Visualisation (empty - Feng)](docs/Visualisation.md)
    * Strategy
       * [Team 0](docs/strategy_team_0.md)
       * [Team 1](docs/strategy.md)
    * Basic Actions   
-      * [Go To Point (empty - Shrey)]()
-      * [Go Around Point (empty - Shrey)]()
-      * [Kick Ball (empty - Shrey)]()
+      * [Go To Point (empty - Shrey)](docs/Go_To_Point.md)
+      * [Go Around Point (empty - Shrey)](docs/Go_Around_Point.md)
+      * [Kick Ball (empty - Shrey)](docs/Kick_Ball.md)
    * Strategic Actions
-      * [Pass Ball (empty - Szymon)]()
-      * [Score Goal (empty - Ivan)]()  
+      * [Pass Ball (empty - Szymon)](docs/Pass_Ball.md)
+      * [Score Goal (empty - Ivan)](docs/Score_Goal.md)  
       * [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
       * [Dribble](docs/Actions_Dribble_Ball.md)
-      * [Cover Opponent (empty - Ivan)]()
-      * [Go To Strategic point (Empty - Omar)]()
+      * [Cover Opponent (empty - Ivan)](docs/Cover_Opponent.md)
+      * [Go To Strategic point (Empty - Omar)](docs/Go_To_Strategic_point.md)
    * Supporting functions
       * Kicking the ball
          * Check if pass the ball is feasible (Feng)
