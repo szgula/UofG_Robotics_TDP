@@ -1,6 +1,6 @@
 # **Strategy Team 1**
 
-**[Go back to main page](../Documentation.md)**
+**[Go back to main page](../../Documentation.md)**
 
 ## Decision Making
 
@@ -34,7 +34,7 @@ To be able to differentiate between one player and another, the tree includes a 
 An example of the flow that the tree follows can be found below:
 
 <p align="center">
-  <img src="../Images/Decision Flow.png" />
+  <img src="../../Images/Decision Flow.png" />
 </p>
 
 
@@ -44,7 +44,7 @@ Regarding the command flow, every player is commanded by one controller, Player 
 An example of the control system:
 
 <p align="center">
-  <img src="../Images/Control System.png" />
+  <img src="../../Images/Control System.png" />
 </p>
 
 The diagram above states the following:
