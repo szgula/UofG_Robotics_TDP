@@ -20,39 +20,39 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 # Table of Contents
 1. [Introduction - Omar](#introduction)
 2. [Methodology](#methodology)
-   * [Architecture + ROS (empty - Szymon & Omar)](docs/Architecture.md)
-   * [Simulation](docs/simulation.md)
-   * [Visualisation (empty - Feng)](docs/Visualisation.md)
+   * [Architecture + ROS (empty - Szymon & Omar)](docs/Architecture/Architecture.md)
+   * [Simulation](docs/Simulation/Simulation.md)
+   * [Visualisation (empty - Feng)](docs/Visualisation/Visualisation.md)
    * Strategy
-      * [Team 0](docs/strategy_team_0.md)
-      * [Team 1](docs/strategy.md)
+      * [Team 0](docs/Strategy/Strategy_Team_0.md)
+      * [Team 1](docs/Strategy/Strategy_Team_1.md)
    * Basic Actions   
-      * [Go To Point (empty - Shrey)](docs/Go_To_Point.md)
-      * [Go Around Point (empty - Shrey)](docs/Go_Around_Point.md)
-      * [Kick Ball (empty - Shrey)](docs/Kick_Ball.md)
+      * [Go To Point (empty - Shrey)](docs/Basic_Actions/Go_To_Point.md)
+      * [Go Around Point (empty - Shrey)](docs/Basic_Actions/Go_Around_Point.md)
+      * [Kick Ball (empty - Shrey)](docs/Basic_Actions/Kick_Ball.md)
    * Strategic Actions
-      * [Pass Ball (empty - Szymon)](docs/Pass_Ball.md)
-      * [Score Goal (empty - Ivan)](docs/Score_Goal.md)  
-      * [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
-      * [Dribble](docs/Actions_Dribble_Ball.md)
-      * [Cover Opponent (empty - Ivan)](docs/Cover_Opponent.md)
-      * [Go To Strategic point (Empty - Omar)](docs/Go_To_Strategic_point.md)
+      * [Pass Ball (empty - Szymon)](docs/Strategic_Actions/Pass_Ball.md)
+      * [Score Goal (empty - Ivan)](docs/Strategic_Actions/Score_Goal.md)  
+      * [Avoid Obstacles](docs/Strategic_Actions/Actions_Avoid_Obstacle.md)
+      * [Dribble](docs/Strategic_Actions/Actions_Dribble_Ball.md)
+      * [Cover Opponent (empty - Ivan)](docs/Strategic_Actions/Cover_Opponent.md)
+      * [Go To Strategic point (Empty - Omar)](docs/Strategic_Actions/Go_To_Strategic_point.md)
    * Supporting functions
       * Kicking the ball
-         * Check if pass the ball is feasible (Feng)
-         * Find player to Pass  (Omar)
-         * Check if score the goal is feasible (Ivan)
+         * [Check if pass the ball is feasible (Feng)](docs/Supporting_functions/Ball_Pass.md)
+         * [Find player to Pass  (Omar)](docs/Supporting_functions/Player_Pass.md)
+         * [Check if score the goal is feasible (Ivan)](docs/Supporting_functions/Goal_Pass.md)
       * Capture the ball   
-         * Get the soonest ball collision (Szymon)
-         * Get capture position (ball pos at time) (Szymon)
-         * Get the soonest contact (Szymon )
-2. [Results and Analysis (Feng & Ivan) (empty)]()
+         * [Get the soonest ball collision (Szymon)](docs/Supporting_functions/Soonest_Ball.md)
+         * [Get capture position (ball pos at time) (Szymon)](docs/Supporting_functions/Capture_Position.md)
+         * [Get the soonest contact (Szymon)](docs/Supporting_functions/Soonest_Contact.md)
+2. [Results and Analysis (Feng & Ivan) (empty)](docs/Supporting_functions/Ball_Pass.md)
    * Experiments
    * Test cases
    * etc
-4. [Team Performance Analysis (empty)]()
-5. [Conclusions (Omar) (empty)]()
-6. [References (empty)]()
+4. [Team Performance Analysis (empty)](docs/Team_Performance.md)
+5. [Conclusions (Omar) (empty)](docs/Conclusions.md)
+6. [References (empty)](docs/References.md/)
 
 Introduction <a name="introduction"></a>
 ============
