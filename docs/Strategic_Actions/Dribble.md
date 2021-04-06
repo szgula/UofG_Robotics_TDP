@@ -22,7 +22,7 @@ Finally, we select two goal point where locate in the the two corners of the goa
    
 ### Where to place this action in desition tree?
 <p align="center">
-  <img src="../../Images/Decesion_Tree_1.svg" />
+  <img src="../../Images/Decision_Tree_1.svg" />
 </p>
 
 As the above flow chart shows, we place this advanced action the the second priority. It is no doubt that the play should shoot if there are any chance to score, but there are still lots of consituations the player is stuck or too far to the gate. So the best choice in the situation is to dribble the ball to reach a closer position towards gate.
