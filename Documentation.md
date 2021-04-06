@@ -18,38 +18,41 @@ __!! The report should indicate which team members were responsible for authorin
 __!! All figures, tables and equations must be numbered in an appropriate manner. Figures and tables need to have a descriptive caption. Axes on graphs need to be labelled appropriately.__
 
 # Table of Contents
-1. [Introduction](#introduction)
+1. [Introduction - Omar](#introduction)
 2. [Methodology](#methodology)
-   * [Architecture + ROS (empty)]()
+   * [Architecture + ROS (empty - Szymon & Omar)]()
    * [Simulation](docs/simulation.md)
-   * [Visualisation (empty)]()
+   * [Visualisation (empty - Feng)]()
    * Strategy
       * [Team 0](docs/strategy_team_0.md)
       * [Team 1](docs/strategy.md)
    * Basic Actions   
-      * [Go To Point (empty)]()
-      * [Go Around Point (empty)]()
-      * [Kick Ball (empty)]()
+      * [Go To Point (empty - Shrey)]()
+      * [Go Around Point (empty - Shrey)]()
+      * [Kick Ball (empty - Shrey)]()
    * Strategic Actions
-      * [Pass Ball (empty)]()
-      * [Score Goal (empty)]()  
+      * [Pass Ball (empty - Szymon)]()
+      * [Score Goal (empty - Ivan)]()  
       * [Avoid Obstacles](docs/Actions_Avoid_Obstacle.md)
       * [Dribble](docs/Actions_Dribble_Ball.md)
-      * [Cover Opponent (empty)]()
-      * [Go To Strategic point (?? Empty - is it different than go to point)]()
+      * [Cover Opponent (empty - Ivan)]()
+      * [Go To Strategic point (Empty - Omar)]()
    * Supporting functions
       * Kicking the ball
-         * Check if pass the ball is feasible 
-         * Find player to Pass
-         * Check if score the goal is feasible
+         * Check if pass the ball is feasible (Feng)
+         * Find player to Pass  (Omar)
+         * Check if score the goal is feasible (Ivan)
       * Capture the ball   
-         * Get the soonest ball collision
-         * Get capture position (ball pos at time)
-         * Get the soonest contact
-2. [Results and Analysis (empty)]()
-2. [Team Performance Analysis (empty)]()
-2. [Conclusions (empty)]()
-2. [References (empty)]()
+         * Get the soonest ball collision (Szymon)
+         * Get capture position (ball pos at time) (Szymon)
+         * Get the soonest contact (Szymon )
+2. [Results and Analysis (Feng & Ivan) (empty)]()
+   * Experiments
+   * Test cases
+   * etc
+4. [Team Performance Analysis (empty)]()
+5. [Conclusions (Omar) (empty)]()
+6. [References (empty)]()
 
 Introduction <a name="introduction"></a>
 ============
