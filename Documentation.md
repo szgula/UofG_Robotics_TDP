@@ -20,9 +20,9 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 # Table of Contents
 1. [Introduction - Omar](#introduction)
 2. [Methodology](#methodology)
-   * [Architecture + ROS (empty - Szymon & Omar)](docs/Architecture/Architecture.md)
-   * [Simulation](docs/Simulation/Simulation.md)
-   * [Visualisation (empty - Feng)](docs/Visualisation/Visualisation.md)
+   * [Architecture + ROS (empty - Szymon & Omar)](docs/Ros_Methodology/Architecture.md)
+   * [Simulation](docs/Ros_Methodology/Simulation.md)
+   * [Visualisation (empty - Feng)](docs/Ros_Methodology/Visualisation.md)
    * Strategy
       * [Team 0](docs/Strategy/Strategy_Team_0.md)
       * [Team 1](docs/Strategy/Strategy_Team_1.md)
@@ -39,14 +39,14 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
       * [Go To Strategic point (Empty - Omar)](docs/Strategic_Actions/Go_To_Strategic_point.md)
    * Supporting functions
       * Kicking the ball
-         * [Check if pass the ball is feasible (Feng)](docs/Supporting_functions/Ball_Pass.md)
-         * [Find player to Pass  (Omar)](docs/Supporting_functions/Player_Pass.md)
-         * [Check if score the goal is feasible (Ivan)](docs/Supporting_functions/Goal_Pass.md)
+         * [Check if pass the ball is feasible (Feng)](docs/Supporting_functions/Kick_Ball/Ball_Pass.md)
+         * [Find player to Pass  (Omar)](docs/Supporting_functions/Kick_Ball/Player_Pass.md)
+         * [Check if score the goal is feasible (Ivan)](docs/Supporting_functions/Kick_Ball/Goal_Pass.md)
       * Capture the ball   
-         * [Get the soonest ball collision (Szymon)](docs/Supporting_functions/Soonest_Ball.md)
-         * [Get capture position (ball pos at time) (Szymon)](docs/Supporting_functions/Capture_Position.md)
-         * [Get the soonest contact (Szymon)](docs/Supporting_functions/Soonest_Contact.md)
-2. [Results and Analysis (Feng & Ivan) (empty)](docs/Supporting_functions/Ball_Pass.md)
+         * [Get the soonest ball collision (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Ball.md)
+         * [Get capture position (ball pos at time) (Szymon)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
+         * [Get the soonest contact (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Contact.md)
+2. [Results and Analysis (Feng & Ivan) (empty)](docs/Result_Analysis.md)
    * Experiments
    * Test cases
    * etc
