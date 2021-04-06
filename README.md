@@ -8,6 +8,11 @@
     Robotics Team Design Project at University of Glasgow
     <br />
     <br />
+    <a href=""><img height=40 src="Images/Log/youtube_social_icon_red.png"></img></a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href=""><img height=40 src="Images/Log/f_logo_RGB-Blue_1024.png"></img></a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href=""><img height=40 src="Images/Log/2021%20Twitter%20logo%20-%20blue.png"></img></a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <br />
+  
 <div align="center">
   
 [![Contributors](https://img.shields.io/github/contributors/szgula/UofG_Robotics_TDP.svg?style=for-the-badge)](https://github.com/szgula/UofG_Robotics_TDP/graphs/contributors)
