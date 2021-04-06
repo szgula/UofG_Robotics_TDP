@@ -1,6 +1,6 @@
 # **Actions**
 
-**[Go back to main page](../Documentation.md)**
+**[Go back to main page](../../Documentation.md)**
 
 ## Avoid Obstacle
 
@@ -18,7 +18,7 @@ There are two problems to be considered:
         According to different situations in the decision tree.
    
    <p align="center">
-      <img src="../Images/avoid_obstacle_flow.png" />
+      <img src="../../Images/avoid_obstacle_flow.png" />
    </p>
    
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
@@ -36,7 +36,7 @@ There are two problems to be considered:
    #### Final stage: Keep distance larger than threshold
    
    <p align="center">
-      <img src="../Images/avoid_obstacle_theory.png" />
+      <img src="../../Images/avoid_obstacle_theory.png" />
    </p>
    
    This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
