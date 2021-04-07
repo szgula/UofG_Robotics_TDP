@@ -19,6 +19,8 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 
 # Table of Contents
 1. [Introduction - Omar](#introduction)
+   - [Problem Statement](#problem statement)
+   - [Objective](#objective)
 2. [Methodology](#methodology)
    * [Architecture + ROS (empty - Szymon & Omar)](docs/Ros_Methodology/Architecture.md)
    * [Simulation](docs/Ros_Methodology/Simulation.md)
@@ -46,7 +48,7 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
          * [Get the soonest ball collision (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Ball.md)
          * [Get capture position (ball pos at time) (Szymon)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
          * [Get the soonest contact (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Contact.md)
-2. [Results and Analysis (Feng & Ivan) (empty)](docs/Result_Analysis.md)
+3. [Results and Analysis (Feng & Ivan) (empty)](docs/Result_Analysis.md)
    * Experiments
    * Test cases
    * etc
