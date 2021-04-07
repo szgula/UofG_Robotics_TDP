@@ -37,8 +37,8 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
       * [Score Goal (empty - Ivan)](docs/Strategic_Actions/Score_Goal.md)  
       * [Avoid Obstacles](docs/Strategic_Actions/Avoid_Obstacle.md)
       * [Dribble](docs/Strategic_Actions/Dribble.md)
-      * [Cover Opponent (empty - Ivan)](docs/Strategic_Actions/Cover_Opponent.md)
-      * [Go To Strategic point (Empty - Omar)](docs/Strategic_Actions/Go_To_Strategic_point.md)
+      * [Cover Opponent (empty - Omar)](docs/Strategic_Actions/Cover_Opponent.md)
+      * [Go To Strategic point (Empty - Ivan)](docs/Strategic_Actions/Go_To_Strategic_point.md)
    * Supporting functions
       * Kicking the ball
          * [Check if pass the ball is feasible (Feng)](docs/Supporting_functions/Kick_Ball/Ball_Pass.md)
