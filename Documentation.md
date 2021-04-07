@@ -18,7 +18,7 @@ __!! The report should indicate which team members were responsible for authorin
 __!! All figures, tables and equations must be numbered in an appropriate manner. Figures and tables need to have a descriptive caption. Axes on graphs need to be labelled appropriately.__
 
 # Table of Contents
-1. [Introduction - Omar](#introduction)
+1. [Introduction](#introduction)
 2. [Methodology](#methodology)
    * [Architecture + ROS (empty - Szymon & Omar)](docs/Ros_Methodology/Architecture.md)
    * [Simulation](docs/Ros_Methodology/Simulation.md)
@@ -30,7 +30,9 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
       * [Go To Point (empty - Shrey)](docs/Basic_Actions/Go_To_Point.md)
       * [Go Around Point (empty - Shrey)](docs/Basic_Actions/Go_Around_Point.md)
       * [Kick Ball (empty - Shrey)](docs/Basic_Actions/Kick_Ball.md)
+      * Rotate towards 
    * Strategic Actions
+      * [Redirect Ball](docs/Strategic_Actions/Redirect_Ball.md)
       * [Pass Ball (empty - Szymon)](docs/Strategic_Actions/Pass_Ball.md)
       * [Score Goal (empty - Ivan)](docs/Strategic_Actions/Score_Goal.md)  
       * [Avoid Obstacles](docs/Strategic_Actions/Avoid_Obstacle.md)
