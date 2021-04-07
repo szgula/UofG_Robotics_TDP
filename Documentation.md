@@ -57,30 +57,15 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 Introduction <a name="introduction"></a>
 ============
 
-This project is about simulating a football game played by robots.
-Such projects give us a way to test out the theory we have learnt, develop an understanding
-of how to design and implement projects of a substantial size and to co-ordinate in a team.
-We can hope to learn various aspects of software engineering, logic, algorithms, mathematics
-and kinematics. Therefore this project becomes more than just a game, it is an opportunity to
-learn at a fast pace.
+This project presents an engineering pipeline of allowing robotic components to sucessfully complete a football match based on behavioral controllers and impulsive strategy to solve the international RoboCup challenge. <br>The simulation involves two teams containing five robots, competing against each other for the win. <br>The robots were designed to be differential drive machines relying on the input voltages to perform their assigned actions.<br>This solution is demonstrated in a simulated environment taking into account all the rules and procedures demanded by the challenge. <br> The main building blocks of this project are as follows:<br> 1- Robot Operating System (ROS): This platform combines all the project's components into one distributed system that treats each executable program as a thread in said system.<br> 2- Gazebo: Software to present the simulation in an easy and straighforward manner. This program encapsulates all the different components and presents them in a structured simulation mimicing the environment.<br> 3- Python: Programming language used to develop the executable programs representing the robot's decision making, planning and actions.<br> 4- Pygame: Visualisation tool to plot the main components of the environment: football field (e.g. goals, line separators), robot structures (chassis size, scale, orientation and form).<br>All of these tools allowed us to work as a team and structure our solution as fast-paced sprints alongside long-achieving milestones.
 
-Problem Statement 
------------------
+### Problem Statement 
 
-In a team we must create a simulation of a robot soccer team and the playing environment. 
-We must develop a playing environment, behavioural algorithms and a visualisation of the
-pitch and players.
-There must be two strikers, two defenders and a goalkeeper.
-We must consider either two, three of four wheeled robots.
-
-Note: Although the platform of choice was Matlab(with it's convenient packages
-such as Simulink and Stateflow), we have chosen Python as the technology to go ahead with for reasons
-staded in the next section.  
+This challenge proposes the implementation of a simulation of behavioral robots managing to rely on their built-in algorithms and challenging each other in a football match environment. This problem is divided into several sub-problems to be tackled:<br>1- System Architecture: Finding the optimal system design to represent and structure our execution flow.<br>2- Simulation + Visualization: Implementing an efficient representation of the problem through simulating the physical elements of the environment and illustrating its different components appropriately.<br>3- Strategy and Decision Making: Implementing from scratch the theory behind strategy and decision making on a team-wide level.
 
 
-Objective <a name="methodology"></a>
----------
-The objective mirrors the problem statement. There are a few points to consider.
+### Objective <a name="methodology"></a>
+The main objective is to generate appropriate solutions for the sub-problems stated above. <br>Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member.<br>As stated before, the project outline is divided into short-term sprints and long-term milestones. Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve said milestone. 
 
 ### Level of Abstraction
 The problem statement gives us the freedom to choose the level of abstraction of the simulation.
