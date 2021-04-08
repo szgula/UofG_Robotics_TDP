@@ -18,7 +18,7 @@ In each interation, the master will not only request `team0_server` and `team1_s
 rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
 ```
 
-![Visualizer workflow](../Figures/visualization_workflow.png)
+![Visualizer workflow](../Figures/visualization_workflow.png)  
 **Figure 1:** Visualizer Workflow
 
 ## Display components
