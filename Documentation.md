@@ -21,6 +21,7 @@ __!! All figures, tables and equations must be numbered in an appropriate manner
 1. [Introduction - Omar](#introduction)
    - [Problem Statement](#problemstatement)
    - [Objective](#objective)
+   - [Expectations](#excpectations)
 2. [Methodology](#methodology)
    * [Architecture + ROS (empty - Szymon & Omar)](docs/Ros_Methodology/Architecture.md)
    * [Simulation](docs/Ros_Methodology/Simulation.md)
@@ -67,7 +68,11 @@ This challenge proposes the implementation of a simulation of behavioral robots 
 
 
 ### Objective <a name="objective"></a>
-The main objective is to generate appropriate solutions for the sub-problems stated above. <br>Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member.<br>As stated before, the project outline is divided into short-term sprints and long-term milestones. Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve said milestone. 
+The main objective is to generate appropriate solutions for the sub-problems stated above. <br>Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member.<br>As stated before, the project outline is divided into short-term sprints and long-term milestones. Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve said milestone.
+
+### Expectations <a name = "expectations"></a>
+
+The teams are expected to withhold a full football match with all rules followed and actions supported with behavioral reactions and impulsive response in the environment.<br>-Team 0 is expected to be the test case. The latter means that the players will perform minimal effort, enough to cooperate and compete, but not optimal as a perfect and flawless team. <br>-Team 1 is expected to have superior decision making and strategy, and to have the advantage in both scoring and possession in the football match.<br> -Hence, our main expectation is that Team 1 will win the match and overcome all Team 0's strategies.
 
 ### Level of Abstraction
 The problem statement gives us the freedom to choose the level of abstraction of the simulation.
