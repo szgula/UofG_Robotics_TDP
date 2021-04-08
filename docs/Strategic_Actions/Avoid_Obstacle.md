@@ -41,7 +41,7 @@ There are two problems to be considered:
    
    This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
 
-### Shortcomings and future improvements:
+### 3. Shortcomings and future improvements:
    
    It is considered that comebine the avoid obstacle and dribble together, if the robot can dribble and avoid obstacle, it will the professional robotic football player and the match will be more interesting.
    
