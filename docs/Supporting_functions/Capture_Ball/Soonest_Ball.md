@@ -1,6 +1,6 @@
 # Supporting functions: Capture the ball: Ball the soonest collision
 
-##### [Go back to main page](../../Documentation.md)
+##### [Go back to main page](../../../Documentation.md)
 
 ### Supporting functions: Move to the main file
 
@@ -26,4 +26,5 @@ __Output__: Time of ball hitting the field side
 ### Logic
 
 If the ball velocity is zero: return infinity
+
 Else: calculate the distance along the trajectory to the end of the field and divide by velocity
