@@ -20,9 +20,9 @@
 
 # Table of Contents
 
-1. [Introduction](#introduction) - Omar: Done please review.
+1. [Introduction](#introduction)
 2. [Methodology](#methodology)
-   - [Architecture + ROS (empty - Szymon & Omar)](docs/Ros_Methodology/Architecture.md)
+   - [Architecture + ROS](docs/Ros_Methodology/Architecture.md)
    - [Simulation](docs/Ros_Methodology/Simulation.md)
    - [Visualisation (empty - Feng)](docs/Ros_Methodology/Visualisation.md)
    - Strategy
@@ -35,7 +35,7 @@
      - Rotate towards
    - Strategic Actions
      - [Redirect Ball](docs/Strategic_Actions/Redirect_Ball.md)
-     - [Pass Ball (empty - Szymon)](docs/Strategic_Actions/Pass_Ball.md)
+     - [Pass Ball](docs/Strategic_Actions/Pass_Ball.md)
      - [Score Goal (empty - Ivan)](docs/Strategic_Actions/Score_Goal.md)
      - [Avoid Obstacles](docs/Strategic_Actions/Avoid_Obstacle.md)
      - [Dribble](docs/Strategic_Actions/Dribble.md)
@@ -47,9 +47,9 @@
        - [Find player to Pass (Omar)](docs/Supporting_functions/Kick_Ball/Player_Pass.md)
        - [Check if score the goal is feasible (Ivan)](docs/Supporting_functions/Kick_Ball/Goal_Pass.md)
      - Capture the ball
-       - [Get the soonest ball collision (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Ball.md)
-       - [Get capture position (ball pos at time) (Szymon)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
-       - [Get the soonest contact (Szymon)](docs/Supporting_functions/Capture_Ball/Soonest_Contact.md)
+       - [Get the soonest ball collision](docs/Supporting_functions/Capture_Ball/Soonest_Ball.md)
+       - [Get capture position (ball pos at time)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
+       - [Get the soonest contact](docs/Supporting_functions/Capture_Ball/Soonest_Contact.md)
 3. [Results and Analysis (Feng & Ivan) (empty)](docs/Result_Analysis.md)
    - Experiments
    - Test cases
