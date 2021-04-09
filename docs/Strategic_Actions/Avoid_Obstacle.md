@@ -22,7 +22,9 @@ There are two problems to be considered:
    </p>
    
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
-   
+   <p align="center">
+      <img src="../../Images/Avoid_obstacle.png" />
+   </p>
 ### 2. How to do avoding obstacle?
    
    #### First stage: go back
@@ -40,16 +42,13 @@ There are two problems to be considered:
    </p>
    
    #### Final stage: Keep distance larger than threshold
-   <p align="center">
-      <img src="../../Images/Avoid_obstacle.png" />
-   </p>
+   
+   This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
    
    <p align="center">
       <img src="../../Images/avoid_obstacle_theory.png" />
    </p>
    
-   This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
-
 ### Shortcomings and future improvements:
    
    It is considered that comebine the avoid obstacle and dribble together, if the robot can dribble and avoid obstacle, it will the professional robotic football player and the match will be more interesting.
