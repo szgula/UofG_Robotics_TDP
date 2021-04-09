@@ -4,7 +4,7 @@
 
 ## Score Goal
 
-Score Goal is one of the most strategic important actions for the robots，since it decides which team can win the game directly. Therefore, effective strategies for scoring the Goal should be considered carefully.
+Score Goal is one of the most strategic important actions for the robots，since it decides which team can win the game directly. Therefore, effective strategies for scoring the Goal should be considered carefully. We can see the figure below showed the processes of how the Score Goal works in the logic. 
    
    <p align="center">
       <img src="../../Images/Score_Goal_flow.png" />
