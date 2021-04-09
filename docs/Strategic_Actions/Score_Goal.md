@@ -13,7 +13,7 @@ enemy's goal, thus, passing the ball to the enemy's goal is scoring the goal.
    The process should be 3 main functions, the figure of the theory is showed below:
    
    <p align="center">
-      <img src="../../Score_Goal.png" />
+      <img src="../../Images/Score_Goal.png" />
    </p>
    
    #### The first function：
@@ -31,7 +31,7 @@ enemy's goal, thus, passing the ball to the enemy's goal is scoring the goal.
    Finally, we can see the **No.3** robot in the **Team 0**(Blue one) scores the goal, which is showed in the Gif below:
    
    <p align="center">
-      <img src="../../Score_Goal.gif" />
+      <img src="../../Images/Score_Goal.gif" />
    </p>
    
 ### Shortcomings and future improvements:
