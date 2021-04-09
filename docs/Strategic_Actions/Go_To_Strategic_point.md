@@ -8,10 +8,12 @@ Strategic Point is somewhere the robot can cooperate with its teammates effectiv
 When the ball is in our team, what we need to do is to make the other attacker which does not have the ball keeps a distance with the robot who gets the ball so that they can pass the ball to each other and score the ball.  
    
 ### How to do Go To Strategic Point in code?
+   
    <p align="center">
-      <img src="../../Images/Go_To_Strategic_point.png" />
+      <img src="../../Images/Go_To_Strategic_Point.png" />
    </p>
    The process should be 2 main functions
+   
    #### The first function：
         boost(robot_state: Position, target: Position)
    This function optimized the parameters, which make the robots run smoothly.
@@ -22,7 +24,7 @@ When the ball is in our team, what we need to do is to make the other attacker w
    Finally, we can see the **No.3** robot in the **Team 0**(Blue one) goes to the strategic point, which is showed in the Gif below
    
    <p align="center">
-      <img src="../../Images/Go_To_Strategic_point.gif" />
+      <img src="../../Images/Go_To_Strategic_Point.gif" />
    </p>
    
 ### Shortcomings and future improvements:
