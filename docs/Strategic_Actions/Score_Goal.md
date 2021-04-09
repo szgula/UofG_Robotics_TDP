@@ -11,6 +11,7 @@ enemy's goal, thus, passing the ball to the enemy's goal is scoring the goal.
 ### How to do Score Goal in code?
    
    The process should be 3 main functions, the figure of the theory is showed below:
+   
    <p align="center">
       <img src="../../Score_Goal.png" />
    </p>
@@ -28,6 +29,7 @@ enemy's goal, thus, passing the ball to the enemy's goal is scoring the goal.
    Judge from the functions above, if it is ture, which means the robot is close to opponent's goal and find a feasible location to Score the Goal, thus, the robot will score the Goal directly.
 
    Finally, we can see the **No.3** robot in the **Team 0**(Blue one) scores the goal, which is showed in the Gif below:
+   
    <p align="center">
       <img src="../../Score_Goal.gif" />
    </p>
