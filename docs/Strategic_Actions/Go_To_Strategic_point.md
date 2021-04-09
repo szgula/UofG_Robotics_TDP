@@ -36,6 +36,8 @@ When the ball is in our team, what we need to do is to make the other attacker w
    </p>
    
 ### Shortcomings and future improvements:
-   Now we just regard a specific point as the strategic point, and test it by using fixed point relative to the other robot. Although it works in most of cases, yet in some case, it does not make sense to go to that point, for example, when the robot is very closed to the edge of the football field, there is no need for the other one to get that place to cooperate with the robot. So the strategic point should be defined with more parameters and more information.
+   Now we just regard a specific point as the strategic point, and test it by using fixed point relative to the other robot. Although it works in most of cases, yet in some case, it does not make sense to go to that point, for example, when the robot is very closed to the edge of the football field, there is no need for the other one to get that place to cooperate with the robot. 
+   
+   Therefore, the strategic point should be defined with more parameters and more information. It should be more related to team strategic point, not individual strategic point or the strategic point just for two members.
         
 </p>
