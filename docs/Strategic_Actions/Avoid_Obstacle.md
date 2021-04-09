@@ -33,7 +33,16 @@ There are two problems to be considered:
    
    It should work in the theory. However, in the code, since the program judges the distance every time and replanning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obastacle, it will be more closer and closer and can't break away from the obstacle.
    
+   Here is the gif of avoiding obstacle.
+   
+   <p align="center">
+      <img src="../../Images/Avoid_obstacle.gif" />
+   </p>
+   
    #### Final stage: Keep distance larger than threshold
+   <p align="center">
+      <img src="../../Images/Avoid_obstacle.png" />
+   </p>
    
    <p align="center">
       <img src="../../Images/avoid_obstacle_theory.png" />
