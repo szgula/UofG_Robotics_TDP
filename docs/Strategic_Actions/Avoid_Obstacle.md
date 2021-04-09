@@ -26,7 +26,7 @@ There are two problems to be considered:
       <img src="../../Images/Avoid_obstacle.png" />
    </p>
    
-### 2. How to do avoding obstacle?
+### 2. How to do avoiding obstacle?
    
    #### First stage: go back
    
@@ -36,7 +36,7 @@ There are two problems to be considered:
    
    It should work in the theory. However, in the code, since the program judges the distance every time and replanning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obastacle, it will be more closer and closer and can't break away from the obstacle.
    
-   Here is the gif of avoiding obstacle.
+   Here is the Gif of avoiding obstacle, we can see the **No.0** robot in the **Team 0**(Blue one) does avoid obstacle.
    
    <p align="center">
       <img src="../../Images/Avoid_obstacle.gif" />
