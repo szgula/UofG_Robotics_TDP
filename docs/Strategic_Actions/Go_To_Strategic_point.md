@@ -21,7 +21,10 @@ When the ball is in our team, what we need to do is to make the other attacker w
    #### The Second function：
         go_to_parametrized(robot_state: Position, target: Position, MIN_PURE_ROTATION_ANGLE, K_P_PURE_ROTATION, MAX_OUTPUT_VALUR, K_P_FORWARD_COMPONENT)
    This function will adjust the velocity according to the parameters, such as State Position and Target Position. 
-   Finally, we can see the **No.3** robot in the **Team 0**(Blue one) goes to the strategic point, which is showed in the Gif below
+   
+   Go to strategic point will combine this two functions and adjust the velocity of two wheels so that the robot can go to the strategic point quickly and accurately.
+   
+   Finally, we can see the **No.3** robot in the **Team 0**(Blue one) goes to the strategic point and its teammate No.2 robot gets the ball then they also do pass the ball naturely, which is showed in the Gif below:
    
    <p align="center">
       <img src="../../Images/Go_To_Strategic_Point.gif" />
