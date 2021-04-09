@@ -7,7 +7,7 @@
 Score Goal is one of the most strategic important actions for the robots，since it decides which team can win the game directly. Therefore, effective strategies for scoring the Goal should be considered carefully.
    
    <p align="center">
-      <img src="../../Images/Score_Goal.flow.png" />
+      <img src="../../Images/Score_Goal_flow.png" />
    </p>
    
 As metioned before, our team adopts the Decision Tree to control all the robots logically. In the **Deccision Tree**, when the robot gets the ball, it needs to judge how far from the enemy's goal. What is more, it also needs to check if [scoring the goal is feasible], which is metioned in the supproting functions. This check function will return **(x, y) coordinate**, which is the place that robot should do [receive and pass the ball] action in. We reuse this function here and set the target position to the
