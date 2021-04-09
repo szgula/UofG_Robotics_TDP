@@ -25,6 +25,7 @@ There are two problems to be considered:
    <p align="center">
       <img src="../../Images/Avoid_obstacle.png" />
    </p>
+   
 ### 2. How to do avoding obstacle?
    
    #### First stage: go back
