@@ -23,7 +23,7 @@ There are two problems to be considered:
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
    <p align="center">
       <img src="../../Images/Avoid_obstacle.png" />
-      Figure 2: Avoid obstacle in our virualization 
+      <b>Figure 2: Avoid obstacle in our virualization<b />
    </p>
    
    
