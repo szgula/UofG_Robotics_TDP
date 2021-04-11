@@ -17,13 +17,16 @@ There are two problems to be considered:
         
         According to different situations in the decision tree.
    
-   ![The flow of avoidng obstacle](../../Images/avoid_obstacle_flow.png)
-   __Figure 1:__The flow of avoiding obstacle
+   <p align="center">
+      <img src="../../Images/avoid_obstacle_flow.png" />
+      <b>Figure 1: The flow of avoiding obstacle<b />
+   </p>
    
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
+   
    <p align="center">
       <img src="../../Images/Avoid_obstacle.png" />
-      <b>Figure 2: Avoid obstacle in our virualization<b />
+      <b>Figure 2: Avoid obstacle in virualization<b />
    </p>
    
    
@@ -41,8 +44,8 @@ There are two problems to be considered:
    
    <p align="center">
       <img src="../../Images/Avoid_obstacle.gif" />
+      <b>Figure 3: Gif of avoiding obstacle in virualization<b />
    </p>
-   __Figure 3:__ gif of avoiding obstacle in virualization
    
    #### Final stage: Keep distance larger than threshold
    
@@ -50,8 +53,8 @@ There are two problems to be considered:
    
    <p align="center">
       <img src="../../Images/avoid_obstacle_theory.png" />
+      <b>Figure 4: Final theory of avoiding obstacle<b />
    </p>
-   __Figure 4:_ Final theory of avoiding obstacle
    
 ### Shortcomings and future improvements:
    
