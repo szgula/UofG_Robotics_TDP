@@ -17,6 +17,7 @@ There are two problems to be considered:
         
         According to different situations in the decision tree.
    
+   <center style="color:#C0C0C0;text-decoration:underline">Figure 1: The flow of avoiding obstacle</center>
    <p align="center">
       <img src="../../Images/avoid_obstacle_flow.png" />
       <center style="color:#C0C0C0;text-decoration:underline">Figure 1: The flow of avoiding obstacle</center>
