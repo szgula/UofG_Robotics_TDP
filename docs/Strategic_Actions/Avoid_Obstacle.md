@@ -83,7 +83,8 @@ def distance_judge(game_info: list, init_distance = None) -> [bool, int, int]:
 ​	*Usage：*
 
 ```python
-# It will return the [bool, int, int], the first one is a flag to judge whether the robot meets the obstacle or not. The second one and the third one are team id and player id of the robot which meets obstacle respectively. 
+# It will return the [bool, int, int], the first one is a flag to judge whether the robot meets the obstacle or not. 
+# The second one and the third one are team id and player id of the robot which meets obstacle respectively. 
 
 is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
 ```
@@ -93,7 +94,8 @@ is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
 ​	*Definition：*
 
 ```python
-# When the flag of the above function is true, we can get the team id and player id from distance_judge() function and put them here so that the robot can do avoid_obstacle().
+# When the flag of the above function is true, we can get the team id and player id from distance_judge() function.
+# Then put them here so that the robot can do avoid_obstacle().
 
 @staticmethod
 def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
@@ -102,7 +104,8 @@ def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerComman
 ​	*Usage：*
 
 ```python
-# Just fill with information in the funtion, which needs to be metioned here is that the avoid_obstacle() function reuses the go_around_the_point() function, but changes the parameters.
+# Just fill with information above in this function, which needs to be metioned here is that the avoid_obstacle() 
+# reuses the go_around_the_point() function, but changes the parameters.
 
 controller.avoid_obstacle(game_info, which_team, obstacle_id)
 ```
