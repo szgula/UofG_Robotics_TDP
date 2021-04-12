@@ -1,6 +1,6 @@
 # **Actions**
 
-**[Go back to main page](../../Documentation.md)**
+**[Go back to main page](../../../Documentation.md)**
 
 ## Check if Score the Goal is feasible
    Checking wehther Score the Goal is feasible is the signal for scoring the goal, this function will use the Game information to help robots judge the distance and find the feasible location to kick the ball.     
