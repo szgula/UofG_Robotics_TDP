@@ -16,11 +16,9 @@ There are two problems to be considered:
         According to the distance between each robot and obstacle (teammates / opponents).
         
         According to different situations in the decision tree.
-   
-   <center style="color:#C0C0C0;text-decoration:underline">Figure 1: The flow of avoiding obstacle</center>
+  
    <p align="center">
       <img src="../../Images/avoid_obstacle_flow.png" />
-      <center style="color:#C0C0C0;text-decoration:underline">Figure 1: The flow of avoiding obstacle</center>
    </p>
    
    In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
