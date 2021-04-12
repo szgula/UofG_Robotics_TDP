@@ -22,7 +22,7 @@ For continuing the football match, robots need to deal with that problem by itse
 
    <p align="center">
       <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
-      <center><b>Figure 1: The flow of avoiding obstacle</b></center>
+      <b>Figure 1: The flow of avoiding obstacle</b>
    </p>
 
 
@@ -51,7 +51,7 @@ Here is the Gif of avoiding obstacle, we can see the **No. 0** robot in the **Te
 
    <p align="center">
       <img src="../../Images/Avoid_obstacle.gif" /><br><br>
-      <b>Figure 3: Gif of avoiding obstacle in virualization<b />
+      <b>Figure 3: Gif of avoiding obstacle in virualization</b>
    </p>
 
 
