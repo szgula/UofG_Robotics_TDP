@@ -21,18 +21,20 @@ For continuing the football match, robots need to deal with that problem by itse
         According to different situations in the decision tree.
 
    <p align="center">
-      <img src="../../Images/avoid_obstacle_flow.png" /><br />
+      <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
       <center><b>Figure 1: The flow of avoiding obstacle</b></center>
    </p>
+
 
 
 
 In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
 
    <p align="center">
-      <img src="../../Images/Avoid_obstacle.png" />
-      <b>Figure 2: Avoid obstacle in virualization<b />
+      <img src="../../Images/Avoid_obstacle.png" /><br><br>
+      <b>Figure 2: Avoid obstacle in virualization</b>
    </p>
+
    
 
 ### 2. How to do avoiding obstacle?
@@ -45,12 +47,13 @@ This method seems to be useful for testing. However, when the robot of the oppon
 
 It should work in the theory. However, in the code, since the program judges the distance every time and re-planning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obstacle, it will be more closer and closer and can't break away from the obstacle.
 
-Here is the gif of avoiding obstacle, we can see the **No. 0** robot in the **Team 0**(Blue one) does avoid obstacle.
+Here is the Gif of avoiding obstacle, we can see the **No. 0** robot in the **Team 0**(Blue one) does avoid obstacle.
 
    <p align="center">
-      <img src="../../Images/Avoid_obstacle.gif" />
+      <img src="../../Images/Avoid_obstacle.gif" /><br><br>
       <b>Figure 3: Gif of avoiding obstacle in virualization<b />
    </p>
+
 
 
    #### Final stage: Keep distance larger than threshold
@@ -58,9 +61,10 @@ Here is the gif of avoiding obstacle, we can see the **No. 0** robot in the **Te
 This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
 
    <p align="center">
-      <img src="../../Images/avoid_obstacle_theory.png" /><br>
-      <b>Figure 4: Final theory of avoiding obstacle<b />
+      <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
+       <b>Figure 4: Final theory of avoiding obstacle</b>
    </p>
+
 
 ### 3. How it works in the code?
 
