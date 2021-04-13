@@ -3,4 +3,4 @@
 
 
 
-![Go Around Point Diagram](../Figures/ROS_architecture.png)
+<!--- ![Go Around Point Diagram](../Figures/.png) -->

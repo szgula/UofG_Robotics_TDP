@@ -3,4 +3,4 @@
 
 
 
-![Kick Ball Vector Diagram](../Figures/ROS_architecture.png)
+<!-- ![Kick Ball Vector Diagram](../Figures/.png) -->
