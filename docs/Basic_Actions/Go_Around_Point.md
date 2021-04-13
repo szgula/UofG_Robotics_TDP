@@ -20,7 +20,7 @@ right wheels are related. The relation is given by the following equations:
 
 where R is the radius of curvature of the path and l is the distance between the two wheels.
 
-In this function we take the velocity of the faster wheel is 3 units, and the velocity of the slower wheel is calculated
+In this function we take the velocity of the faster wheel as 3 units, and the velocity of the slower wheel is calculated
 from the ratio mentioned in the equation above.
 
 <!--- ![Go Around Point Diagram](../Figures/.png) -->
