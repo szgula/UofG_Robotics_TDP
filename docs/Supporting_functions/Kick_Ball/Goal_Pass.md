@@ -9,7 +9,7 @@ There is the flow to introduce how it works:
 
    <p align="center">
       <img src="../../../Images/Goal_Pass_flow.png" /><br><br>
-       <b>Figure 1: The flow of going to strategic point</b>
+       <b>Figure 1: The flow of checking if score the Goal is feasible</b>
    </p>
 
 
