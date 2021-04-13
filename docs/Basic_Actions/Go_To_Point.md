@@ -13,7 +13,7 @@ In this function the angular speeds imparted to the wheels is treated as a linea
 of rotational effects and translation effects.
 
 ## Rotational Component
-In a differential drive, the vehicle rotates around a point in circular motion if the angular speeds are equal in magnitude
+In a differential drive, the vehicle rotates about itself in circular motion if the angular speeds are equal in magnitude
 but opposite in direction. Therefore the pure rotational component of the angular speed is given by the following logic:
 
 `rotation_component_l = angle_diff * K_P_PURE_ROTATION`
