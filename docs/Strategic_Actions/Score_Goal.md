@@ -77,7 +77,7 @@ Finally, we can see the **No. 3** robot in the **Team 0** (Blue one) scores the 
 
    <p align="center">
       <img src="../../Images/Score_Goal.gif" /><br><br>
-      <b>Figure 3: Gif of avoiding obstacle in virualization</b>
+      <b>Figure 3: Gif of scoring goal in virualization</b>
    </p>
 
 
