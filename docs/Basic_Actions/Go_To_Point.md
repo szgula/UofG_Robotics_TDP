@@ -11,6 +11,7 @@ drive kinematics and allows users to move the robot from one point to another.
 ## Inputs and Outputs
 This function takes in the position and heading angle of the robot and the target position.
 The function returns the angular speeds of the left and the right wheels for each step.
+
 __Inputs__: Robot state, Target Position
 
 __Output__: Robot control signal
