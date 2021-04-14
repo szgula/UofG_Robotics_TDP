@@ -24,7 +24,7 @@
 2. [Methodology](#methodology)
    - [Architecture + ROS](docs/Ros_Methodology/Architecture.md)
    - [Simulation](docs/Ros_Methodology/Simulation.md)
-   - [Visualisation (empty - Feng)](docs/Ros_Methodology/Visualisation.md)
+   - [Visualisation](docs/Ros_Methodology/Visualisation.md)
    - Strategy
      - [Team 0](docs/Strategy/Strategy_Team_0.md)
      - [Team 1](docs/Strategy/Strategy_Team_1.md)
@@ -32,20 +32,20 @@
      - [Go To Point (empty - Shrey)](docs/Basic_Actions/Go_To_Point.md)
      - [Go Around Point (empty - Shrey)](docs/Basic_Actions/Go_Around_Point.md)
      - [Kick Ball (empty - Shrey)](docs/Basic_Actions/Kick_Ball.md)
-     - Rotate towards
+     - [Rotate towards (empty - Shrey)]()
    - Strategic Actions
      - [Redirect Ball](docs/Strategic_Actions/Redirect_Ball.md)
      - [Pass Ball](docs/Strategic_Actions/Pass_Ball.md)
-     - [Score Goal (empty - Ivan)](docs/Strategic_Actions/Score_Goal.md)
+     - [Score Goal](docs/Strategic_Actions/Score_Goal.md)
      - [Avoid Obstacles](docs/Strategic_Actions/Avoid_Obstacle.md)
      - [Dribble](docs/Strategic_Actions/Dribble.md)
-     - [Cover Opponent (empty - Omar)](docs/Strategic_Actions/Cover_Opponent.md) Omar: Done please review.
-     - [Go To Strategic point (Empty - Ivan)](docs/Strategic_Actions/Go_To_Strategic_point.md)
+     - [Cover Opponent](docs/Strategic_Actions/Cover_Opponent.md)
+     - [Go To Strategic point ](docs/Strategic_Actions/Go_To_Strategic_point.md)
    - Supporting functions
      - Kicking the ball
-       - [Check if pass the ball is feasible (Feng)](docs/Supporting_functions/Kick_Ball/Ball_Pass.md)
-       - [Find player to Pass (Omar)](docs/Supporting_functions/Kick_Ball/Player_Pass.md)
-       - [Check if score the goal is feasible (Ivan)](docs/Supporting_functions/Kick_Ball/Goal_Pass.md)
+       - [Check if pass the ball is feasible](docs/Supporting_functions/Kick_Ball/Ball_Pass.md)
+       - [Find player to Pass ](docs/Supporting_functions/Kick_Ball/Player_Pass.md)
+       - [Check if score the goal is feasible](docs/Supporting_functions/Kick_Ball/Goal_Pass.md)
      - Capture the ball
        - [Get the soonest ball collision](docs/Supporting_functions/Capture_Ball/Soonest_Ball.md)
        - [Get capture position (ball pos at time)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
@@ -54,7 +54,8 @@
    - Experiments
    - Test cases
    - etc
-4. [Team Performance Analysis (empty)](docs/Team_Performance.md)
+4. [Project organisation](docs/Organisation/Project_Organisation.md)
+   - [Team Performance Analysis (empty)](docs/Organisation/Team_Performance.md)
 5. [Conclusions (Omar) (empty)](docs/Conclusions.md)
 6. [References (empty)](docs/References.md/)
 
