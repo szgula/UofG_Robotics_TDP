@@ -6,13 +6,13 @@
 
 The game visualizer is embedded in the `GameSimulationServer` as a utility class. `visualizer.py` contains all the functional code for visualization and there is only one relevant class just to call this function when necessary.
 
-Such architecture bring all logic about visualization together and that make simulator no longer need to worry about display and just need to focuses on the physics engine, which make the whole project keeps the low coupling and high cohesion virtue.
+Such architecture brings all logic about visualization together and that makes the simulator no longer need to worry about the display and just need to focus on the physics engine, which makes the whole project keeps the low coupling and high cohesion virtue.
 
 ## Workflow
 
-Once game start, the game master will start a loop first, the length of which depends on the value of `full_game_length`.
+Once the game starts, the game master will start a loop first, the length of which depends on the value of `full_game_length`.
 
-In each interation, the master will not only request `team0_server` and `team1_server` for latest command for every player but also send request to `simulator_server` for updating all the visualizaion display.
+In each iteration, the master will not only request `team0_server` and `team1_server` for the latest command for every player but also send a request to `simulator_server` for updating all the visualization display.
 
 ```
 rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
@@ -26,7 +26,7 @@ rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simu
 Visualizer is responsible for almost 9 components' displaying:
 
 1. **id indicator**: show the number of every player
-2. **direction indicator**: show the direction every player points to and will change in real time.
+2. **direction indicator**: show the direction every player points to and will change in real-time.
 3. **offside warning line**: just display the possible offside line for warning purpose
 
 ![Main Components](../Figures/Visualization_main_components_of_field.png)
@@ -37,7 +37,8 @@ Visualizer is responsible for almost 9 components' displaying:
 
 ## Available properties for setting display style
 
-we can use these properties to set the style for every components.
+__Comment:__ Good, but make it a bit less dry ;) 
+We can use these properties to set the style for every component.
 
 ```
 self._robo_radius = 10

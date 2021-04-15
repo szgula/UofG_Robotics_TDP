@@ -13,6 +13,8 @@ Each player has a base logic that is function related. This logic is executed du
 After each player is assigned the base function, the shared logic search for initiative action. 
 If such action is found, the base action is overwritten with initiative action.
 
+__Comment!__ this is Subsumption Architecture (look lecture 6 Robotics foundation)
+
 ## Base actions
 
 ### Goal Keeper

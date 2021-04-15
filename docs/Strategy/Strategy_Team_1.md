@@ -4,14 +4,14 @@
 
 ## Decision Making
 
-Once all the structure was implemented in terms of ROS and simulations, a decision making process needed to be implemented. Two of them were developped and compared:
+Once all the structure was implemented in terms of ROS and simulations, a decision-making process needed to be implemented. Two of them were developed and compared:
 
-1. Hard coded rules for each player.
-2. Decision tree for all players (excluding goal keeper as single controller).
+1. Hardcoded rules for each player.
+2. Decision tree for all players (excluding goalkeeper as single controller).
 
-The first method has each player with specfifc locations to follow and specific actions to perform. This methodology has been used to test the more appropriate strategies upon.
+The first method has each player with specific locations to follow and specific actions to perform. This methodology has been used to test the more appropriate strategies.
 
-The second approach however, combines all players and decides on appropriate actions based on the decision tree structure. This method has been agreed on since it is simple and straightforward. The tree behaves like a coach for the team. It gathers information from the simulator related to the team itself and the opponents and then narrows down that information into a tuple of actions. 
+The second approach, however, combines all players and decides on appropriate actions based on the decision tree structure. This method has been agreed on since it is simple and straightforward. The tree behaves like a coach for the team. It gathers information from the simulator related to the team itself and the opponents and then narrows down that information into a tuple of actions. 
 
 The tree's structure is divided into two main branches, one that is based on the player having the ball, and one that is based on the player not having the ball. The diagrams for both of these branches are as follows:
 
@@ -27,9 +27,9 @@ The tree's structure is divided into two main branches, one that is based on the
      <img src="../../Images/Decision_Tree_2.svg" />
    </p>
 
-The decision tree sets an importance to has_ball() since the goal of the team is to get the most goals and win the match. Therefore, the first node that the tree follows is if the player has the ball. If yes, then follow the flow of the first branch, if not then shift to the next one.
+The decision tree sets importance to has_ball() since the goal of the team is to get the most goals and win the match. Therefore, the first node that the tree follows is if the player has the ball. If yes, then follow the flow of the first branch, if not then shift to the next one.
 
-To be able to differentiate between one player and another, the tree includes a bunch of information about the players. First off, the tree acquires the player ids and their corresponding modes. The former are unique ids for each player in the game. The latter are two options for a pair of players that can either be "DEFEND" or "ATTACK". With this seperation between the players, the decision tree will accurately know which actions to assign to which player.
+To be able to differentiate between one player and another, the tree includes a bunch of information about the players. First off, the tree acquires the player ids and their corresponding modes. The former are unique ids for each player in the game. The latter are two options for a pair of players that can either be "DEFEND" or "ATTACK". With this separation between the players, the decision tree will accurately know which actions to assign to which player.
 
 An example of the flow that the tree follows can be found below:
 
@@ -39,7 +39,7 @@ An example of the flow that the tree follows can be found below:
 
 
 
-Regarding the command flow, every player is commanded by one controller, Player Controller. The latter actuates on the defenders/strikers. It receives the method to trigger from the decision tree and acts upon it. Moreover the decision tree gets its information from it, so it is a bi-directional relationship. For example, say the decision tree triggers has_ball(), the controller requests information from the simulator to check for the euclidian distance between the ball and the player, and if it is lower than a fixed threshold, then the method returns true and the flow jumps to the next leaf of the tree.
+Regarding the command flow, every player is commanded by one controller, the Player Controller. The latter actuates on the defenders/strikers. It receives the method to trigger from the decision tree and acts upon it. Moreover, the decision tree gets its information from it, so it is a bi-directional relationship. For example, say the decision tree triggers has_ball(), the controller requests information from the simulator to check for the euclidian distance between the ball and the player, and if it is lower than a fixed threshold, then the method returns true and the flow jumps to the next leaf of the tree.
 
 An example of the control system:
 

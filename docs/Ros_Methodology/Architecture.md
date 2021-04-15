@@ -11,7 +11,7 @@ Such an approach guarantee clear areas of responsibilities of each module, guara
 Besides, it simplified team development, as it was easy to manage code dependencies and code merge conflicts.
 
 The greatest overhead comparing to procedural-sequential architecture (the one we also considered) was the big responsibility of communication interfaces.
-The ROS architecture inheritance requires clearly defined interfaces between modules and after it is done, there is little flexibility to change it.
+The ROS based architecture requires clearly defined interfaces between modules and after it is done, there is little flexibility to change it.
 Fortunately, thanks to the well-defined project requirements, the interface definition becomes a relatively simple task.
 
 ## Project Architecture
@@ -19,7 +19,7 @@ Fortunately, thanks to the well-defined project requirements, the interface defi
 The project was divided into four nodes:
 1. ___Game Master___ is the game wrapper responsible for game initialisation, checking game rules, counting the goals and keep track of the game time. 
    Last but not least, this node is a proxy between teams nodes and the simulator.
-2. ___Simulator___ - is a physics simulation engine that replaces the real world and robots. It takes all robots actions and provides discrete-time update of the whole environment. 
+2. ___Simulator___ - is a physics simulation engine that replaces the real world and robots. It takes all robots actions and provides a discrete-time update of the whole environment. 
 3. ___Team 0___ - is a team 0 logic layer that outputs the actions for specific robots.
 4. ___Team 1___ - a similar node to the previous, but for team 1.
 
