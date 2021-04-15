@@ -69,6 +69,7 @@ It can be seen especially on the infrastructure milestones, where the Gazebo Sim
 Thanks to the initial work organisation and development flexibilities, those changes were very simple to adapt and do not break any other project dependencies.
 
 ![Milestones plan](../Figures/project_realisation_timeline_2.png)
+
 __Figure 2:__ Components realisation: including functional components (blue), infrastructure (green) and other (orange).
 
 Also, it needs to be pointed out that some identified risks come true. 
@@ -85,6 +86,7 @@ In total, the team has spent about 480 hours over the semester at this project (
 | @[Yifan](https://github.com/Yifan-Xie) |120h    | 10+22+19+30+13 = __94h__        |
 | @[Shrey](https://github.com/shreyExp) | 120h     | 11 + 19 + 16 + 15 + 12 = __73h__        |
 | @[UofG]() University Staff Support - Dr. McGookin   | on demand (estimated 16h)     | __9h__|
+
 __Table 2__: Project work time summary
 
 Cumulative project cost: 480h * £100 + 9h * £100 = __£57,000__.
@@ -124,6 +126,7 @@ Over the time, this structure converge to the more sparse technical responsibili
 | @[Yifan](https://github.com/Yifan-Xie) |System design    | Strategy development, tactics, system control       |
 | @[Shrey](https://github.com/shreyExp) | Requirements, technical documentation     | ... fill this ...       |
 | @[UofG]() University Staff Support - Dr. McGookin   | Supervision    | Supervision |
+
 __Table 2__: Project responsibilities
 
 ### Work Culture
