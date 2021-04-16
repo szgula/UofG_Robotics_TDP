@@ -27,7 +27,7 @@ The working principle behind this function is a sum of two proportional controll
 The output of the instantaneous angular speeds is calculated on the basis of the distance between the robot and the target and the angular orientation of the target with respect to the robot. 
 
 In this function, the angular speeds imparted to the wheels is treated as a linear combination of rotational effects and translation effects.
-<div style="text-align:center">
+<div align="center">
 ![Go to point diagram](../../Images/GoToPoint.jpeg)
 </div>
 
