@@ -2,7 +2,8 @@
 
 **[Go back to main page](../../Documentation.md)**
 
-## Decision Making
+
+__Comment!__ This probably should go to intro or sth 
 
 Once all the structure was implemented in terms of ROS and simulations, a decision-making process needed to be implemented. Two of them were developed and compared:
 
@@ -10,6 +11,8 @@ Once all the structure was implemented in terms of ROS and simulations, a decisi
 2. Decision tree for all players (excluding goalkeeper as single controller).
 
 The first method has each player with specific locations to follow and specific actions to perform. This methodology has been used to test the more appropriate strategies.
+
+## Structure - Decision Tree
 
 The second approach, however, combines all players and decides on appropriate actions based on the decision tree structure. This method has been agreed on since it is simple and straightforward. The tree behaves like a coach for the team. It gathers information from the simulator related to the team itself and the opponents and then narrows down that information into a tuple of actions. 
 
@@ -21,11 +24,14 @@ The tree's structure is divided into two main branches, one that is based on the
   <img src="../../Images/Decision_Tree_1.svg" />
 </p>
 
+__Comment!__ Figure name!
+
 2. If the player does not have the ball:
 
    <p align="center">
      <img src="../../Images/Decision_Tree_2.svg" />
    </p>
+__Comment!__ Figure name!
 
 The decision tree sets importance to has_ball() since the goal of the team is to get the most goals and win the match. Therefore, the first node that the tree follows is if the player has the ball. If yes, then follow the flow of the first branch, if not then shift to the next one.
 
@@ -36,6 +42,7 @@ An example of the flow that the tree follows can be found below:
 <p align="center">
   <img src="../../Images/Decision Flow.png" />
 </p>
+__Comment!__ Figure name!
 
 
 
@@ -46,9 +53,13 @@ An example of the control system:
 <p align="center">
   <img src="../../Images/Control System.png" />
 </p>
+__Comment!__ Figure name!
 
 The diagram above states the following:
 
 1. The decision tree queries the controller to check if the player has the ball, if yes it returns True and False otherwise. (In this example the player has the ball).
 2. Once the query is done, the tree triggers the controller with a method called can_score, to check if there are any feasible shooting curves along the way, and the controller returns a boolean.
-3. Lastly, in this example, the Decision tree sends the required information for the controller to actuate on the player with an action tuple of (0,0,1). The first two parameters are the voltage powers on the left and right wheel respectively, then the last number represents the action to take which in this case 1: KICK.
+3. Lastly, in this example, the Decision tree sends the required information for the controller to actuate on the player with an action tuple of (0,0,1). 
+   The first two parameters are the voltage powers on the left and right wheel respectively, then the last number represents the action to take which in this case 1: KICK.
+
+__Comment!__ replace "action tuple of (0,0,1)" - this is low level, to sth like "request kick the ball action/behaviour "

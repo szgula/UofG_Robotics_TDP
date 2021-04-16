@@ -2,7 +2,8 @@
 
 ##### [Go back to main page](../../Documentation.md)
 
-### Strategic actions: Move to the main file
+### Application - Strategic actions: 
+__Comment!__ Move to the main file
 
 Strategics actions are actions build on top of basic actions (like move to point, rotate, kick the ball).
 Those actions create a mid-layer between simple robot control task and high-level planners which takes strategic decisions for a specific robot or the whole team.
