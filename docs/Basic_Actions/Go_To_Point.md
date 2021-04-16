@@ -28,7 +28,7 @@ The output of the instantaneous angular speeds is calculated on the basis of the
 
 In this function, the angular speeds imparted to the wheels is treated as a linear combination of rotational effects and translation effects.
 
-__Comment__: Add diagram
+![Go to point diagram](../../Images/GoToPoint.jpeg)
 
 ### Rotational Component
 In a differential drive, the vehicle rotates about itself in a circular motion if the angular speeds are equal in magnitude
@@ -54,4 +54,3 @@ vel_r = rotation_component_r + forward_component
 ```
 
 
-<!-- ![Go to point diagram](../Figures/.png) -->
