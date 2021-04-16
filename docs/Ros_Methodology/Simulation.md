@@ -3,6 +3,9 @@
 
 __Missing!__ general description on the simulator
 
+The problem statement gives us the freedom to choose the level of abstraction of the simulation.
+The level of abstraction here means the lowest level of detail of physics, which the simulation is going to take under consideration.
+
 # Architecture
 The game simulator was developed following two design patterns: 
 * __Mediator__ (behavioural design pattern) - used to communicate all simulation components and provide an information flow

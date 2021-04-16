@@ -62,13 +62,12 @@
 
 This project presents an engineering pipeline of allowing robotic components to successfully complete a football match based on behavioural controllers and impulsive strategy to solve the international RoboCup challenge. 
 The simulation involves two teams containing five robots, competing against each other for the win. 
-The robots were designed to be differential drive machines relying on the input voltages to perform their assigned actions.
+The robots were designed to be two-wheels differential drive machines with internal logic processor and capable to communication with different robots.
 This solution is demonstrated in a simulated environment taking into account all the rules and procedures demanded by the challenge. 
 The main building blocks of this project are as follows:
 1. Robot Operating System (ROS): This platform combines all the project's components into one distributed system that treats each executable program as a thread in said system.
-2. Gazebo: Software to present the simulation in an easy and straightforward manner. This program encapsulates all the different components and presents them in a structured simulation mimicking the environment. 
 3. Python: Programming language used to develop the executable programs representing the robot's decision making, planning and actions.
-4. PyGame: Visualisation tool to plot the main components of the environment: football field (e.g. goals, line separators), robot structures (chassis size, scale, orientation and form).
+4. PyGame: Visualisation framework to display the main components of the environment: football field (e.g. goals, line separators), robot structures (chassis size, scale, orientation and form).
 
 All of these tools allowed us to work as a team and structure our solution as fast-paced sprints alongside long-achieving milestones.
    
@@ -78,47 +77,34 @@ This challenge proposes the implementation of a simulation of behavioural robots
 This problem is divided into several sub-problems to be tackled:
 1. System Architecture: Finding the optimal system design to represent and structure our execution flow.
 2. Simulation + Visualization: Implementing an efficient representation of the problem through simulating the physical elements of the environment and illustrating its different components appropriately.
-3. Strategy and Decision Making: Implementing from scratch the theory behind the strategy and decision making on a team-wide level.
+3. Strategy and Decision Making: Implementing from scratch the theory behind the strategy and decision-making on a team-wide level.
 
 
 ## Objective <a name="objective"></a>
-The main objective is to generate appropriate solutions for the sub-problems stated above. Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member. As stated before, the project outline is divided into short-term sprints and long-term milestones. Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve a specific milestone.
+The main objective is to generate appropriate solutions for the sub-problems stated above. 
+Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member. 
+As stated before, the project outline is divided into short-term sprints and long-term milestones. 
+Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve a specific milestone.
 
 ### Expectations <a name = "expectations"></a>
 
 The teams are expected to withhold a full football match with all rules followed and actions supported with behavioural reactions and impulsive response in the environment.
-- Team 0 is expected to be the test case. The latter means that the players will perform minimal effort, enough to cooperate and compete, but not optimal as a perfect and flawless team. 
-- Team 1 is expected to have superior decision making and strategy, and to have the advantage in both scoring and possession in the football match. 
+- Team 0 is expected to be the semi-smart team. The latter means that the players will perform minimal effort, enough to cooperate and compete, but not optimal as a perfect and flawless team. 
+- Team 1 is expected to have superior decision-making and strategy, and to have the advantage in both scoring and possession in the football match. 
 
 Hence, our main expectation is that Team 1 will win the match and overcome all Team 0's strategies.
 
 
-### Level of Abstraction
+### Choice of Technology
 
-The problem statement gives us the freedom to choose the level of abstraction of the simulation.
-The level of abstraction here means the lowest level of detail of physics, which the simulation
-is going to take under consideration.
-We have chosen that we can impart instantaneous angular velocity to
-the wheels. This will make the interface of further development of functions easier for all team members.
-
-### Choice of ROS and Python as the Technology
-
-We have chosen ROS because...
-
-We have chosen Python as it is slowly becoming the language of choice for scientific computing.
+We have chosen Python as it is most popular scripting language with great community support and number of open-source libraries.
 Python is also a general-purpose language which means any practice of it comes under the category
 of "Transferable learning", i.e. the knowledge of the programming language carries over to application
-in other budding fields such as A.I. and Data Science. For scientific computing and linear algebra
-Python has a state of the art library called NumPy. Numpy has data structures, indexing and
-syntax almost identical to Matlab, which makes it easy for people who are well versed in speaking Matlab
-to migrate to Pythondom.
+in other budding fields such as A.I. and Data Science.
 
-Therefore we must develop a playing environment, the laws of physics of the simulated world, with models of the ball
-and differential drive robots the behavioural algorithms of such robots. We shall do this by implementing ROS and the
-Python programming language.
+In addition to Python, we decided to use Robot Operating System (ROS) as a backend infrastructure for the project.
+ROS is the fastest growing framework for robotics application with great open community and many available packages. 
+More specific reasons why we selected ROS are discussed in Architecture section. 
 
-## Overview
-
-Here a bird’s eye of the Project and upcoming chapters should be given.
 
 
