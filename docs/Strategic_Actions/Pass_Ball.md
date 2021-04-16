@@ -1,7 +1,7 @@
 
 # Strategic action: Pass the ball
 
-##### [Go back to main page](../../../Documentation.md)
+##### [Go back to main page](../../Documentation.md)
 
 ### Pass the ball
 

@@ -14,10 +14,6 @@
 8. Appendices – Additional material not needed in the main sections of the report e.g.
    Matlab code, full Simulink block diagrams.
 
-**!! The report should indicate which team members were responsible for authoring the separate sections of the report e.g. Section 1 (written by Team Member 1 and Team Member 2).**
-
-**!! All figures, tables and equations must be numbered in an appropriate manner. Figures and tables need to have a descriptive caption. Axes on graphs need to be labelled appropriately.**
-
 # Table of Contents
 
 1. [Introduction](#introduction)
@@ -32,8 +28,8 @@
      - [Team 0](docs/Strategy/Strategy_Team_0.md)
      - [Team 1](docs/Strategy/Strategy_Team_1.md)
    - Basic Actions
-     - [Go To Point (empty - Shrey)](docs/Basic_Actions/Go_To_Point.md)
-     - [Go Around Point (empty - Shrey)](docs/Basic_Actions/Go_Around_Point.md)
+     - [Go To Point](docs/Basic_Actions/Go_To_Point.md)
+     - [Go Around Point](docs/Basic_Actions/Go_Around_Point.md)
      - [Kick Ball (empty - Shrey)](docs/Basic_Actions/Kick_Ball.md)
      - [Rotate towards (empty - Shrey)]()
    - Strategic Actions
