@@ -30,7 +30,9 @@ In this function, the angular speeds imparted to the wheels is treated as a line
 <p align="center">
   <img src="../../Images/GoToPoint.jpeg">
 </p>
-__Go To Point__ Diagram showing the working principal of propotional controllers.
+<p align="center">
+Diagram showing the working principal of propotional controllers.
+</p>
 
 
 ### Rotational Component
