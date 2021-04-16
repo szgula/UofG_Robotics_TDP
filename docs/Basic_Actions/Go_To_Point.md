@@ -29,8 +29,8 @@ The output of the instantaneous angular speeds is calculated on the basis of the
 In this function, the angular speeds imparted to the wheels is treated as a linear combination of rotational effects and translation effects.
 <p align="center">
   <img src="../../Images/GoToPoint.jpeg">
-__Go To Point__ Diagram showing the working principal of propotional controllers.
 </p>
+__Go To Point__ Diagram showing the working principal of propotional controllers.
 
 
 ### Rotational Component
