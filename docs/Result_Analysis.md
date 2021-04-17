@@ -44,3 +44,10 @@
 | ----  |   ----  | ----  | ----  | 
 |1|  Run a demo match. Put players randomly. Set virtual enemies to force players to pass ball. |N/A|N/A| 
 |2|  Keep observe whether the pass ball action work normally. If not, you also can change the initial positions  | The action of passing ball work normally and the corresponding team member could also go to the strategy position automatically |Pass<p  align="center"><img width=600 src="../Images/test_pass_ball.gif"/><br><br>figure : avoid obstacle between two players test</p>
+
+- Offside warning line
+
+||  Steps   | Expect Result  | Result |
+| ----  |   ----  | ----  | ----  | 
+|1|  Run a demo match. Players start from opening positions|N/A|N/A| 
+|2|  Keep checking whether the line could indicate the offside position. Whether the line is pink.  | The color of warning line is pink. The line could indicate the possible offside position x. |Pass. Both warning line works well<p  align="center"><img width=600 src="../Images/test_offside_line.gif"/><br><br>figure : avoid obstacle between two players test</p>
