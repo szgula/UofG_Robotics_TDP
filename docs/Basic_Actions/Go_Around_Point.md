@@ -24,7 +24,7 @@ where R is the radius of curvature of the path and l is the distance between the
   <img src="../../Images/GoingAroundOne.jpeg">
 </p>
 <p align="center">
-<b>Figure</b>The Robot and the point it has to go around.
+<b>Figure</b> The Robot and the point it has to go around.
 </p>
 
 
@@ -32,7 +32,7 @@ where R is the radius of curvature of the path and l is the distance between the
   <img src="../../Images/GoAroundAPoint.png">
 </p>
 <p align="center">
-<b>Figure</b>The derivation of the formula using simalarity of triangles.
+<b>Figure</b> The derivation of the formula using simalarity of triangles.
 </p>
 
 
