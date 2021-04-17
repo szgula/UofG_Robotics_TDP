@@ -8,6 +8,13 @@ as a command, it will check if the robot is inside a circle of radius 0.2 units.
 The direction of kick is away from the centre of the round robot. In other words, the direction of the kick is
 collinear with the center of the robot and center of the ball.
 
+<p align="center">
+  <img src="../../Images/KickBall.jpeg">
+</p>
+<p align="center">
+Vector Diagram showing the direction of the kick and its relation to the relative direction of the ball with respect to robot.
+</p>
+
 
 
 <!-- ![Kick Ball Vector Diagram](../Figures/.png) -->

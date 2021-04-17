@@ -35,7 +35,7 @@
      - [Go To Point (empty - Shrey)](docs/Basic_Actions/Go_To_Point.md)
      - [Go Around Point (empty - Shrey)](docs/Basic_Actions/Go_Around_Point.md)
      - [Kick Ball (empty - Shrey)](docs/Basic_Actions/Kick_Ball.md)
-     - [Rotate towards (empty - Shrey)]()
+     - [Rotate towards (empty - Shrey)](docs/Basic_Actions/Rotate_Towards.md)
    - Strategic Actions
      - [Redirect Ball](docs/Strategic_Actions/Redirect_Ball.md)
      - [Pass Ball](docs/Strategic_Actions/Pass_Ball.md)
