@@ -60,51 +60,42 @@
 
 # Introduction <a name="introduction"></a>
 
-This project presents an engineering pipeline of allowing robotic components to successfully complete a football match based on behavioural controllers and impulsive strategy to solve the international RoboCup challenge. 
-The simulation involves two teams containing five robots, competing against each other for the win. 
-The robots were designed to be two-wheels differential drive machines with internal logic processor and capable to communication with different robots.
-This solution is demonstrated in a simulated environment taking into account all the rules and procedures demanded by the challenge. 
-The main building blocks of this project are as follows:
-1. Robot Operating System (ROS): This platform combines all the project's components into one distributed system that treats each executable program as a thread in said system.
-3. Python: Programming language used to develop the executable programs representing the robot's decision making, planning and actions.
-4. PyGame: Visualisation framework to display the main components of the environment: football field (e.g. goals, line separators), robot structures (chassis size, scale, orientation and form).
+This project is about designing and simulating the RoboCup challenge - the football match with robots as players. 
+The simulation involves two teams of five robots competing against each other. 
+The robots are designed as two-wheel differential drive machines with an internal logic processor and a capability to communicate with different robots. 
+Our design is presented in a simulated environment that takes into account all constraints of the challenge. 
+The main building blocks of this project are the following:
+1.	Robot Operating System (ROS) - a platform that combines all the design's components into one distributed system that treats each executable program as a thread in the given system.
+2.	Python - a programming language used to develop the executable programs representing the robot's decision-making process, planning and actions.
+3.	PyGame - a visualisation framework to display the main components of the environment: football field (e.g., goals, line separators), robot structures (chassis size, scale, orientation and form).
 
-All of these tools allowed us to work as a team and structure our solution as fast-paced sprints alongside long-achieving milestones.
-   
+All of these tools allowed us to work as a team and structure our solution as fast-paced sprints alongside long-term milestones.
+
 ## Problem Statement <a name="problemstatement"></a>
 
-This challenge proposes the implementation of a simulation of behavioural robots managing to rely on their built-in algorithms and challenging each other in a football match environment. 
-This problem is divided into several sub-problems to be tackled:
-1. System Architecture: Finding the optimal system design to represent and structure our execution flow.
-2. Simulation + Visualization: Implementing an efficient representation of the problem through simulating the physical elements of the environment and illustrating its different components appropriately.
-3. Strategy and Decision Making: Implementing from scratch the theory behind the strategy and decision-making on a team-wide level.
+The project focuses on designing with a team of collaborative robots that can compete with opponents in a simulated game. This problem was split into several sub-problems to be tackled one by one:
+1.	System Architecture - finding an optimal system design to represent and structure our execution flow.
+2.	Simulation + Visualization - implementing an efficient representation of the problem through simulation of the physical elements of the environment and visualising its different components appropriately.
+3.	Strategy and Decision Making - implementing from scratch the theory behind the strategy and decision-making on a team level.
 
 
 ## Objective <a name="objective"></a>
-The main objective is to generate appropriate solutions for the sub-problems stated above. 
-Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member. 
-As stated before, the project outline is divided into short-term sprints and long-term milestones. 
-Hence, each sub-module will be guaranteed a milestone and each sprint will dedicate tasks to achieve a specific milestone.
+The main objective is to generate appropriate solutions for the sub-problems stated above. Dividing the project into sub-modules allows us to interpret the solution as a bottom-up approach and facilitates assigning tasks to each team member. As stated earlier, the project outline is split into short-term sprints and long-term milestones. Hence, each sub-module is linked with a milestone and each sprint focuses on achieving a specific milestone.
+
 
 ### Expectations <a name = "expectations"></a>
 
-The teams are expected to withhold a full football match with all rules followed and actions supported with behavioural reactions and impulsive response in the environment.
-- Team 0 is expected to be the semi-smart team. The latter means that the players will perform minimal effort, enough to cooperate and compete, but not optimal as a perfect and flawless team. 
-- Team 1 is expected to have superior decision-making and strategy, and to have the advantage in both scoring and possession in the football match. 
+The robot teams are expected to complete a full football match with all rules followed and actions supported with behavioural reactions and impulsive response in the environment.
+   - Team 0 is expected to be a semi-smart team. It means that the players will make a minimal effort - enough to cooperate and compete, but not as effective as a high-performing team.
+   - Team 1 is expected to have superior decision-making and strategy, and to have the advantage in both scoring and ball possession in a football match.
 
-Hence, our main expectation is that Team 1 will win the match and overcome all Team 0's strategies.
+Hence, our main expectation is that Team 1 will win each match and overperform all Team 0's strategies.
 
 
 ### Choice of Technology
 
-We have chosen Python as it is most popular scripting language with great community support and number of open-source libraries.
-Python is also a general-purpose language which means any practice of it comes under the category
-of "Transferable learning", i.e. the knowledge of the programming language carries over to application
-in other budding fields such as A.I. and Data Science.
+We have chosen Python as it is the most popular scripting language with great community support and a number of open-source libraries. Moreover, Python is a general-purpose language, which means any practice of it comes under the category of "Transferable learning" (i.e., the knowledge of the programming language carries over to application in other growing fields such as A.I. and Data Science).
 
-In addition to Python, we decided to use Robot Operating System (ROS) as a backend infrastructure for the project.
-ROS is the fastest growing framework for robotics application with great open community and many available packages. 
-More specific reasons why we selected ROS are discussed in Architecture section. 
-
+In addition to Python, we have decided to use Robot Operating System (ROS) as a backend infrastructure for the project. ROS is the fastest-growing framework for robotics application with a great open community and many available packages. Specific reasons why we selected ROS are further discussed in the Architecture section.
 
 
