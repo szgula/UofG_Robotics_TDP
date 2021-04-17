@@ -1,3 +1,18 @@
+<style>
+table th:first-of-type {
+    width: 3%;
+}
+table th:nth-of-type(2) {
+    width: 27%;
+}
+table th:nth-of-type(3) {
+    width: 40%;
+}
+table th:nth-of-type(4) {
+    width: 30%;
+}
+</style>
+
 # Result Analysis
 
 ##### [Go back to main page](../Documentation.md)
@@ -13,7 +28,7 @@
 
 ||  Steps   | Expect Result  | Result |
 | ----  |   ----  | ----  | ----  | 
-|1|  Set a target point and let player from a random position to start moving | The player will go around the target point until find the best angle towards opponent gate |Pass <p align="center"><img src="../Images/test_go_around_point.gif"/><br><br>figure : go to point test</p>
+|1|  Set a target point and let player from a random position to start moving | The player will go around the target point until find the best angle towards opponent gate |Pass <p  align="center"><img src="../Images/test_go_around_point.gif"/><br><br>figure : go to point test</p>
 
 3. Kick ball  
 
