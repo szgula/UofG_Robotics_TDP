@@ -26,12 +26,16 @@ where R is the radius of curvature of the path and l is the distance between the
 <p align="center">
 Diagram showing the the Robot and the point it has to go about.
 </p>
+
+
 <p align="center">
   <img src="../../Images/GoAroundAPoint.png">
 </p>
 <p align="center">
 The figure shows the derivation of the formula using simalarity of triangles.
 </p>
+
+
 In this function we take the velocity of the faster wheel as 3 units, and the velocity of the slower wheel is calculated
 from the ratio mentioned in the equation above.
 
