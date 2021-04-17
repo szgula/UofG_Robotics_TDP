@@ -138,3 +138,6 @@ dmypy.json
 robocup_ws/devel/
 
 .vscode
+dynamic_images.mp4
+merged.png
+plot_dynamics.py

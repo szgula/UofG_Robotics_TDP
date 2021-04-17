@@ -1,3 +1,8 @@
+# Methodology
+This section of the documentation is about the project's structure, architecture and implementation aspects.
+We first present the project division and architecture. Next, we go into details about high-level task definition and algorithm design. 
+Finally, the implementation details about low-level functions are presented.
+
 # ROS and Project Architecture
 ##### [Go back to main page](../../Documentation.md)
 
