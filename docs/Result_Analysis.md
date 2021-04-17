@@ -3,9 +3,21 @@
 ##### [Go back to main page](../Documentation.md)
 
 ## Analysis
+### Efficient Software Development approach (Agile)
+For a system to be built from scratch, the workflow must be completed first, which is very important. In this project, we used a part of agile methodologies to make our work more flexable and measuable. At the very begining, we setup our mile stones for the whole development life cycle.<br>
+<!-- ![Mile Stone](../Images/mile_stone.png)  
+**Figure :** Mile Stone -->
 
-## Improvements
+Because of the limitation on the number of people, the five of us are not only developers but also tester, scrum master, and product owner. From the begining to the end, we devide work according to our different roles and we use the dashboard provided by github to arrange work, which make our work monitored and easy to find problems.<br>
+![Task Board](../Images/task_dashboard.png)  
+**Figure :** Task Dashboard
 
+### Robust and Flexible System Architecture
+1. In this project, we keeps the good extensibility all the time. We have two controller access modes, which are individual access and decision tree access. Either one follows OOP principles to reserve channels for the extension of algorithms.
+2. ...
+3. ...
+
+### ...
 ## Test Cases
 - Go to point  
 
