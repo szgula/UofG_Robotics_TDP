@@ -7,7 +7,7 @@
 
 ||  Steps   | Expect Result  | Result |
 | ----  |   ----  | ----  | ----  | 
-|1|  Set a target point and let player from a random position to start moving | The player go straight to the target point |Pass <p align="center"><img src="../Images/test_go_to_point.gif"/><br><br>figure : go to point test</p>
+|1|  Set a target point and let player from a random position to start moving | The player go straight to the target point |Pass <p align="center"><img src="../Images/test_go_to_position.gif"/><br><br>figure : go to point test</p>
 
 2. Go around point  
 
