@@ -4,41 +4,40 @@
 
 # Architecture
 
-The game visualizer is embedded in the `GameSimulationServer` as a utility class. `visualizer.py` contains all the functional code for visualization and there is only one relevant class just to call this function when necessary.
+The game visualiser is embedded in the `GameSimulationServer` as a utility class. `visualizer.py` contains all the functional code for visualisation and there is only one relevant class to call this function when necessary.
 
-Such architecture brings all logic about visualization together and that makes the simulator no longer need to worry about the display and just need to focus on the physics engine, which makes the whole project keeps the low coupling and high cohesion virtue.
+Such architecture brings all logic about visualization together and makes the simulator independent from the display functionalities. It keeps coupling between modules low and ensures code transparency.
 
 ## Workflow
 
-Once the game starts, the game master will start a loop first, the length of which depends on the value of `full_game_length`.
+Once the game starts, the game master will start a loop with the length dependent on the value of `full_game_length`.
 
-In each iteration, the master will not only request `team0_server` and `team1_server` for the latest command for every player but also send a request to `simulator_server` for updating all the visualization display.
+In each iteration, the master will not only request `team0_server` and `team1_server` for the latest command for every player but also send a request to `simulator_server` to update all the visualisation display.
 
 ```
 rospy.Service(r'game_engine/game_simulation', SimulationUpdate, self.handle_simulation_call)
 ```
 
 ![Visualizer workflow](../Figures/visualization_workflow.png)  
-**Figure 1:** Visualizer Workflow
+**Figure 1:** Visualiser Workflow
 
 ## Display components
 
-Visualizer is responsible for almost 9 components' displaying:
+Visualiser is responsible for nine components' displaying, including:
 
-1. **id indicator**: show the number of every player
-2. **direction indicator**: show the direction every player points to and will change in real-time.
-3. **offside warning line**: just display the possible offside line for warning purpose
+1. **id indicator**: shows an id number of every player
+2. **direction indicator**: shows the direction every player points to and changes in real-time.
+3. **offside warning line**: displays the possible offside line for a warning purpose
 
 ![Main Components](../Figures/Visualization_main_components_of_field.png)
-**Figure 2:** Components for visualization
+**Figure 2:** Components for visualisation
 
 ![Main Components](../Figures/Visualization_main_component_on_field_map.png)
-**Figure 3:** Components for visualization marked on map
+**Figure 3:** Components for visualisation marked on a map
 
 ## Available properties for setting display style
 
-__Comment:__ Good, but make it a bit less dry ;) 
-We can use these properties to set the style for every component.
+We can use the following properties to set the style for every component.
 
 ```
 self._robo_radius = 10
@@ -56,5 +55,4 @@ self._penalty_arc_center_distance = 1.1 * display_scale
 self._margin = 0.3 * display_scale
 self._gate_height = 2 * display_scale
 self._gate_color = (170, 170, 170)
-
 ```
