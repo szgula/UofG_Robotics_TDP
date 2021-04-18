@@ -1,7 +1,7 @@
 
 # **Actions**
 
- **[Go back to main page](../../Documentation.md)**
+**[Go back to main page](../../../Documentation.md)**
 
 ## Player Pass
 This algorithm is responsible for finding the best mate to pass the ball to. 
