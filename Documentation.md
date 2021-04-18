@@ -1,26 +1,11 @@
-## Plan according to the report guidlines
-
-1. Abstract – Brief summary of the report. Usually only half a page for a report of this type.
-2. Introduction – Outline of the project requirements in your own words.
-3. Methodology – Description of the implementation aspects for each stage of the
-   assignment e.g. creation of model, validation, control system design, tests.
-4. Results and Analysis – Required results to illustrate completion of each stage and
-   discussion of the analysis of these results.
-5. Team Performance Analysis – Evaluation of the performance of your team, including a
-   comparison of your estimated and actual time/costs.
-6. Conclusions – Findings from the methodology implementation and analysis of the
-   results. Overall assessment of the project outcomes.
-7. References – List of documents used in this assignment.
-8. Appendices – Additional material not needed in the main sections of the report e.g.
-   Matlab code, full Simulink block diagrams.
 
 # Table of Contents
 
 1. [Introduction](#introduction)
-   - [Problem Statement](#problemstatement)
-   - [Objective](#objective)
-   - [Expectations](#excpectations)
-2. [Methodology](#methodology)
+   - Problem Statement
+   - Objective
+   - Expectations
+2. Methodology
    - [Architecture + ROS](docs/Ros_Methodology/Architecture.md)
    - [Simulation](docs/Ros_Methodology/Simulation.md)
    - [Visualisation](docs/Ros_Methodology/Visualisation.md)
@@ -52,7 +37,6 @@
 3. [Results and Analysis](docs/Result_Analysis.md)
    - Experiments
    - Test cases
-   - etc
 4. [Project organisation](docs/Organisation/Project_Organisation.md)
    - [Team Performance Analysis (empty)](docs/Organisation/Team_Performance.md)
 5. [Conclusions (Omar)](docs/Conclusions.md)
