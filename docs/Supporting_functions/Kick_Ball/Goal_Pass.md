@@ -1,30 +1,35 @@
+dsf
+Is my nake pupa?
+
 # **Actions**
 
 **[Go back to main page](../../../Documentation.md)**
 
 ## Check if Score the Goal is feasible
 
-***check_if_direct_goal_feasible()*** is used by methods related to scoring the gaols. This function returns the flag if the goal can be scored and kick position to maximise the goal changes.
+***check_if_direct_goal_feasible()*** is used by methods related to scoring the gaols. 
+This function returns the flag and a kick position if the goal can be scored to maximise the goal chances.
 
 ### Implementation
-The information flow of this function is presented in Figure 1.
+The information flow of the discussed function is presented in Figure 1.
 
 <p align="center">
   <img src="../../../Images/Goal_Pass_flow.png" /><br><br>
 </p>
+
 __Figure 1__: The flow of checking if score the Goal is feasible
 
-The main implementation in the code in under a following static method:
+The main implementation of the code in under a following static method:
 ```python
 def check_if_direct_goal_feasible(player_pos_wcs: Position, ball_pos: Position, opponents_pos_wcs: List[Position], team_id: int, vis: bool = False)
 ```
 
 This function uses the game information to judge if the direct goal is feasible or not.
-The two main information taken into consideration by the function are:
- - distance from net, 
+The function takes the following information into consideration:
+ - distance from a net, 
  - dangerous zones, representation of the areas where opponents robot can get before the ball cross the net line.
 
-The described method uses multiple supporting functions to calculate the result. It includes:
+The described method uses multiple supporting functions to calculate the result, including:
 1. 
 ```python
 # Estimate the region from where an opponent can capture the ball
