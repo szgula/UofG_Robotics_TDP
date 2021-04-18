@@ -27,4 +27,14 @@ right (Vr) wheels are related. The relation is given by the following equation:
 
 Finally, we check the maximum velocity. If the velocity of any wheel exceeds a threshold value, a new calculation is done.
 
-<!--- ![Go Around Point Diagram](../Figures/.png) -->
+<p align="center">
+  <img src="../../Images/GoingAroundOne.jpeg">
+</p>
+
+__Figure 1__:The Robot and the point it has to go around.
+
+<p align="center">
+  <img src="../../Images/GoAroundAPoint.png">
+</p>
+
+__Figure 2__:</b> The derivation of the formula using simalarity of triangles.

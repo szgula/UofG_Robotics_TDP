@@ -29,7 +29,11 @@ The output of the instantaneous angular speeds is calculated on the basis of the
 
 In this function, the angular speeds imparted to wheels are treated as a linear combination of rotational and translation effects.
 
-__Comment__: Add diagram
+<p align="center">
+  <img src="../../Images/GoToPoint.jpeg">
+</p>
+
+__Figure 1__: Diagram showing the working principal of propotional controllers.
 
 ### Rotational Component
 In a differential drive, the vehicle rotates around itself if the angular speeds have equal magnitudes but opposite directions. Hence, the pure rotational component of the angular speed is given by the following principle:
@@ -50,6 +54,3 @@ The final angular speeds attached to the wheels is the addition of the correspon
 vel_l = rotation_component_l + forward_component
 vel_r = rotation_component_r + forward_component
 ```
-
-
-<!-- ![Go to point diagram](../Figures/.png) -->
