@@ -11,6 +11,7 @@ Figure 1 shows how the Score Goal works.
    <p align="center">
       <img src="../../Images/Score_Goal_flow.png" /><br><br>
    </p>
+
 __Figure 1__: The flow of scoring the goal
 
 As mentioned before, our team adopts the Decision Tree to control all the robots. In the **Decision Tree**, when a robot gets the ball, it needs to judge how far the opponents are from scoring a goal.
@@ -26,6 +27,7 @@ The test case for this function is shown in Figure 2:
    <p align="center">
       <img src="../../Images/Score_Goal.png" /><br><br>
    </p>
+
 __Figure 2__: Visualisation of goal scoriing.
 
 The process of goal scoring is implemented in three main functions. 
@@ -67,4 +69,5 @@ Using the output of the second function (***can_score()***), the robot will ***d
 <p align="center">
    <img src="../../Images/Score_Goal.gif" /><br><br>
 </p>
+
 __Figure 3__: Visualisation of goal scoring.

@@ -1,5 +1,3 @@
-fsd
-
 # **Actions**
 
 **[Go back to main page](../../Documentation.md)**
@@ -17,6 +15,7 @@ The obstacle avoidance needs to consider two main scenarios:
 <p align="center">
    <img src="../../Images/Avoid_obstacle.png" /><br><br>
 </p>
+
 __Figure 1__: Visualisation of avoid obstacle function.
 
 The information flow for the avoid obstacles function is presented in Figure 2.
@@ -24,6 +23,7 @@ The information flow for the avoid obstacles function is presented in Figure 2.
 <p align="center">
    <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
 </p>
+
 __Figure 2__: The information flow of avoiding obstacle function
 
 
@@ -50,6 +50,7 @@ In figure 3, we can see the **No. 0** robot in the **Team 0**(blue team) avoids 
    <p align="center">
       <img src="../../Images/Avoid_obstacle.gif" /><br><br>
    </p>
+
 __Figure 3__: Visualisation of avoiding obstacle function.
 
 
@@ -60,6 +61,7 @@ It "pulls away" a robot from the obstacles (like potential field method).
 <p align="center">
    <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
 </p>
+
 __Figure 4__: Visualisation of keep the distance method.
 
 ### Implementation

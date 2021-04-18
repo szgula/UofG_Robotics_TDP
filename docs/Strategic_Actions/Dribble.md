@@ -19,12 +19,14 @@ Finally, we select two points located in the corners of the net's area and the p
 <p align="center">
    <img src="../../Images/dribble_ball_goal_points.png" />
 </p>
+
 __Figure 1__: Dribble target points.
    
 ### Application in the Decision Tree
 <p align="center">
   <img src="../../Images/Decision_Tree_1.svg" />
 </p>
+
 __Figure 2__: Application of dribble action in the decision tree.
 
 As shown in Figure 2, we place this advanced action as a second priority. The play should shoot if there is any chance to score. In situations when scoring is not feasible (e.g., the player is stuck or is too far to the net) the best action is to dribble the ball towards a more optimal position.
@@ -34,4 +36,5 @@ As shown in Figure 2, we place this advanced action as a second priority. The pl
 <p align="center">
   <img src="../../Images/dribble_ball_schematic_map.jpg" />
 </p>
+
 __Figure 3__: Dribble the ball schematic map.
