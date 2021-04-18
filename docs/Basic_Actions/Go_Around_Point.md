@@ -8,7 +8,7 @@
 This action generates a robot control signal (wheel velocities) to go around a point at a given distance from the robot's centre 
 (distance perpendicular to the robot's heading).
 
-Possible use cases are, for example, getting into an appropriate position to kick the ball and obstacle avoidance.
+Possible use cases are, for example, getting to an appropriate position to kick the ball or obstacle avoidance.
 
 This action is implemented in the function `go_around_the_point()`. 
 
@@ -37,4 +37,4 @@ __Figure 1__:The Robot and the point it has to go around.
   <img src="../../Images/GoAroundAPoint.png">
 </p>
 
-__Figure 2__:</b> The derivation of the formula using simalarity of triangles.
+__Figure 2__:</b> The derivation of the formula using similarity of triangles.

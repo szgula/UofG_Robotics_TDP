@@ -4,7 +4,7 @@
 This functionality is implemented as a part of the ball model. If the ball receives a kick command from a robot, it first checks if the robot is within a predefined distance from the ball.
 
 ## Kick direction
-The direction of a kick is away from the centre of the round robot. In other words, the direction of the kick is collinear with the centre of the robot and the centre of the ball.
+The direction of a kick is away from the centre of the robot. In other words, the direction of the kick is collinear with the centre of the robot and the centre of the ball.
 
 <p align="center">
   <img src="../../Images/KickBall.jpeg">
