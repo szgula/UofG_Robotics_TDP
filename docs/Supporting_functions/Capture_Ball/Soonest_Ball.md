@@ -1,4 +1,3 @@
-fas fgd
 # Supporting functions: Capture the ball: Ball soonest collision
 
 ##### [Go back to main page](../../../Documentation.md)

@@ -1,14 +1,14 @@
 
 # Supporting functions: Capture the ball: Ball the soonest contact
 
-##### [Go back to main page](../../Documentation.md)
+**[Go back to main page](../../../Documentation.md)**
 
 
 ### Ball the soonest contact
-The ball the soonest contact function estimates the time when a specific player can get to the freely moving ball (when the robot can cross the ball trajectory).
+The `ball soonest contact` function estimates the time when a specific player can get to the freely moving ball (when the robot can cross the ball trajectory).
 It takes into consideration the ball state (position and velocity), and robot state (position and max speed). 
 
-If the robot cannot get to the ball before it hits the wall, the function can be configured to take into consideration the ball bounce and calculate intersection time after bounced. 
+If the robot cannot get to the ball before it hits the wall, the function can be configured to take into consideration the ball bounces and calculate intersection time after the ball bounced and change trajectory. 
 
 
 ### Assumptions, Inputs and Outputs
