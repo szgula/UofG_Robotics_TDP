@@ -56,6 +56,7 @@ A working example of the cover mechanism is illustrated in Figure 3:
 <p align="center">
    <img src="../../Images/cover_scenario.gif" />
 </p>
+
 __Figure 3__: Cover Scenario
 
 As demonstrated in Figure 3, the defenders accomplish their given tasks and successfully prevent the defenders from scoring a goal or even approaching the strategic positions.
