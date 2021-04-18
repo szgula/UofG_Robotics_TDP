@@ -1,3 +1,4 @@
+
 # Basic action: Go Around the Point
 
 ##### [Go back to main page](../../Documentation.md)
@@ -19,11 +20,11 @@ __Inputs__: Radius of Curvature of the path, direction: 1 = clockwise, -1 = coun
 __Output__: Robot control command (single instance)
 
 ## Logic
-In the two-wheels differential drive system the radius of curvature (R), the distance between wheels (l) and the ratio of velocities of the left (Vl) and the
-right (Vr) wheels are related. The relation is given by the following equations:
+In the two-wheel differential drive system the radius of curvature (R), the distance between wheels (l) and the ratio of velocities of the left (Vl) and the
+right (Vr) wheels are related. The relation is given by the following equation:
 
 `Vl/Vr = (R - l/2)/(R + l/2)`.
 
-Finally, the maximum velocity check is performed. If the velocity of any wheel exceeds a threshold value, the new calculation is performed.
+Finally, we check the maximum velocity. If the velocity of any wheel exceeds a threshold value, a new calculation is done.
 
 <!--- ![Go Around Point Diagram](../Figures/.png) -->

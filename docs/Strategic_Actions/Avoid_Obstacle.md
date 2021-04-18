@@ -6,13 +6,9 @@
 
 ## Avoid Obstacle
 
-Avoiding obstacle is one of the necessary action for robots, since the robots will get stuck with each other if they do not do avoiding obstacle when they are closed to each other. 
+Avoiding obstacle function ensure that robots do not collide with each other.
 
-For continuing the football match, robots need to deal with that problem by itself, therefore, one of feasible method is avoiding obstacle.
-
-
-
-### 1. When to do avoiding obstacle?
+### Use cases 
 
    Two situations need to be considered:
 
@@ -72,7 +68,7 @@ Two main parts in the code:
 
 **One of them is :**
 
-​	*Definition:*
+​  *Definition:*
 
 ```python
 # The function is to judge the distance between the robot and obstacles (Teammates, opponents, ball).
@@ -80,7 +76,7 @@ Two main parts in the code:
 @staticmethod
 def distance_judge(game_info: list, init_distance = None) -> [bool, int, int]:
 ```
-​	*Usage：*
+​  *Usage：*
 
 ```python
 # It will return the [bool, int, int], the first one is a flag to judge whether the robot meets the obstacle or not. The second one and the third one are team id and player id of the robot which meets obstacle respectively. 
@@ -90,7 +86,7 @@ is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
 
 **The  other one of them is:** 
 
-​	*Definition：*
+​  *Definition：*
 
 ```python
 # When the flag of the above function is true, we can get the team id and player id from distance_judge() function and put them here so that the robot can do avoid_obstacle().
@@ -99,7 +95,7 @@ is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
 def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
 ```
 
-​	*Usage：*
+​  *Usage：*
 
 ```python
 # Just fill with information in the funtion, which needs to be metioned here is that the avoid_obstacle() function reuses the go_around_the_point() function, but changes the parameters.
