@@ -28,7 +28,7 @@ __Figure 2__: The algorithm decision process of strategic point function.
 
 The strategic point logic is implemented as a static method ```def go_to_strategic_point(game_info, partner_id)```.
 
-This function adjusts the velocity of both wheels according to the position we set so that the robot can go to the strategic point. For example, if one robot holds the ball, the other one will use ***go_to_strategic_point()*** to get a good position to wait for the ball, so they can work together effectively.
+This function adjusts the velocity of both wheels according to the position we set so that the robot can go to the strategic point. For example, if one robot holds the ball, the other one will use ***go_to_strategic_point()*** to get a good position and wait for the ball, therefore, they can work together more effectively.
 
 As shown in Figure 3 robot **No. 3** from the **Team 0** (blue team) goes to the strategic point. When its teammate (player **No. 2**) who has a ball is approached by an opponent, he passes the ball to robot **No. 3** that is already waiting in a strategic position.
 
@@ -43,6 +43,6 @@ __Figure 3__: Visualisation of going to the strategic point.
 
 Now we just consider a specific point as the strategic point and test it by using a fixed point relative to the other robot. 
 Although it works in most of the cases, in some scenarios, it does not make sense to go to that point. 
-For example, when the robot is very closed to the edge of the football field, there is no need for the other player to get to that place to cooperate with the robot. 
+For example, when the robot is very closed to the edge of the football field, there is no need for the other player to get to that place and cooperate with the robot. 
 
-Therefore, the strategic point should be defined with more parameters and more information. It should be more related to the team strategic point, not individual strategic point or the strategic point just for two members.
+Therefore, the strategic point should be defined with more parameters and more information. It should be more related to the team strategic point, not individual strategic point or the strategic point just for two members of the group.
