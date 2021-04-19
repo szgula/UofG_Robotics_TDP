@@ -4,8 +4,8 @@
 
 ## Avoid Obstacle
 
-Avoiding obstacle function ensure that robots do not collide with each other. 
-For example, when two robots from opponent teams move along trajectories that cross or get close together, the robot should correct its trajectory.  
+Avoiding obstacle function ensures that robots do not collide with each other. 
+For example, when robots from opponent team move along trajectories that cross or get close to our robot, our robot should correct its trajectory to avoid obstacle.  
 
 The obstacle avoidance needs to consider two main scenarios:
 - Situations that involve short and high priority actions (i.e., pass the ball) 
@@ -16,7 +16,7 @@ The obstacle avoidance needs to consider two main scenarios:
    <img src="../../Images/Avoid_obstacle.png" /><br><br>
 </p>
 
-__Figure 1__: Visualisation of avoid obstacle function.
+__Figure 1__: Visualisation of avoiding obstacle function.
 
 The information flow for the avoid obstacles function is presented in Figure 2.
 
@@ -62,7 +62,7 @@ It "pulls away" a robot from the obstacles (like potential field method).
    <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
 </p>
 
-__Figure 4__: Visualisation of keep the distance method.
+__Figure 4__: Visualisation of keeping the distance method.
 
 ### Implementation
 
