@@ -6,8 +6,6 @@
 
 Score Goal is one of the most important actions for the robots as it determines which team wins the game. Therefore, effective strategies for goal scoring should be considered carefully. 
 
-Figure 1 shows how the Score Goal works. 
-
    <p align="center">
       <img src="../../Images/Score_Goal_flow.png" /><br><br>
    </p>
@@ -28,7 +26,7 @@ The test case for this function is shown in Figure 2:
       <img src="../../Images/Score_Goal.png" /><br><br>
    </p>
 
-__Figure 2__: Visualisation of goal scoriing.
+__Figure 2__: Visualisation of goal scoring.
 
 The process of goal scoring is implemented in three main functions. 
 

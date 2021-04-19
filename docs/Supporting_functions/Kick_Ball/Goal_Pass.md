@@ -7,7 +7,7 @@ Is my nake pupa?
 
 ## Check if Score the Goal is feasible
 
-***check_if_direct_goal_feasible()*** is used by methods related to scoring the gaols. 
+***check_if_direct_goal_feasible()*** is used by methods related to scoring the goal. 
 This function returns the flag and a kick position if the goal can be scored to maximise the goal chances.
 
 ### Implementation
@@ -30,6 +30,7 @@ The function takes the following information into consideration:
  - dangerous zones, representation of the areas where opponents robot can get before the ball cross the net line.
 
 The described method uses multiple supporting functions to calculate the result, including:
+
 1. 
 ```python
 # Estimate the region from where an opponent can capture the ball
