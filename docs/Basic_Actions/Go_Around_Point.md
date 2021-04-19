@@ -29,7 +29,7 @@ where R is the radius of curvature of the path and l is the distance between the
 
 
 <p align="center">
-  <img src="../../Images/GoAroundAPoint.png">
+  <img src="../../Images/GoAroundAPointTwo.jpeg">
 </p>
 <p align="center">
 <b>Figure:</b> The derivation of the formula using simalarity of triangles.
