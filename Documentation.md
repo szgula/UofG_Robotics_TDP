@@ -35,8 +35,6 @@
        - [Get capture position (ball pos at time)](docs/Supporting_functions/Capture_Ball/Capture_Position.md)
        - [Get the soonest contact](docs/Supporting_functions/Capture_Ball/Soonest_Contact.md)
 3. [Results and Analysis](docs/Result_Analysis.md)
-   - Experiments
-   - Test cases
 4. [Project organisation](docs/Organisation/Project_Organisation.md)
    - [Team Performance Analysis (empty)](docs/Organisation/Team_Performance.md)
 5. [Conclusions (Omar)](docs/Conclusions.md)
