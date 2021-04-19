@@ -54,7 +54,7 @@ In this instance, Def0 will approach Opp3 (red circle) while keeping a distance,
 A working example of the cover mechanism is illustrated in Figure 3:
 
 <p align="center">
-   <img src="../../Images/defence-cover.gif" width="500" height="500"/>
+   <img src="../../Images/defence-cover.gif" width="1000" height="1000"/>
 </p>
 
 __Figure 3__: Cover Scenario
