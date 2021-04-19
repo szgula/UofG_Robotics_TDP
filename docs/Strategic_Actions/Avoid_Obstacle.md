@@ -62,7 +62,7 @@ It "pulls away" a robot from the obstacles (like potential field method).
    <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
 </p>
 
-__Figure 4__: Visualisation of keeping the distance method.
+__Figure 4__: Visualisation of keep the distance method.
 
 ### Implementation
 
