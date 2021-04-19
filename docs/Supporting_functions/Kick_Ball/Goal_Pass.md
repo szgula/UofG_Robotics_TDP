@@ -30,6 +30,7 @@ The function takes the following information into consideration:
  - dangerous zones, representation of the areas where opponents robot can get before the ball cross the net line.
 
 The described method uses multiple supporting functions to calculate the result, including:
+
 1. 
 ```python
 # Estimate the region from where an opponent can capture the ball
