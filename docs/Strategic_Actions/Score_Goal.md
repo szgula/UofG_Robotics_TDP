@@ -43,7 +43,7 @@ The function uses the game information to judge if the robot has the ball and re
         
 #### 2) Check if a Robot Can Score a Goal
 
-This function returns a flag, along with kicking coordinates, if a robot with a ball can score a goal with a direct kick. 
+This function returns a flag, along with kick coordinates, if a robot with a ball can score a goal with a direct kick. 
 It reuses supporting functions to generate points on the net and check for possible collisions with robots along the kick trajectory.
 
 In code, this function is defined with a static method 
