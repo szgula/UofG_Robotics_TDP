@@ -12,7 +12,7 @@ collinear with the center of the robot and center of the ball.
   <img src="../../Images/KickBall.jpeg">
 </p>
 <p align="center">
-Vector Diagram showing the direction of the kick and its relation to the relative direction of the ball with respect to robot.
+ <b>Figure:</b>Vector Diagram showing the direction of the kick and its relation to the relative direction of the ball with respect to robot.
 </p>
 
 
