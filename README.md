@@ -5,7 +5,7 @@
   </a>
   
   <p align="center">
-    Robotics Team Design Project at University of Glasgow
+    <strong>Robotics Team Design Project at University of Glasgow<strong>
     <br />
     <br />
     <a href=""><img height=40 src="Images/Log/youtube_social_icon_red.png"></img></a>&nbsp;&nbsp;&nbsp;&nbsp;
