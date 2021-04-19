@@ -1,10 +1,9 @@
 # Simulation 
 ##### [Go back to main page](../../Documentation.md)
 
-__Missing!__ general description on the simulator
-
-- from intro: The problem statement gives us the freedom to choose the level of abstraction of the simulation.
- The level of abstraction here means the lowest level of detail of physics, which the simulation is going to take under consideration.
+Simulation is the module that emulates the physics of the game. 
+It includes the models of the dynamic environment (a ball and players), static environment (a field), set of time update rules (kinematics and dynamics) and some robot-soccer rules (goal rules, etc.).
+This module, although strongly independent of other modules, is the essential component that allows fast development of the robot's algorithms.
 
 # Architecture
 The game simulator was developed following two design patterns: 
