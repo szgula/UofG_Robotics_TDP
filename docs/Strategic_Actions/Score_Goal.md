@@ -1,91 +1,73 @@
-# **Actions**
+# Strategic action: Score the Goal
 
-**[Go back to main page](../../Documentation.md)**
+##### [Go back to main page](../../Documentation.md)
 
 ## Score Goal
 
-Score Goal is one of the most strategic important actions for the robots，since it decides which team can win the game directly. Therefore, effective strategies for scoring the Goal should be considered carefully. 
+Score Goal is one of the most important actions for the robots as it determines which team wins the game. Therefore, effective strategies for goal scoring should be considered carefully. 
 
-We can see the figure below showed the processes of how the Score Goal works in the logic. 
+Figure 1 shows how the Score Goal works. 
 
    <p align="center">
       <img src="../../Images/Score_Goal_flow.png" /><br><br>
-      <b>Figure 1: The flow of scoring the goal</b>
    </p>
 
+__Figure 1__: The flow of scoring the goal
 
-As mentioned before, our team adopts the Decision Tree to control all the robots logically. In the **Decision Tree**, when the robot gets the ball, it needs to judge how far from the enemy's goal. 
+As mentioned before, our team adopts the Decision Tree to control all the robots. In the **Decision Tree**, when a robot gets the ball, it needs to judge how far the opponents are from scoring a goal.
 
-What is more, it also needs to check if [scoring the goal is feasible], which is mentioned in the supporting functions. This check function will return **(x, y) coordinate**, which is the place that robot should do ***receive_and_pass_action*()** in. 
+What is more, it also needs to check if ```scoring the goal is feasible``` that is mentioned in the supporting functions. This function will return **(x, y) coordinate**, which is the place that robot should kick to. 
 
-We reuse this function here and set the target position to the enemy's goal, thus, passing the ball to the enemy's goal is scoring the goal.
+We reuse this function here and set the target position to the enemy's goal, thus, passing the ball to the enemy's net is equivalent to scoring the goal.
 
 
-
-### How to do Score Goal in code?
-
-The process should be 3 main functions, the figure of the theory is showed below:
+### Score Goal Implementation
+The test case for this function is shown in Figure 2:
 
    <p align="center">
       <img src="../../Images/Score_Goal.png" /><br><br>
-      <b>Figure 2: Score goal in virualiztion</b>
    </p>
 
+__Figure 2__: Visualisation of goal scoriing.
 
+The process of goal scoring is implemented in three main functions. 
 
-There three main functions：
+#### 1) Check if a Team Has a Ball
 
-   #### The first function：
+This function returns a flag if any of the team's players are within contact distance to the ball. 
+If so, it returns the identifies.
 
-```python
-# Return the True or False, judge from the threshold
-# If two or more robots' distance are both less then threshold,
-# The closest one get the ball
+In code, this function is defined with a static method 
 
-@staticmethod
-def has_ball(game_info: list) -> bool:
-```
+```def has_ball(game_info: list)```
 
-The function uses the game information to judge if the robot has the ball and return True or False .
+The function uses the game information to judge if the robot has the ball and returns a boolean value.
         
-   #### The Second function：
-```python
-# Return the (direct_kick_feasible, kick_x, kick_y)
-# direct_kick_feasible = True or False
-# (kick_x, kick_y) is the location the robot should go.
+#### 2) Check if a Robot Can Score a Goal
 
-@staticmethod
-def can_score(game_info: list, team_id):
-```
+This function returns a flag, along with kick coordinates, if a robot with a ball can score a goal with a direct kick. 
+It reuses supporting functions to generate points on the net and check for possible collisions with robots along the kick trajectory.
 
-This function helps to judge whether the recent location is feasible for robots to score goal, there more details mentioned in the ***can_score()*** individually.
+In code, this function is defined with a static method 
 
+```def can_score(game_info: list, team_id) -> (direct_kick_feasible, kick_x, kick_y)```
 
-
-   #### The third function：
-```python
-# Return the command, which the message we send to robots
-# Since that, the robot can do the action.
-
-@staticmethod
-def score_goal(game_info,kick_x,kick_y):
-```
-
-Judge from the second function ***can_score()*** above, if it is **True**, which means the robot is close to opponent's goal and find a feasible location to score the goal,  then the robot will ***do score_goal()*** directly.
-
-Finally, we can see the **No. 3** robot in the **Team 0** (Blue one) scores the goal, which is showed in the Gif below:
-
-   <p align="center">
-      <img src="../../Images/Score_Goal.gif" /><br><br>
-      <b>Figure 3: Gif of scoring goal in virualization</b>
-   </p>
+This function helps to assess whether the recent location is feasible for robots to score a goal. More details are mentioned in the ***can_score()*** .
 
 
 
-### Shortcomings and future improvements:
+#### 3) Score the Goal
 
-Although the robot can simply judge when and how to score the ball, yet the real physical environment is more complex. We should also check if there is opponent near the robot by the limited version. 
+This function shares the code with _Pass the_Ball_ function. The only difference between discussed functions is that _Score the Goal_ refers to a stationary point on a net rather than another player.
 
-Besides, make the robot able to take actions dynamically according to the real time situation. Finally, using some deep learning methods, such as BP and CNN should be the other solution to make the robots smart to react to the ball.
-      
+In the code, this function is defined with a static method 
+
+```def score_goal(game_info,kick_x,kick_y) -> command ```
+
+Using the output of the second function (***can_score()***), the robot will ***do score_goal()*** directly if the output is **True** (i.e., the robot is close to the opponent's goal and finds a feasible location to score a goal). The discussed situation is presented in Figure 3:  **No. 3** robot in the **Team 0** (shown in blue) scores the goal.
+
+<p align="center">
+   <img src="../../Images/Score_Goal.gif" /><br><br>
 </p>
+
+__Figure 3__: Visualisation of goal scoring.

@@ -1,118 +1,77 @@
-
-
 # **Actions**
 
 **[Go back to main page](../../Documentation.md)**
 
 ## Avoid Obstacle
 
-Avoiding obstacle is one of the necessary action for robots, since the robots will get stuck with each other if they do not do avoiding obstacle when they are closed to each other. 
+Avoiding obstacle function ensure that robots do not collide with each other. 
+For example, when two robots from opponent teams move along trajectories that cross or get close together, the robot should correct its trajectory.  
 
-For continuing the football match, robots need to deal with that problem by itself, therefore, one of feasible method is avoiding obstacle.
+The obstacle avoidance needs to consider two main scenarios:
+- Situations that involve short and high priority actions (i.e., pass the ball) 
+  when a robot should minimise the risk of losing an initiative in a short time at the cost of a future unfavourable position.
+- Cases when a robot executes long actions that do not contain short term behavioural twists (example presented in Figure 1).
+
+<p align="center">
+   <img src="../../Images/Avoid_obstacle.png" /><br><br>
+</p>
+
+__Figure 1__: Visualisation of avoid obstacle function.
+
+The information flow for the avoid obstacles function is presented in Figure 2.
+
+<p align="center">
+   <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
+</p>
+
+__Figure 2__: The information flow of avoiding obstacle function
 
 
+  
+### Avoid obstacles methods
 
-### 1. When to do avoiding obstacle?
+Avoid obstacles logic is split into multiple stages of which execution (if and to what extent) is dependent on a player's specific situation.
 
-   Two situations need to be considered:
+#### First stage: Go back
 
-        According to the distance between each robot and obstacle (teammates / opponents).
+The simplest way to avoid obstacles is to roll back the player. 
+This method is especially useful when a robot is close to the field edges, however, it has many constraints and limited strategic applications.
         
-        According to different situations in the decision tree.
+#### Second stage: Rotate away from the obstacle
 
-   <p align="center">
-      <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
-      <b>Figure 1: The flow of avoiding obstacle</b>
-   </p>
+The second method focuses on avoiding obstacles based on the assumption that an obstacle is stationary.
+It is realised by rotating the robot away from obstacles that are ahead. This method works fine in cases the obstacle is stationary or moves away from the collision point.
+However, due to undertaken assumption, it fails to execute if an obstacle is moving in the direction of the robot's rotation. 
+To overcome this, the algorithm changes the direction of rotation if the previous stage fails to execute over a predefined period of time.
+Although it does not cover all scenarios, we found it works sufficiently well in games.
 
-
-
-
-In the theory, if the distance is less than the threshold, then do avoiding obstacle. However, in some special situation, when the robots need to do something meaningful, for example, pass the ball to teammates and score the goal, it is not necessary to do avoiding obstacle. 
-
-   <p align="center">
-      <img src="../../Images/Avoid_obstacle.png" /><br><br>
-      <b>Figure 2: Avoid obstacle in virualization</b>
-   </p>
-
-   
-
-### 2. How to do avoiding obstacle?
-
-   #### First stage: go back
-
-This method seems to be useful for testing. However, when the robot of the opponents go forward and attack, it can not do anything for preventing the opponents.
-        
-   #### Second stage: Rotate slight away from the obstacle
-
-It should work in the theory. However, in the code, since the program judges the distance every time and re-planning for the robot every time,  therefore if there is moment the robot tends to be more closed to the obstacle, it will be more closer and closer and can't break away from the obstacle.
-
-Here is the Gif of avoiding obstacle, we can see the **No. 0** robot in the **Team 0**(Blue one) does avoid obstacle.
+In figure 3, we can see the **No. 0** robot in the **Team 0**(blue team) avoids obstacle using the discussed method.
 
    <p align="center">
       <img src="../../Images/Avoid_obstacle.gif" /><br><br>
-       <b>Figure 3: Gif of avoiding obstacle in virualization</b> 
    </p>
 
+__Figure 3__: Visualisation of avoiding obstacle function.
 
 
-   #### Final stage: Keep distance larger than threshold
+#### Final stage: Keep distance
 
-This method means when if the distance between robot and the obstacle is less than threshold, the robot needs to get rid of the situation at a time so that the next time it can do meaningful action for the match. 
+This stage ensures that robot does not return to a place where avoiding the obstacle is necessary. 
+It "pulls away" a robot from the obstacles (like potential field method).
+<p align="center">
+   <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
+</p>
 
-   <p align="center">
-      <img src="../../Images/avoid_obstacle_theory.png" /><br><br>
-       <b>Figure 4: Final theory of avoiding obstacle</b>
-   </p>
+__Figure 4__: Visualisation of keep the distance method.
 
+### Implementation
 
-### 3. How it works in the code?
-
-Two main parts in the code:
-
-**One of them is :**
-
-​	*Definition:*
+The above described methods are implemented under following static methods:
 
 ```python
 # The function is to judge the distance between the robot and obstacles (Teammates, opponents, ball).
+def distance_judge(game_info: list, init_distance = None) -> [bool, int, int]
 
-@staticmethod
-def distance_judge(game_info: list, init_distance = None) -> [bool, int, int]:
-```
-​	*Usage：*
-
-```python
-# It will return the [bool, int, int], the first one is a flag to judge whether the robot meets the obstacle or not. The second one and the third one are team id and player id of the robot which meets obstacle respectively. 
-
-is_obstacle, which_team, obstacle_id = controller.distance_judge(game_info)
-```
-
-**The  other one of them is:** 
-
-​	*Definition：*
-
-```python
 # When the flag of the above function is true, we can get the team id and player id from distance_judge() function and put them here so that the robot can do avoid_obstacle().
-
-@staticmethod
-def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerCommand:
+def avoid_obstacle(game_info: list, team_id, obstacle_player_id) -> PlayerCommand
 ```
-
-​	*Usage：*
-
-```python
-# Just fill with information in the funtion, which needs to be metioned here is that the avoid_obstacle() function reuses the go_around_the_point() function, but changes the parameters.
-
-controller.avoid_obstacle(game_info, which_team, obstacle_id)
-```
-
-
-
-### 4. Shortcomings and future improvements:
-
-It is considered that combine the avoid obstacle and dribble together, if the robot can dribble and avoid obstacle, it will the professional robotic football player and the match will be more interesting.
-
-Furthermore, the vision and other sensors are very necessary for the function, it is difficult for robots to judge whether do avoiding obstacle just according to the distance, the information is not enough to support it to make a wise decision.  
-        
-</p>

@@ -2,70 +2,34 @@
 
 ##### [Go back to main page](../../Documentation.md)
 
-## Check if pass the ball is feasible
+## Check if passing the ball is feasible
 
-To make players work together more closely and smartly, pass ball is one of the most important actions. However the situation in field changes at every time. To make the process of passing acurrately and safely, we designed this check action for passing ball.
+To make players work together the pass_ball function is needed. 
+As the situation in the field is dynamic, to make the process of passing accurate and safe, the team needs to check if any opponent can capture the ball on the ball trajectory.
 
-### Workflow
+### Implementation
 
-Different roles have different strategies. For defenders, we can consider the threat of opponents less because the main purpose of defenders is to control the ball and find a better place to beat back.
-
-However for attackers, we need think more about opponenets, so here we also designed a threshold value to access the risk of passing. If opponents are too close, our team players need to pass quickly. If not, our players could keep forward to find a better place to pass.
+Each robot role has different strategies and priorities for passing the ball. 
+For example, the defenders focus on controlling the ball and finding a better place to beat back, while the attackers need to put more focus on the opponents. To that end, we introduced an extra threshold value to assess the risk of passing. 
+If opponents are too close, a player needs to pass quickly. If not, a player could keep moving forward to find a better place for passing.
 
 ![Check Pass Ball workflow](../../Figures/Actions_check_pass_ball_feasible.png)
 
-**Figure 1:** Check Pass Ball Feasible
+__Figure 1:__ Check pass ball feasibility.
 
-### How to check the safety of pass in code?
+The algorithm is implement in the following function:
+- attacker check (common): ```def check_for_pass(self, game_info: list, net:list) -> [bool, int]```
 
-#### The main functions
+- defender check (simplified): ```def defender_pass(self, game_info: list, net:list) -> [bool, int]```
 
-- attacker check (common)
+#### Inputs & Outputs
 
-```
-def check_for_pass(self, game_info: list, net:list) -> [bool, int]
-```
-
-- defender check (simplied)
-
-```
-def defender_pass(self, game_info: list, net:list) -> [bool, int]
-```
-
-#### Inputs
-
-```
-game_info: list, net:list
-```
-
-- game_info: ball position, team players info, opponent team players info, field info.
-- net: opponent net info.
-
-#### Outputs
-
-```
-can_pass: bool, pass_candidate_id:int
-```
-
-- can_pass: whether can pass ball or not after access the current situation.
-- pass_candidate_id: the player who pass to.
+- __Inputs:__ dynamics game information, field information
+- __Outputs:__ flag if pass is feasible, the identifier of player to pass
 
 #### Threshold
 
-Threshold is aimed to access the risk of pass. And this value is mainly depend on the distance between player and enemy players. If the risk is high, we give 1 to threhold. If not, then 2.
-
-```
-distance_player_enemy = self.get_closest_opponent(game_info)
-if(distance_player_enemy < 5):
-    self.strategic_threshold = 2
-else:
-    self.strategic_threshold = 1
-```
-
-Finally, we use this threshold to determine whether pass the ball is feasible
-
-```
-if(delta_strategic_point <= self.strategic_threshold):
-    return True, pass_candidate
-return False, pass_candidate
-```
+Threshold aims to parametrise the risk of passing. 
+This value mainly depends on the distance between a player and opponents. 
+If the risk is acceptable the value can be small (1 or smaller), otherwise keep it high.
+In the code, this threshold value is used to determine whether the pass of the ball is feasible.
