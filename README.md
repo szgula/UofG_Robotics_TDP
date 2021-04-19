@@ -142,19 +142,21 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- Contact Info -->
 ## Contact
-* **Szymon**  @[Szymon](https://github.com/szgula)
 <br>
 
-* **Feng**  @[Feng](https://github.com/fengfengFinn)
+* Boss and Leader: **Szymon Gula**  @[Szymon](https://github.com/szgula)
 <br>
 
-* **Omar**  @[Omar](https://github.com/OmarJabri7)
+* Our visual effect specialist - visualisation: **Feng Feng**  @[Feng](https://github.com/fengfengFinn)
 <br>
 
-* **Yifan**  @[Yifan](https://github.com/Yifan-Xie)
+* Our strategy guy: **Omar Jabri**  @[Omar](https://github.com/OmarJabri7)
 <br>
 
-* **Shrey** @[Shrey](https://github.com/shreyExp)
+* Martial arts guru - "how to avoid enemy": **Yifan Xie**  @[Yifan](https://github.com/Yifan-Xie)
+<br>
+
+* Dynamics: **Shreyansh Singh** @[Shrey](https://github.com/shreyExp)
 <br>
 
 * **Project address** @[Project address](https://github.com/szgula/UofG_Robotics_TDP)
