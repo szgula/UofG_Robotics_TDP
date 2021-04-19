@@ -9,13 +9,18 @@ For a system to be built from scratch, the workflow must be completed first, whi
 **Figure :** Mile Stone -->
 
 Because of the limitation on the number of people, the five of us are not only developers but also tester, scrum master, and product owner. From the begining to the end, we devide work according to our different roles and we use the dashboard provided by github to arrange work, which make our work monitored and easy to find problems.<br>
+
 ![Task Board](../Images/task_dashboard.png)  
 **Figure :** Task Dashboard
 
 ### Flexible and Robust System Architecture
-1. In this project, we keeps the good extensibility all the time. We have two controller access modes, which are individual access and decision tree access. Either one follows OOP principles to reserve channels for the extension of algorithms.
+1. In this project, we keeps the good extensibility all the time. We have two controller access modes, which are individual access and decision tree access. Either one follows OOP principles to reserve channels for the extension of algorithms. <br>Because we chose ROS as our main develop framwork, which is a set of software libraries and tools to help us create real-time and concurrent programs, our architecture is naturally distributed. According to ROS develop rules, we split the project into multiple modules. It allowed us to clearly define areas of responsibilities of each software module. And Client-Server communicating mechanism provide us a very flexible way to connect our controllers with simulator and visualiser.
+
+
 2. From low level point of view, each robot controller has same pipline of receiving environment data and then processing data and then output control command.They are independent of each other. In the actual match, if one goes down, the other robots will not be affected. Besides, to make sure the program runs stably, we added the error handling in each critical logic place. Although due to time constraints we were not able to add the logging collection feature, we reserved the interfaces for this.
-## Test Cases
+
+
+## Test Cases For Quality Assurance
 - Go to point  
 
 ||  Steps   | Expect Result  | Result |
