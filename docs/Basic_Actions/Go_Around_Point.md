@@ -21,7 +21,7 @@ right wheels are related. The relation is given by the following equations:
 where R is the radius of curvature of the path and l is the distance between the two wheels.
 
 <p align="center">
-  <img src="../../Images/GoingAroundOne.jpeg">
+  <img src="../../Images/GoingAroundOne.jpeg" width="600" height="400">
 </p>
 <p align="center">
 <b>Figure:</b> The Robot and the point it has to go around.
