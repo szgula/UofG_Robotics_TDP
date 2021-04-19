@@ -12,12 +12,9 @@ Because of the limitation on the number of people, the five of us are not only d
 ![Task Board](../Images/task_dashboard.png)  
 **Figure :** Task Dashboard
 
-### Robust and Flexible System Architecture
+### Flexible and Robust System Architecture
 1. In this project, we keeps the good extensibility all the time. We have two controller access modes, which are individual access and decision tree access. Either one follows OOP principles to reserve channels for the extension of algorithms.
-2. ...
-3. ...
-
-### ...
+2. From low level point of view, each robot controller has same pipline of receiving environment data and then processing data and then output control command.They are independent of each other. In the actual match, if one goes down, the other robots will not be affected. Besides, to make sure the program runs stably, we added the error handling in each critical logic place. Although due to time constraints we were not able to add the logging collection feature, we reserved the interfaces for this.
 ## Test Cases
 - Go to point  
 
