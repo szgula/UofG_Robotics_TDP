@@ -23,7 +23,7 @@ __Figure 1__:  Team 1 decision tree for scenarios in which the team has a ball.
 
 __Figure 2__:  Team 1 decision tree for scenarios in which the team does not have a ball.
 
-The decision tree uses a set of information about the players to discriminate against them, including players id and their corresponding modes. The ids are unique for each player in the game, while the mode can take two states: "DEFEND" or "ATTACK".  This approach ensures that the decision tree accurately assign actions to players. In Figure 3, we show a sample decision tree information flow.
+The decision tree uses a set of information about the players to differentiate between them, including players id and their corresponding modes. The ids are unique for each player in the game, while the mode can take two states: "DEFEND" or "ATTACK".  This approach ensures that the decision tree accurately assign actions to players. In Figure 3, we show a sample decision tree information flow.
 
 <p align="center">
   <img src="../../Images/Decision Flow.png" />
