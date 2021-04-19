@@ -7,7 +7,7 @@ Is my nake pupa?
 
 ## Check if Score the Goal is feasible
 
-***check_if_direct_goal_feasible()*** is used by methods related to scoring the gaols. 
+***check_if_direct_goal_feasible()*** is used by methods related to scoring the goal. 
 This function returns the flag and a kick position if the goal can be scored to maximise the goal chances.
 
 ### Implementation
