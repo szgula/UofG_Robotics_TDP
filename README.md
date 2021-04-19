@@ -1,7 +1,7 @@
 <h2 align="center">UofG_Robotics_TDP</h2>  
 <p align="center">
   <a href="https://github.com/szgula/UofG_Robotics_TDP">
-    <img src="Images/Log/Robotic_TDP.png" alt="Logo" >
+    <img src="Images/Log/Robotic.png" alt="Logo" >
   </a>
   
   <p align="center">
