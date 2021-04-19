@@ -4,7 +4,7 @@
 
 ## Avoid Obstacle
 
-Avoiding obstacle function ensures that robots do not collide with each other. 
+Avoid obstacle function ensures that robots do not collide with each other. 
 For example, when robots from the opponent team move along trajectories that cross or get closer to our robot, our robot should correct its trajectory to avoid obstacle.  
 
 The obstacle avoidance needs to consider two main scenarios:
@@ -16,15 +16,15 @@ The obstacle avoidance needs to consider two main scenarios:
    <img src="../../Images/Avoid_obstacle.png" /><br><br>
 </p>
 
-__Figure 1__: Visualisation of avoiding obstacle function.
+__Figure 1__: Visualisation of avoid obstacle function.
 
-The information flow for the avoid obstacles function is presented in Figure 2.
+The information flow for the avoid obstacle function is presented in Figure 2.
 
 <p align="center">
    <img src="../../Images/avoid_obstacle_flow.png" /><br><br>
 </p>
 
-__Figure 2__: The information flow of avoiding obstacle function
+__Figure 2__: The information flow of avoid obstacle function
 
 
   
