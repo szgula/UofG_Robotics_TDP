@@ -6,8 +6,6 @@
 
 Score Goal is one of the most important actions for the robots as it determines which team wins the game. Therefore, effective strategies for goal scoring should be considered carefully. 
 
-Figure 1 shows how the Score Goal works. 
-
    <p align="center">
       <img src="../../Images/Score_Goal_flow.png" /><br><br>
    </p>
@@ -28,7 +26,7 @@ The test case for this function is shown in Figure 2:
       <img src="../../Images/Score_Goal.png" /><br><br>
    </p>
 
-__Figure 2__: Visualisation of goal scoriing.
+__Figure 2__: Visualisation of goal scoring.
 
 The process of goal scoring is implemented in three main functions. 
 
@@ -45,7 +43,7 @@ The function uses the game information to judge if the robot has the ball and re
         
 #### 2) Check if a Robot Can Score a Goal
 
-This function returns a flag, along with kick coordinates, if a robot with a ball can score a goal with a direct kick. 
+This function returns a flag, along with kicking coordinates, if a robot with a ball can score a goal with a direct kick. 
 It reuses supporting functions to generate points on the net and check for possible collisions with robots along the kick trajectory.
 
 In code, this function is defined with a static method 
