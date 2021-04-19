@@ -48,7 +48,7 @@ Deciding if a pass is feasible is based on the triangular shape emitted by playe
 Figure 2 shows the full passing sequence. It demonstrates how player 3 decides to pass to teammate 2 instead of player 1. 
 
 <p align="center">
-     <img src="../../../Images/find-player-pass.gif" />
+     <img src="../../../Images/find-player-pass.gif" width = 800 height = 500/>
 </p>
 
 __Figure 2__: Passing Algorithm Example
