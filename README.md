@@ -130,15 +130,15 @@ In ```requirement.txt```
 
 <!-- Usage -->
 ## Usage
-The method to use it.
+The simulation and game master is finished, therefore, new learner can write some stragetic things for the project. 
 
 <!-- Contributing -->
 ## Contributing
-How to contribute the project.
+This is a project for new learner to follow.
 
 <!-- License -->
 ## License
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [`LICENSE`](https://github.com/szgula/UofG_Robotics_TDP/blob/main/LICENSE) for more information.
 
 <!-- Contact Info -->
 ## Contact
