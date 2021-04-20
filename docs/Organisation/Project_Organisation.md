@@ -120,7 +120,7 @@ Over time, this structure converges to the more sparse technical responsibilitie
 | @[Feng](https://github.com/fengfengFinn)  |Integration, deployment | Visualisations, system control, tactics    |
 | @[Omar](https://github.com/OmarJabri7) | Testing, verification    |  System design, strategy development, ROS       |
 | @[Yifan](https://github.com/Yifan-Xie) |System design    | Strategy development, tactics, system control       |
-| @[Shrey](https://github.com/shreyExp) | Requirements, technical documentation     | ... fill this ...       |
+| @[Shrey](https://github.com/shreyExp) | Requirements, technical documentation     | Control       |
 | @[UofG]() University Staff Support - Dr. McGookin   | Supervision    | Supervision |
 
 __Table 2__: Project responsibilities.
